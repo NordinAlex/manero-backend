@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manero-backend", "Manero-backend\Manero-backend.csproj", "{548496B6-61D9-4831-AFA1-C2E03908D26B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{548496B6-61D9-4831-AFA1-C2E03908D26B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{548496B6-61D9-4831-AFA1-C2E03908D26B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{548496B6-61D9-4831-AFA1-C2E03908D26B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{548496B6-61D9-4831-AFA1-C2E03908D26B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CBD499DE-5375-453F-ACA6-5BCA8141785F}
+	EndGlobalSection
+EndGlobal
