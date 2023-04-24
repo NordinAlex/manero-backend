@@ -20,11 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="DTOs\User\" />
     <Folder Include="DTOs\Review\" />
-    <Folder Include="DTOs\Product\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="Models\UserEntities\" />
     <Folder Include="Models\UserProductEntities\" />
   </ItemGroup>
 

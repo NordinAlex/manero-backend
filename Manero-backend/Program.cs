@@ -1,8 +1,25 @@
+using Manero_backend.Context;
+using Manero_backend.Models.UserEntities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Manero")));
+builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
+{
+    x.Password.RequiredLength = 6;
+    x.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<IdentityContext>();
+builder.Services.ConfigureApplicationCookie(x =>
+{
+    x.LoginPath = "/login";
+});
 
 
 
