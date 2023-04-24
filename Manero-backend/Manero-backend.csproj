@@ -26,7 +26,6 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Models\UserEntities\" />
     <Folder Include="Models\UserProductEntities\" />
-    <Folder Include="Models\ProductEntities\" />
   </ItemGroup>
 
 </Project>
