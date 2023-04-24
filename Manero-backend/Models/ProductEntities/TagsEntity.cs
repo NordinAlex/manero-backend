@@ -1,6 +1,6 @@
 ﻿namespace Manero_backend.Models.ProductEntities
 {
-    public class Tags
+    public class TagsEntity
     {
     }
 }
