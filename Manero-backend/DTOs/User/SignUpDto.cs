@@ -2,7 +2,7 @@
 
 namespace Manero_backend.DTOs.User
 {
-    public class RegisterDto
+    public class SignUpDto
     {
         public string Name { get; set; } = null!;
         public string Password { get; set; } = null!;
