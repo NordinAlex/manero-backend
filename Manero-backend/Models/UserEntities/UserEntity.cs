@@ -1,4 +1,6 @@
 ﻿using Manero_backend.DTOs.Review;
+using Manero_backend.DTOs.User;
+using Manero_backend.Factories;
 using Microsoft.AspNetCore.Identity;
 
 namespace Manero_backend.Models.UserEntities
@@ -22,11 +24,10 @@ namespace Manero_backend.Models.UserEntities
 
         public static implicit operator SignUpDto(UserEntity entity)
         {
-            var res = ArticleResponseFactory.Create();
-            res.Id = entity.Id;
-            res.Name = entity.Name;
-            res.Password = entity.Password;
-            res.ConfirmPassword = entity.ConfirmPassword;
+            var res = SignUpDtoFactory.Create();
+            res.Name = entity.Name!;
+            res.Password = entity.Password!;
+            res.ConfirmPassword = entity.ConfirmPassword!;
 
             return res;
         }

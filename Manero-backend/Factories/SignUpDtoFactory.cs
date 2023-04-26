@@ -1,11 +1,12 @@
-﻿namespace Manero_backend.Factories
+﻿using Manero_backend.DTOs.User;
+
+namespace Manero_backend.Factories
 {
     public class SignUpDtoFactory
     {
-        public static SignUpDto Create()
+        public static SignUpResponse Create()
         {
-            return new SignUpDto();
+            return new SignUpResponse();
         }
     }
-}
 }

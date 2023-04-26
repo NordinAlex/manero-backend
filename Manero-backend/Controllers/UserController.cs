@@ -1,6 +1,7 @@
 ﻿using Manero_backend.Context;
-using Microsoft.AspNetCore.Http;
+using Manero_backend.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Controllers
 {
@@ -8,38 +9,34 @@ namespace Manero_backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IdentityContext _identityContext;
+        private readonly IdentityContext _identitycontext;
 
-        public UserController(IdentityContext identityContext)
+        public UserController(IdentityContext identitycontext)
         {
-            _identityContext = identityContext;
+            _identitycontext = identitycontext;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(string id)
+        [HttpGet()]
+        public async Task<IActionResult> GetAsync()
         {
-            if (!Guid.TryParse(id, out var guid))
-            {
-                return BadRequest("Bruh please write a guid");
-            }
+            var user = await _identitycontext.Users.GetAsync(a => a.Name == name);
 
-            var article = await _identityContext.GetAsync(a => a.Id == id);
-
-            if (article == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(article);
+            return Ok(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(SignUpDto signup)
+        public async Task<IActionResult> CreateAsync(SignUpResponse signup)
         {
             if (ModelState.IsValid)
             {
-                ArticleResponse res = await _articleRepository.CreateAsync(article);
+                SignUpResponse res = await _identitycontext.CreateAsync(signup);
                 if (res != null)
+                    return Created("", res);
                     return Created("", res);
             }
             return BadRequest();

@@ -14,6 +14,13 @@ namespace Manero_backend.Services
             _identitycontext = identitycontext;
         }
 
+        public async Task<UserEntity> Create(UserEntity userEntity)
+        {
+            _identitycontext.Add(userEntity);
+            await _identitycontext.SaveChangesAsync();
+            return userEntity;
+        }
+
         public async Task<UserEntity> GetAsync(Expression<Func<UserEntity, bool>> predicate)
         {
             var entity = await _identitycontext.Users.FirstOrDefaultAsync(predicate);
