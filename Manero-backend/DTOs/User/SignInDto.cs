@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Manero_backend.DTOs.User
 {
-    public class LoginDto
+    public class SignInDto
     {
         [Required]
         public string Email { get; set; } = null!;
