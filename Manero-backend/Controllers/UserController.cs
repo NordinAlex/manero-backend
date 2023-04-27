@@ -21,14 +21,9 @@ namespace Manero_backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(string id)
+        public async Task<IActionResult> GetAsync(int id)
         {
-            if (!Guid.TryParse(id, out var guid))
-            {
-                return BadRequest("Error!");
-            }
-
-            var user = await _identitycontext.Users.SingleOrDefaultAsync();
+            var user = await _identitycontext.Users.SingleOrDefaultAsync(id);
 
             if (user == null)
             {
@@ -39,16 +34,14 @@ namespace Manero_backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(SignUpResponse signup)
+        public async Task<IActionResult> Create(SignUpRequest article)
         {
-            /*
             if (ModelState.IsValid)
             {
-                SignUpResponse res = await _identitycontext.CreateAsync(signup);
+                SignUpResponse res = await _identitycontext.CreateAsync(article);
                 if (res != null)
                     return Created("", res);
-                return Created("", res);
-            */
+            }
             return BadRequest();
         }
     }
