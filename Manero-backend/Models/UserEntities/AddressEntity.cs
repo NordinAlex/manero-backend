@@ -1,4 +1,6 @@
-﻿namespace Manero_backend.Models.UserEntities
+﻿using System.Runtime.CompilerServices;
+
+namespace Manero_backend.Models.UserEntities
 {
     public class AddressEntity
     {
@@ -9,5 +11,6 @@
         public string? City { get; set; }
 
         public ICollection<UserAddressEntity> UserAddresses { get; set; } = new HashSet<UserAddressEntity>();
+
     }
 }
