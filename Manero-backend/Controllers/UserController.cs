@@ -41,13 +41,14 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(SignUpResponse signup)
         {
+            /*
             if (ModelState.IsValid)
             {
                 SignUpResponse res = await _identitycontext.CreateAsync(signup);
                 if (res != null)
                     return Created("", res);
                 return Created("", res);
-            }
+            */
             return BadRequest();
         }
     }

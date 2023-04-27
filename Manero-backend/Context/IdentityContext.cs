@@ -57,17 +57,5 @@ namespace Manero_backend.Context
             });
         }
 
-        internal Task<SignUpResponse> CreateAsync(SignUpResponse signup)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Task GetAsync(Func<object, bool> value)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
     }
 }
