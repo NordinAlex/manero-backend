@@ -22,7 +22,7 @@ namespace Manero_backend.Models.UserEntities
 
         public ICollection<UserCompanyEntity> UserCompanies { get; set; } = new HashSet<UserCompanyEntity>();
 
-        public static implicit operator SignUpDto(UserEntity entity)
+        public static implicit operator SignUpResponse(UserEntity entity)
         {
             var res = SignUpDtoFactory.Create();
             res.Name = entity.Name!;
