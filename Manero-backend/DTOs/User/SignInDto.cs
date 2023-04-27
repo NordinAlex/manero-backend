@@ -10,7 +10,6 @@ namespace Manero_backend.DTOs.User
 
         [Required]
         public string Password { get; set; } = null!;
-
         public string RememberMe { get; set; } = null!;
         public string ForgotPassword { get; set; } = null!;
         
