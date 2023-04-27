@@ -1,4 +1,5 @@
-﻿using Manero_backend.Models.UserEntities;
+﻿using Manero_backend.DTOs.User;
+using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -55,5 +56,18 @@ namespace Manero_backend.Context
                 UserId = userId
             });
         }
+
+        internal Task<SignUpResponse> CreateAsync(SignUpResponse signup)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Task GetAsync(Func<object, bool> value)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
     }
 }

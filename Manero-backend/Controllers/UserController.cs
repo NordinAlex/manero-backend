@@ -1,5 +1,6 @@
 ﻿using Manero_backend.Context;
 using Manero_backend.DTOs.User;
+using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,16 +11,24 @@ namespace Manero_backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IdentityContext _identitycontext;
+  
+
 
         public UserController(IdentityContext identitycontext)
         {
             _identitycontext = identitycontext;
+
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> GetAsync()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(string id)
         {
-            var user = await _identitycontext.Users.GetAsync(a => a.Name == name);
+            if (!Guid.TryParse(id, out var guid))
+            {
+                return BadRequest("Error!");
+            }
+
+            var user = await _identitycontext.Users.SingleOrDefaultAsync();
 
             if (user == null)
             {
@@ -37,9 +46,10 @@ namespace Manero_backend.Controllers
                 SignUpResponse res = await _identitycontext.CreateAsync(signup);
                 if (res != null)
                     return Created("", res);
-                    return Created("", res);
+                return Created("", res);
             }
             return BadRequest();
         }
     }
 }
+
