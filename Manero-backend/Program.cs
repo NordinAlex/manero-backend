@@ -1,5 +1,6 @@
 using Manero_backend.Context;
 using Manero_backend.Models.UserEntities;
+using Manero_backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<UserService>();
 builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Manero")));
 builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
 {
