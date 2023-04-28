@@ -4,11 +4,11 @@ namespace Manero_backend.Interfaces.Product
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<ProductEntity>> GetAllArticles();
-        Task<ProductEntity> GetArticleById(int id);
-        Task<IEnumerable<ProductEntity>> GetArticlesByGroupId(int groupId);
-        Task AddArticle(ProductEntity product);
-        Task UpdateArticle(ProductEntity product);
-        Task DeleteArticle(int id);
+        Task<IEnumerable<ProductEntity>> GetAllProductAsync();
+        Task<ProductEntity> GetProductByIdAsync(int id);
+        Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId);
+        Task AddProductAsync(ProductEntity product);
+        Task UpdateProductAsync(ProductEntity product);
+        Task DeleteProductAsync(int id);
     }
 }
