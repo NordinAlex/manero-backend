@@ -22,7 +22,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="DTOs\Review\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="Models\UserProductEntities\" />
   </ItemGroup>
 
 </Project>
