@@ -1,4 +1,5 @@
-﻿using Manero_backend.Models.UserProductEntities;
+﻿using Manero_backend.DTOs.Product;
+using Manero_backend.Models.UserProductEntities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manero_backend.Models.ProductEntities
@@ -24,5 +25,10 @@ namespace Manero_backend.Models.ProductEntities
         public ICollection<ProductTagsEntity> Tags { get; set; } = null!; // en product kan ha flera tags
         public ICollection<ProductColorEntity> Colors { get; set; } = null!; // en product kan ha flera färger
         public ICollection<ProductTypeEntity> Type { get; set; } = null!; // en product kan ha flera typer
+
+        internal ProductResponse ToProductResponse(IEnumerable<TagsEntity> tags, IEnumerable<BrandEntity> brands, IEnumerable<ColorEntity> colors, IEnumerable<ImagesEntity> images, IEnumerable<SizeEntity> sizes, IEnumerable<TypeEntity> types)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

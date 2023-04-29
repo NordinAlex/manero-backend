@@ -4,6 +4,7 @@ using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Interfaces.Product.Services;
 using Manero_backend.Models;
 using Manero_backend.Repository;
+using System.Linq;
 
 namespace Manero_backend.Services
 {
@@ -50,32 +51,32 @@ namespace Manero_backend.Services
             var sizes = await _sizeRepository.GetAllSizeAsync();
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
-            return products.Select(a => a.ToProductResponse(products, tags, brands, colors, images, sizes, types));
+            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
 
         public async Task<ProductResponse> GetProductByIdAsync(int id)
         {
             // Julius
-            var products = await _productRepository.GetAllProductAsync();
+            var products = await _productRepository.GetProductByIdAsync(id);
             var brands = await _brandRepository.GetAllBrandAsync();
             var colors = await _colorRepository.GetAllColorAsync();
             var images = await _imageRepository.GetAllImageAsync();
             var sizes = await _sizeRepository.GetAllSizeAsync();
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
-            return products?.ToProductResponse(products, tags, brands, colors, images, sizes, types);
+            return products.ToProductResponse( tags, brands, colors, images, sizes, types);
         }
 
         public async Task<IEnumerable<ProductResponse>> GetProductByTypeIdAsync(int TypeId)
         {   // Julius
-            var products = await _productRepository.GetAllProductAsync();
+            var products = await _productRepository.GetProductByTypeIdAsync(TypeId);
             var brands = await _brandRepository.GetAllBrandAsync();
             var colors = await _colorRepository.GetAllColorAsync();
             var images = await _imageRepository.GetAllImageAsync();
             var sizes = await _sizeRepository.GetAllSizeAsync();
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
-            return products?.ToProductResponse(products, tags, brands, colors, images, sizes, types);
+            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
 
         public Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest)
