@@ -1,4 +1,5 @@
-﻿using Manero_backend.Interfaces.Product.Services;
+﻿using Manero_backend.DTOs.Product;
+using Manero_backend.Interfaces.Product.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +18,19 @@ namespace Manero_backend.Controllers
 
 
         // GET: api/Product
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet]      
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts()
         {
-            return Ok("Hello World");
+            var product = await _productService.GetAllProductAsync();
+            return Ok(product);
+        }
+
+        // POST: api/Product
+        [HttpPost]
+        public async Task<ActionResult<ProductResponse>> CreateProduct([FromBody] ProductRequest productRequest)
+        {
+            var product = await _productService.CreateProductAsync(productRequest);
+            return Ok(product);
         }
     }
 }
