@@ -12,9 +12,11 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public Task<IEnumerable<SizeEntity>> GetAllSizeAsync()
+        public async Task<IEnumerable<SizeEntity>> GetAllSizeAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Size.ToListAsync();
         }
+
+
     }
 }
