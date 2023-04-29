@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Manero_backend.DTOs.Product;
 using Manero_backend.Models.ProductEntities;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Manero_backend.Models
 {
@@ -21,9 +22,11 @@ namespace Manero_backend.Models
                 BrandEntityId = product.BrandEntityId,
                 BrandEntity = brands.FirstOrDefault(a => a.Id == product.BrandEntityId)?.BrandName,
                 WishlistEntityId = product.WishlistEntityId,
-              
-              
 
+                Colors = product.Colors?.Select(pc => colors.FirstOrDefault(c => c.Id == pc.ColorEntityId)?.Color).ToList() ?? new List<string>(),
+                Sizes = product.Sizes?.Select(ps => sizes.FirstOrDefault(s => s.Id == ps.SizeEntityId)?.Size).ToList() ?? new List<string>(),
+                Tags = product.Tags?.Select(pt => tags.FirstOrDefault(t => t.Id == pt.TagsEntityId)?.Tag).ToList() ?? new List<string>(),
+                Type = product.Type?.Select(pty => types.FirstOrDefault(ty => ty.Id == pty.TypeEntityId)?.Type).ToList() ?? new List<string>(),
             };
         }
         public static ProductEntity ToProductEntity(this ProductRequest request, ProductEntity product)
