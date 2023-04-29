@@ -12,9 +12,9 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public Task<IEnumerable<TagsEntity>> GetAllTagAsync()
+        public async Task<IEnumerable<TagsEntity>> GetAllTagAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Tags.ToListAsync();
         }
     }
 }

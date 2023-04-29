@@ -14,7 +14,7 @@ namespace Manero_backend.Repository
 
         public async Task<IEnumerable<SizeEntity>> GetAllSizeAsync()
         {
-            return await _context.Size.ToListAsync();
+            return await _context.Sizes.ToListAsync();
         }
 
 

@@ -12,9 +12,9 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public Task<IEnumerable<TypeEntity>> GetAllTypeAsync()
+        public async Task<IEnumerable<TypeEntity>> GetAllTypeAsync()
         {
-            throw new NotImplementedException();
+           return await _context.Types.ToListAsync();
         }
     }
 }
