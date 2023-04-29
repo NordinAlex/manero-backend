@@ -35,9 +35,9 @@ namespace Manero_backend.Repository
             return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
         }
 
-        public async Task<IEnumerable<ProductEntity>> GetProductByIdAsync(int id)
+        public async Task<ProductEntity> GetProductByIdAsync(int id)
         {
-            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
+            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId)
@@ -50,5 +50,7 @@ namespace Manero_backend.Repository
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+      
     }
 }
