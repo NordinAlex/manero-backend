@@ -1,6 +1,7 @@
 ﻿using Manero_backend.Context;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Models.ProductEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Repository
 {

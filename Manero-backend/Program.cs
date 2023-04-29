@@ -1,5 +1,8 @@
 using Manero_backend.Context;
+using Manero_backend.Interfaces.Product;
+using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Models.UserEntities;
+using Manero_backend.Repository;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +29,17 @@ builder.Services.ConfigureApplicationCookie(x =>
 
 // Product services
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("ProductSql")));
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IColorRepository, ColorRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<ISizeRepository, SizeRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<ITypeRepository, TypeRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ProductService>();
+
+
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
