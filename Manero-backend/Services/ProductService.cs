@@ -2,6 +2,7 @@
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Interfaces.Product.Services;
+using Manero_backend.Repository;
 
 namespace Manero_backend.Services
 {
@@ -38,21 +39,42 @@ namespace Manero_backend.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ProductResponse>> GetAllProductAsync()
+        public async Task<IEnumerable<ProductResponse>> GetAllProductAsync()
         {
             // Julius
-            throw new NotImplementedException();
+            var products = await _productRepository.GetAllProduct();
+            var brands = await _brandRepository.GetAllBrands();
+            var colors = await _colorRepository.GetAllColors();
+            var images = await _imageRepository.GetAllImages();
+            var sizes = await _sizeRepository.GetAllSizes();
+            var tags = await _tagRepository.GetAllTags();
+            var types = await _typeRepository.GetAllTypes();
+            return products.Select(a => a.ToProductResponse(products, tags, brands, colors, images, sizes, types));
         }
 
-        public Task<ProductResponse> GetProductByIdAsync(int id)
+        public async Task<ProductResponse> GetProductByIdAsync(int id)
         {
             // Julius
-            throw new NotImplementedException();
+            var products = await _productRepository.GetAllProducts();
+            var brands = await _brandRepository.GetAllBrands();
+            var colors = await _colorRepository.GetAllColors();
+            var images = await _imageRepository.GetAllImages();
+            var sizes = await _sizeRepository.GetAllSizes();
+            var tags = await _tagRepository.GetAllTags();
+            var types = await _typeRepository.GetAllTypes();
+            return products?.ToArticleResponse(products, tags, brands, colors, images, sizes, types);
         }
 
-        public Task<IEnumerable<ProductResponse>> GetProductByTypeIdAsync(int TypeId)
+        public async Task<IEnumerable<ProductResponse>> GetProductByTypeIdAsync(int TypeId)
         {   // Julius
-            throw new NotImplementedException();
+            var products = await _productRepository.GetAllProducts();
+            var brands = await _brandRepository.GetAllBrands();
+            var colors = await _colorRepository.GetAllColors();
+            var images = await _imageRepository.GetAllImages();
+            var sizes = await _sizeRepository.GetAllSizes();
+            var tags = await _tagRepository.GetAllTags();
+            var types = await _typeRepository.GetAllTypes();
+            return products?.ToArticleResponse(products, tags, brands, colors, images, sizes, types);
         }
 
         public Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest)

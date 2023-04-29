@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Manero_backend;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.UserProductEntities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manero_backend.DTOs.Product
 {
@@ -17,16 +18,21 @@ namespace Manero_backend.DTOs.Product
         public string SKU { get; set; } = null!;
 
         public int BrandEntityId { get; set; }
-        public BrandEntity BrandEntity { get; set; } = null!;
+        public string BrandEntity { get; set; } = null!;
 
         public int WishlistEntityId { get; set; }
-        public WishlistEntity? Wishlist { get; set; }
+        public string? Wishlist { get; set; }
 
-        public ICollection<ImagesEntity>? Images { get; set; } 
-        public ICollection<ReviewEntity>? ReviewEntity { get; set; } 
-        public ICollection<ProductSizeEntity> Sizes { get; set; } = null!; 
-        public ICollection<ProductTagsEntity> Tags { get; set; } = null!; 
-        public ICollection<ProductColorEntity> Colors { get; set; } = null!; 
-        public ICollection<ProductTypeEntity> Type { get; set; } = null!;
+        public string? ImageAlt { get; set; }
+        public string? ImageName { get; set; }
+        [NotMapped]
+        public string? ImageFile { get; set; }
+
+        public ICollection<string>? Images { get; set; } 
+        public ICollection<string>? ReviewEntity { get; set; } 
+        public ICollection<string> Sizes { get; set; } = null!; 
+        public ICollection<string> Tags { get; set; } = null!; 
+        public ICollection<string> Colors { get; set; } = null!; 
+        public ICollection<string> Type { get; set; } = null!;
     }
 }
