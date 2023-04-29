@@ -25,7 +25,7 @@ builder.Services.ConfigureApplicationCookie(x =>
 
 
 // Product services
-
+builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("ProductSql")));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

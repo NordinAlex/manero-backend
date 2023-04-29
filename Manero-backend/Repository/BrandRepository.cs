@@ -1,6 +1,7 @@
 ﻿using Manero_backend.Context;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Models.ProductEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Repository
 {
@@ -15,7 +16,7 @@ namespace Manero_backend.Repository
 
         public async Task<IEnumerable<BrandEntity>> GetAllBrandAsync()
         {
-            throw new NotImplementedException();
+           return await _context.Brands.ToListAsync();
         }
     }
 }

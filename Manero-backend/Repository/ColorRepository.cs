@@ -7,9 +7,9 @@ namespace Manero_backend.Repository
     public class ColorRepository : IColorRepository
     {
         private readonly DataContext _context;
-        private DataContext context;
 
-        public ColorRepository(DataContext _context)
+
+        public ColorRepository(DataContext context)
         {
             _context = context;
         }
