@@ -24,12 +24,12 @@ namespace Manero_backend.DTOs.Product
         public string? ImageAlt { get; set; }
         public string? ImageName { get; set; }
 
-        public ICollection<string>? Images { get; set; }
-        public ICollection<string>? ReviewEntity { get; set; }
-        public ICollection<string> Sizes { get; set; } = null!;
-        public ICollection<string> Tags { get; set; } = null!;
-        public ICollection<string> Colors { get; set; } = null!;
-        public ICollection<string> Type { get; set; } = null!;
+        public ICollection<int>? ImagesIds { get; set; }
+        public ICollection<int>? ReviewEntityIds { get; set; }
+        public ICollection<int> SizesIds { get; set; } = null!;
+        public ICollection<int> TagsIds { get; set; } = null!;
+        public ICollection<int> ColorsIds { get; set; } = null!;
+        public ICollection<int> TypeIds { get; set; } = null!;
     }
 
 }
