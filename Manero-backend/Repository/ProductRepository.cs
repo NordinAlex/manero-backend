@@ -1,6 +1,8 @@
 ﻿using Manero_backend.Context;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Models.ProductEntities;
+using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Manero_backend.Repository
 {
@@ -12,34 +14,41 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public Task AddProductAsync(ProductEntity product)
+        public async Task AddProductAsync(ProductEntity product)
         {
-            throw new NotImplementedException();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<ProductEntity>> GetAllProductAsync()
+        public async Task<IEnumerable<ProductEntity>> GetAllProductAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
         }
 
-        public Task<ProductEntity> GetProductByIdAsync(int id)
+        public async Task<IEnumerable<ProductEntity>> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
         }
 
-        public Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId)
+        public async Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId)
         {
-            throw new NotImplementedException();
+            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
         }
 
-        public Task UpdateProductAsync(ProductEntity product)
+        public async Task UpdateProductAsync(ProductEntity product)
         {
-            throw new NotImplementedException();
+            _context.Entry(product).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

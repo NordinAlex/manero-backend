@@ -1,6 +1,7 @@
 ﻿using Manero_backend.Context;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Models.ProductEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Repository
 {
@@ -12,9 +13,9 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public Task<IEnumerable<ImagesEntity>> GetAllImageAsync()
+        public async Task<IEnumerable<ImagesEntity>> GetAllImageAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Images.ToListAsync();
         }
     }
 }
