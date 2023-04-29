@@ -24,7 +24,36 @@ namespace Manero_backend.Context
 
 
         public DbSet<WishlistEntity> Wishlists { get; set; }
-        public DbSet<ReviewEntity> Reviews { get; set; }        
+        public DbSet<ReviewEntity> Reviews { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductColorEntity>()
+               .HasKey(aa => new { aa.ColorEntityId, aa.ProductEntityId });
 
+            modelBuilder.Entity<ProductColorEntity>()
+                .HasOne(aa => aa.ColorEntity)
+                .WithMany(a => a.ProductColors)
+                .HasForeignKey(aa => aa.ColorEntityId);
+
+            modelBuilder.Entity<ProductColorEntity>()
+                .HasOne(aa => aa.ProductEntity)
+                .WithMany(a => a.Colors)
+                .HasForeignKey(aa => aa.ColorEntityId);
+
+
+
+            modelBuilder.Entity<ProductSizeEntity>()
+                .HasKey(at => new { at.ProductEntityId, at.SizeEntityId });
+
+            modelBuilder.Entity<ProductSizeEntity>()
+                .HasOne(at => at.ProductEntity)
+                .WithMany(a => a.Sizes)
+                .HasForeignKey(at => at.ProductEntityId);
+
+            modelBuilder.Entity<ProductSizeEntity>()
+                .HasOne(at => at.Tag)
+                .WithMany(t => t.ArticleTags)
+                .HasForeignKey(at => at.TagId);
+        }
     }
 }

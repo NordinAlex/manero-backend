@@ -8,7 +8,7 @@ namespace Manero_backend.Models.ProductEntities
         public string Color { get; set; } = null!;
         public string? ColorCode { get; set; }   
         
-        public int ProductColorEntityid { get; set; } // color kan har flere produkter
-        public ProductColorEntity Product { get; set; } = null!;
+       // color kan har flere produkter
+        public ICollection<ProductColorEntity> ProductColors { get; set; } 
     }
 }
