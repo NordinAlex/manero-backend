@@ -21,7 +21,7 @@ namespace Manero_backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetAsync(CancellationToken id)
         {
             var user = await _identitycontext.Users.SingleOrDefaultAsync(id);
 
@@ -38,9 +38,9 @@ namespace Manero_backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                SignUpResponse res = await _identitycontext.CreateAsync(article);
-                if (res != null)
-                    return Created("", res);
+                //SignUpResponse res = await _identitycontext.CreateAsync(article);
+                //if (res != null)
+                //    return Created("", res);
             }
             return BadRequest();
         }
