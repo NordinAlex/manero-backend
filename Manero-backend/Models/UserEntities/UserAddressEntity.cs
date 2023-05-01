@@ -11,5 +11,7 @@ namespace Manero_backend.Models.UserEntities
 
         public int AddressId { get; set; }
         public AddressEntity Address { get; set; } = null!;
+
+        public string AdressDefinition { get; set; } = null!;
     }
 }
