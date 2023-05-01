@@ -29,16 +29,16 @@ namespace Manero_backend.Context
         {
             // Brand and Product relationship
             modelBuilder.Entity<ProductColorEntity>()
-               .HasKey(aa => new { aa.ColorEntityId, aa.ProductEntityId });
-
-            modelBuilder.Entity<ProductColorEntity>()
-                .HasOne(aa => aa.ColorEntity)
-                .WithMany(a => a.ProductColors)
-                .HasForeignKey(aa => aa.ColorEntityId);
+               .HasKey(aa => new { aa.ProductEntityId, aa.ColorEntityId });
 
             modelBuilder.Entity<ProductColorEntity>()
                 .HasOne(aa => aa.ProductEntity)
                 .WithMany(a => a.Colors)
+                .HasForeignKey(aa => aa.ProductEntityId);
+
+            modelBuilder.Entity<ProductColorEntity>()
+                .HasOne(aa => aa.ColorEntity)
+                .WithMany(a => a.ProductColor)
                 .HasForeignKey(aa => aa.ColorEntityId);
 
 
@@ -84,7 +84,7 @@ namespace Manero_backend.Context
                 .HasOne(at => at.TypeEntity)
                 .WithMany(t => t.ProductTypes)
                 .HasForeignKey(at => at.TypeEntityId);
-     
+
         }
     }
 }

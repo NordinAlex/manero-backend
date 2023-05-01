@@ -16,7 +16,7 @@ namespace Manero_backend.Models.ProductEntities
         public int BrandEntityId { get; set; }      
         public BrandEntity BrandEntity { get; set; } = null!; // en product kan ha en brand
 
-        public int WishlistEntityId { get; set; }
+        //public int WishlistEntityId { get; set; }
         public WishlistEntity? Wishlist { get; set; } // en product kan ha en wishlist
 
         public ICollection<ImagesEntity>? Images { get; set; } // en product kan ha flera bilder
@@ -26,9 +26,6 @@ namespace Manero_backend.Models.ProductEntities
         public ICollection<ProductColorEntity> Colors { get; set; } = null!; // en product kan ha flera färger
         public ICollection<ProductTypeEntity> Type { get; set; } = null!; // en product kan ha flera typer
 
-        internal ProductResponse ToProductResponse(IEnumerable<TagsEntity> tags, IEnumerable<BrandEntity> brands, IEnumerable<ColorEntity> colors, IEnumerable<ImagesEntity> images, IEnumerable<SizeEntity> sizes, IEnumerable<TypeEntity> types)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

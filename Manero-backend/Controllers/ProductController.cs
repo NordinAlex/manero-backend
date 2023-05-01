@@ -25,6 +25,7 @@ namespace Manero_backend.Controllers
             return Ok(product);
         }
 
+    
         // POST: api/Product
         [HttpPost]
         public async Task<ActionResult<ProductResponse>> CreateProduct([FromBody] ProductRequest productRequest)

@@ -29,10 +29,18 @@ namespace Manero_backend.Services
             _typeRepository = typeRepository;
         }
 
-        public Task<ProductResponse> CreateProductAsync(ProductRequest productRequest)
+        public async Task<ProductResponse> CreateProductAsync(ProductRequest productRequest)
         {
-            // Alex
-            throw new NotImplementedException();
+         
+            var brands = await _brandRepository.GetAllBrandAsync();
+            var colors = await _colorRepository.GetAllColorAsync();
+            var images = await _imageRepository.GetAllImageAsync();
+            var sizes = await _sizeRepository.GetAllSizeAsync();
+            var tags = await _tagRepository.GetAllTagAsync();
+            var types = await _typeRepository.GetAllTypeAsync();
+            var products = productRequest.ToProductEntity();
+            await _productRepository.AddProductAsync(products);
+            return products.ToProductResponse(tags, brands, colors, images, sizes, types);
         }
 
         public Task DeleteProductAsync(int id)
