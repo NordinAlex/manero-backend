@@ -92,9 +92,9 @@ namespace Manero_backend.Services
             // Ilona
             var brands = await _brandRepository.GetAllTags();
             var colors = await _colorRepository.GetAllColors();
-            var images = await _imagesRepository.GetAllImages();
+            var images = await _imageRepository.GetAllImages();
             var sizes = await _sizeRepository.GetAllSizes();
-            var tags = await _tagrRepository.GetAllTags();
+            var tags = await _tagRepository.GetAllTags();
             var types = await _typeRepository.GetAllTypes();
             var product = await _productRepository.GetProductById(id);
             if (product == null) return null;
