@@ -10,8 +10,18 @@ namespace Manero_backend.Models.ProductEntities
         public string Name { get; set; } = null!;
         public decimal Price { get; set; }
         public string Description { get; set; } = null!;
-        public int Quantity { get; set; }
+       
         public string SKU { get; set; } = null!;
+
+
+        // Hur många av varje storlek som finns i lager
+        public int QuantityXS { get; set; } = 0;
+        public int QuantityS { get; set; } = 0;
+        public int QuantityM { get; set; } = 0;
+        public int QuantityL { get; set; } = 0;
+        public int QuantityXL { get; set; } = 0;
+        public int QuantityXXL { get; set; } = 0;
+        public int QuantityOneSize { get; set; } = 0;
 
         public int BrandEntityId { get; set; }      
         public BrandEntity BrandEntity { get; set; } = null!; // en product kan ha en brand
