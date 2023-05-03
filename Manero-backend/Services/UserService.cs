@@ -9,19 +9,9 @@ namespace Manero_backend.Services
 {
     public class UserService
     {
-        private readonly IdentityContext _identitycontext;
-
-        public UserService(IdentityContext identitycontext)
-        {
-            _identitycontext = identitycontext;
-        }
-
-        public async Task<UserEntity> Create(UserEntity userEntity)
-        {
-            _identitycontext.Add(userEntity);
-            await _identitycontext.SaveChangesAsync();
-            return userEntity;
-        }
+        // public async Task<UserEntity> Create(UserEntity userEntity)
+        //{
+        //}
         
         /*
         public async Task<SignUpRequest> GetAsync(int id)
