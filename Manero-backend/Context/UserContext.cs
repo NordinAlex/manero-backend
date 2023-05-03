@@ -1,21 +1,19 @@
-﻿using Manero_backend.DTOs.User;
-using Manero_backend.Models.UserEntities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Manero_backend.Models.UserEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Context
 {
-    public class IdentityContext : IdentityDbContext<UserEntity>
+    public class UserContext : DbContext
     {
-        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
+        public UserContext(DbContextOptions<UserContext> options) : base(options)
         {
         }
 
-        public DbSet<AddressEntity> AspNetAddresses { get; set; }
-        public DbSet<UserAddressEntity> AspNetUserAddresses { get; set; }
-        public DbSet<CompanyEntity> AspNetCompanies { get; set; }
-        public DbSet<UserCompanyEntity> AspNetUserCompanyAddresses { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<AddressEntity> Addresses { get; set; }
+        public DbSet<UserAddressEntity> UserAddresses { get; set; }
+        public DbSet<CompanyEntity> Companies { get; set; }
+        public DbSet<UserCompanyEntity> CompanyAddresses { get; set; }
 
         /*
         protected override void OnModelCreating(ModelBuilder builder)
@@ -57,7 +55,6 @@ namespace Manero_backend.Context
                 UserId = userId
             });
         }
-
         */
     }
 }

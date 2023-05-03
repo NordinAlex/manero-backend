@@ -18,17 +18,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<UserService>();
 
-builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Manero")));
-builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
-{
-    x.Password.RequiredLength = 6;
-    x.User.RequireUniqueEmail = true;
-})
-.AddEntityFrameworkStores<IdentityContext>();
-builder.Services.ConfigureApplicationCookie(x =>
-{
-    x.LoginPath = "/login";
-});
+// User SQL Server
+builder.Services.AddDbContext<UserContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Manero")));
+
 
 
 // Product SQL Server
