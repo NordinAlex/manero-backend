@@ -8,28 +8,24 @@ namespace Manero_backend.Models.UserEntities
     {
         // Bild 09 i adobe xd
 
-        [ProtectedPersonalData]
-        public string? Name { get; set; }
-
-        [ProtectedPersonalData]
-        public string? Password { get; set; }
-
-        [ProtectedPersonalData]
-        public string? ConfirmPassword { get; set; }    
-
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string? Location { get; set; } = null!;
         public ICollection<UserAddressEntity> UserAddresses { get; set; } = new HashSet<UserAddressEntity>();
-
         public ICollection<UserCompanyEntity> UserCompanies { get; set; } = new HashSet<UserCompanyEntity>();
 
+        
         public static implicit operator SignUpResponse(UserEntity entity)
         {
             var res = new SignUpResponse
             {
-                Name = entity.Name!,
-                Password = entity.Password!
+                FirstName = entity.FirstName!,
+                LastName = entity.LastName!,
+                Email = entity.Email!
             };
 
             return res;
         }
+        
     }
 }

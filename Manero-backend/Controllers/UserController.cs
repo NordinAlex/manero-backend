@@ -34,7 +34,7 @@ namespace Manero_backend.Controllers
 
             if (ModelState.IsValid)
             {
-                var res = await _userManager.CreateAsync(userEntity, signuprequest.Password);
+                var res = await _userManager.CreateAsync(userEntity);
                 if (res.Succeeded)
                     return Created("", res);
             }
