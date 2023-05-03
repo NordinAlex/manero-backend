@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Manero_backend.Migrations.Data
+namespace Manero_backend.Migrations
 {
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
@@ -117,7 +117,25 @@ namespace Manero_backend.Migrations.Data
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("QuantityL")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityM")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityOneSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityS")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityXL")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityXS")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityXXL")
                         .HasColumnType("int");
 
                     b.Property<string>("SKU")
@@ -192,9 +210,6 @@ namespace Manero_backend.Migrations.Data
                     b.Property<string>("Size")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SizeQuantity")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

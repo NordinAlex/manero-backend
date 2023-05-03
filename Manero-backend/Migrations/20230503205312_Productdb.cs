@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Manero_backend.Migrations.Data
+namespace Manero_backend.Migrations
 {
     /// <inheritdoc />
     public partial class Productdb : Migration
@@ -43,8 +43,7 @@ namespace Manero_backend.Migrations.Data
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SizeQuantity = table.Column<int>(type: "int", nullable: false)
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,8 +99,14 @@ namespace Manero_backend.Migrations.Data
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     SKU = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuantityXS = table.Column<int>(type: "int", nullable: false),
+                    QuantityS = table.Column<int>(type: "int", nullable: false),
+                    QuantityM = table.Column<int>(type: "int", nullable: false),
+                    QuantityL = table.Column<int>(type: "int", nullable: false),
+                    QuantityXL = table.Column<int>(type: "int", nullable: false),
+                    QuantityXXL = table.Column<int>(type: "int", nullable: false),
+                    QuantityOneSize = table.Column<int>(type: "int", nullable: false),
                     BrandEntityId = table.Column<int>(type: "int", nullable: false),
                     WishlistId = table.Column<int>(type: "int", nullable: true)
                 },

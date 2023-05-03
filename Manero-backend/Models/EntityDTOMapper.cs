@@ -15,7 +15,7 @@ namespace Manero_backend.Models
                 Name = product.Name,
                 Price = product.Price,
                 Description = product.Description,
-                Quantity = product.Quantity,
+                Quantity = product.QuantityS,
                 SKU = product.SKU,
                 BrandEntityId = product.BrandEntityId,
                 BrandEntity = brands.FirstOrDefault(a => a.Id == product.BrandEntityId)?.BrandName,
@@ -38,7 +38,7 @@ namespace Manero_backend.Models
                 Name = request.Name,
                 Price = request.Price,
                 Description = request.Description,
-                Quantity = request.Quantity,
+                QuantityS = request.Quantity,
                 SKU = request.SKU,
                 BrandEntityId = request.BrandEntityId,
                 //WishlistEntityId = request.WishlistEntityId,
@@ -57,7 +57,7 @@ namespace Manero_backend.Models
             entity.Name = request.Name;
             entity.Price = request.Price;
             entity.Description = request.Description;
-            entity.Quantity = request.Quantity;
+            entity.QuantityS = request.Quantity;
             entity.SKU = request.SKU;
             entity.BrandEntityId = request.BrandEntityId;
             //entity.WishlistEntityId = request.WishlistEntityId;            
