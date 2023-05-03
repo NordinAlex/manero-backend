@@ -17,6 +17,7 @@ namespace Manero_backend.Context
         public DbSet<CompanyEntity> AspNetCompanies { get; set; }
         public DbSet<UserCompanyEntity> AspNetUserCompanyAddresses { get; set; }
 
+        /*
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -57,5 +58,6 @@ namespace Manero_backend.Context
             });
         }
 
+        */
     }
 }

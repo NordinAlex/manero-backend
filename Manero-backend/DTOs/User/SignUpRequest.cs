@@ -1,23 +1,22 @@
-﻿using Manero_backend.Factories;
-using Manero_backend.Models.UserEntities;
+﻿using Manero_backend.Models.UserEntities;
 
 namespace Manero_backend.DTOs.User
 {
     public class SignUpRequest
     {
         public string Name { get; set; } = null!;
+        public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public string ConfirmPassword { get; set; } = null!;
 
         public static implicit operator UserEntity(SignUpRequest signupReuqest)
         {
-            var userEntity = UserEntityFactory.Create();
-
-            userEntity.Name = signupReuqest.Name;
-            userEntity.Password = signupReuqest.Password;
-            userEntity.ConfirmPassword = signupReuqest.ConfirmPassword;
-
-            return signupReuqest;
+            // denna raderar allt med addresser?????????? i controllern så Createar den (userentity och pw?) är det det?
+            return new UserEntity
+            {
+                Email = signupReuqest.Email,
+                Name = signupReuqest.Name,
+                PasswordHash = signupReuqest.Password
+            };
         }
     }
 }

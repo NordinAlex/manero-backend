@@ -1,8 +1,11 @@
 ﻿using Manero_backend.Context;
+using Manero_backend.DTOs.Product;
 using Manero_backend.DTOs.User;
 using Manero_backend.Models.UserEntities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Manero_backend.Controllers
 {
@@ -10,36 +13,29 @@ namespace Manero_backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IdentityContext _identitycontext;
-  
+        private readonly UserManager<UserEntity> _userManager;
 
-
-        public UserController(IdentityContext identitycontext)
+        public UserController(UserManager<UserEntity> userManager)
         {
-            _identitycontext = identitycontext;
-
+            _userManager = userManager;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(CancellationToken id)
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
         {
-            var article = await _identitycontext.GetAsync(a => a.Id == id);
-
-            if (article == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(article);
+            var entity = await _userManager.Users.SingleOrDefaultAsync();
+            return Ok(entity);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(SignUpRequest user)
+        public async Task<IActionResult> Create(SignUpRequest signuprequest)
         {
+            UserEntity userEntity = signuprequest;
+
             if (ModelState.IsValid)
             {
-                SignUpResponse res = await _identitycontext.CreateAsync(article);
-                if (res != null)
+                var res = await _userManager.CreateAsync(userEntity, signuprequest.Password);
+                if (res.Succeeded)
                     return Created("", res);
             }
             return BadRequest();

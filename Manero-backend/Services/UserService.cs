@@ -1,4 +1,6 @@
 ﻿using Manero_backend.Context;
+using Manero_backend.DTOs.Product;
+using Manero_backend.DTOs.User;
 using Manero_backend.Models.UserEntities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -21,9 +23,9 @@ namespace Manero_backend.Services
             return userEntity;
         }
 
-        public async Task<UserEntity> GetAsync(Expression<Func<UserEntity, bool>> predicate)
+        public async Task<SignUpResponse> GetAsync(int id)
         {
-            var entity = await _identitycontext.Users.FirstOrDefaultAsync(predicate);
+            var entity = await _identitycontext.Users.FirstOrDefaultAsync();
             return entity!;
         }
     }
