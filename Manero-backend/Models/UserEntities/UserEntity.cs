@@ -6,26 +6,11 @@ namespace Manero_backend.Models.UserEntities
 {
     public class UserEntity : IdentityUser
     {
-        // Bild 09 i adobe xd
-
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string? Location { get; set; } = null!;
         public ICollection<UserAddressEntity> UserAddresses { get; set; } = new HashSet<UserAddressEntity>();
         public ICollection<UserCompanyEntity> UserCompanies { get; set; } = new HashSet<UserCompanyEntity>();
 
-        
-        public static implicit operator SignUpResponse(UserEntity entity)
-        {
-            var res = new SignUpResponse
-            {
-                FirstName = entity.FirstName!,
-                LastName = entity.LastName!,
-                Email = entity.Email!
-            };
-
-            return res;
-        }
-        
     }
 }

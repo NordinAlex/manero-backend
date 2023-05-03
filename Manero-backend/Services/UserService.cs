@@ -22,11 +22,13 @@ namespace Manero_backend.Services
             await _identitycontext.SaveChangesAsync();
             return userEntity;
         }
-
-        public async Task<SignUpResponse> GetAsync()
+        
+        /*
+        public async Task<SignUpRequest> GetAsync(int id)
         {
-            var entity = await _identitycontext.Users.FirstOrDefaultAsync();
+            var entity = await _identitycontext.Users.FirstOrDefaultAsync(x => x.Id == id.ToString());
             return entity!;
         }
+        */
     }
 }

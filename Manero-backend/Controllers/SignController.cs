@@ -1,26 +1,36 @@
-﻿using Manero_backend.DTOs.User;
+﻿using Manero_backend.Context;
+using Manero_backend.DTOs.Product;
+using Manero_backend.DTOs.User;
 using Manero_backend.Models.UserEntities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Manero_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class SignController : ControllerBase
     {
         private readonly UserManager<UserEntity> _userManager;
 
-        public UserController(UserManager<UserEntity> userManager)
+        public SignController(UserManager<UserEntity> userManager)
         {
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(ProfileRequest profileRequest)
+        [HttpGet("id")]
+        public async Task<IActionResult> GetAsync()
         {
-            UserEntity userEntity = profileRequest;
+            var entity = await _userManager.Users.SingleOrDefaultAsync();
+            return Ok(entity);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(SignUpRequest signuprequest)
+        {
+            UserEntity userEntity = signuprequest;
 
             if (ModelState.IsValid)
             {
@@ -32,3 +42,4 @@ namespace Manero_backend.Controllers
         }
     }
 }
+
