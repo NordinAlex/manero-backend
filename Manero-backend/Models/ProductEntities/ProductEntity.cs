@@ -10,8 +10,9 @@ namespace Manero_backend.Models.ProductEntities
         public string Name { get; set; } = null!;
         public decimal Price { get; set; }
         public string Description { get; set; } = null!;
-       
-        public string SKU { get; set; } = null!;
+
+        // denna kan behövas ta bort då det förmodligen är bättre att ha SKU i productItem istället då det är där vi definerar storlek färg osv
+        public string SKU { get; set; } = null!; 
 
 
         // Hur många av varje storlek som finns i lager
