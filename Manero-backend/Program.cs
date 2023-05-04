@@ -20,7 +20,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Manero")));
 
 
-
 // Product SQL Server
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("ProductSql")));
 
