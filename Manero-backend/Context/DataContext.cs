@@ -1,4 +1,7 @@
-﻿using Manero_backend.Models.ProductEntities;
+﻿using Manero_backend.Models;
+using Manero_backend.Models.OrderEntities;
+using Manero_backend.Models.ProductEntities;
+using Manero_backend.Models.ProductItemEntities;
 using Manero_backend.Models.UserProductEntities;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +24,9 @@ namespace Manero_backend.Context
         public DbSet<SizeEntity> Sizes { get; set; }
         public DbSet<TagsEntity> Tags { get; set; }
         public DbSet<TypeEntity> Types { get; set; }
-
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderLineEntity> OrderLines { get; set; }
+        public DbSet<ProductItemEntity> ProductItems { get; set; }
 
         public DbSet<WishlistEntity> Wishlists { get; set; }
         public DbSet<ReviewEntity> Reviews { get; set; }
@@ -84,6 +89,11 @@ namespace Manero_backend.Context
                 .HasOne(at => at.TypeEntity)
                 .WithMany(t => t.ProductTypes)
                 .HasForeignKey(at => at.TypeEntityId);
+
+            //order and productItem relationship
+
+            modelBuilder.Entity<OrderLineEntity>()
+                .HasKey(or => new { or.ProductItemId, or.OrderId });
 
         }
     }

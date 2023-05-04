@@ -7,7 +7,7 @@ namespace Manero_backend.Models.OrderEntities
     {
         public int OrderId { get; set; }
         public OrderEntity Order { get; set; } = null!;
-        public int ProductId { get; set; }
+        public int ProductItemId { get; set; }
         public ProductItemEntity ProductItem { get; set; } = null!;
         public int Quantity { get; set; }
         public decimal Price { get; set; }
