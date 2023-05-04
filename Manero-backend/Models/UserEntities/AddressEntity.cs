@@ -1,15 +1,20 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Manero_backend.Interfaces.Product.Models;
+using System.Runtime.CompilerServices;
 
 namespace Manero_backend.Models.UserEntities
 {
-    public class AddressEntity
+    public class AddressEntity : IAddressEntity
     {
+        public AddressEntity()
+        {
+            this.Users = new HashSet<UserEntity>();
+        }
+
         public int Id { get; set; }
         public string StreetName { get; set; } = null!;
         public string PostalCode { get; set; } = null!;
         public string? City { get; set; }
 
-        public ICollection<UserAddressEntity> UserAddresses { get; set; } = new HashSet<UserAddressEntity>();
-
+        public virtual ICollection<UserEntity> Users { get; set; }
     }
 }
