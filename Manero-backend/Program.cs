@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Manero_backend.Context;
+using Manero_backend.Interfaces.Order;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Interfaces.Product.Services;
@@ -32,6 +33,8 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 
 
