@@ -1,4 +1,4 @@
-﻿using Manero_backend.Interfaces.Product.Models;
+﻿using Manero_backend.Interfaces.Users.Models;
 
 namespace Manero_backend.DTOs.User
 {

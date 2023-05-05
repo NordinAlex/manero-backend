@@ -1,5 +1,6 @@
 ﻿using Manero_backend.Context;
-using Manero_backend.Interfaces.Product.Repositories;
+using Manero_backend.DTOs.User;
+using Manero_backend.Interfaces.Users.Repositories;
 using Manero_backend.Models.UserEntities;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,19 +20,19 @@ namespace Manero_backend.Repository
              return await _identityContext.Users.AnyAsync();
         }
 
-        public async Task<UserEntity> CreateAsync(UserEntity entity)
+        public Task<UserResponse> GetAsync(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SaveDBAsync()
         {
             try
             {
-                _identityContext.Add(entity);
                 await _identityContext.SaveChangesAsync();
-
-                return entity;
             }
             catch
-            {
-                return null!;
-            }
+            {  }
         }
     }
 }

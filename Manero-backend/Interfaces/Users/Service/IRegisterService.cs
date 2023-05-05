@@ -2,7 +2,7 @@
 using Manero_backend.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Manero_backend.Interfaces.Product.Services
+namespace Manero_backend.Interfaces.Users.Service
 {
     public interface IRegisterService
     {

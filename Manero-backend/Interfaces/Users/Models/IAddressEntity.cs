@@ -1,6 +1,6 @@
 ﻿using Manero_backend.Models.UserEntities;
 
-namespace Manero_backend.Interfaces.Product.Models
+namespace Manero_backend.Interfaces.Users.Models
 {
     public interface IAddressEntity
     {

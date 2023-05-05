@@ -5,6 +5,8 @@ using Manero_backend.Interfaces.Order;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Interfaces.Product.Services;
+using Manero_backend.Interfaces.Users.Repositories;
+using Manero_backend.Interfaces.Users.Service;
 using Manero_backend.Models.UserEntities;
 using Manero_backend.Repository;
 using Manero_backend.Services;
@@ -35,6 +37,16 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IRegisterService, RegisterServices>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserServices>();
+builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
+{
+    x.Password.RequiredLength = 8;
+    x.User.RequireUniqueEmail = true;
+    x.SignIn.RequireConfirmedAccount = false;
+}).AddEntityFrameworkStores<IdentityContext>();
+
 
 
 
@@ -43,7 +55,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

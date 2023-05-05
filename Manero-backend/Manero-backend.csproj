@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Review\" />
+    <Folder Include="Interfaces\Product\Models\" />
     <Folder Include="Migrations\Data\" />
   </ItemGroup>
 

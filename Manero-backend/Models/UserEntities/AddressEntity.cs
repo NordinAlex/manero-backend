@@ -1,4 +1,4 @@
-﻿using Manero_backend.Interfaces.Product.Models;
+﻿using Manero_backend.Interfaces.Users.Models;
 using System.Runtime.CompilerServices;
 
 namespace Manero_backend.Models.UserEntities
