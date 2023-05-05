@@ -1,4 +1,6 @@
-﻿using Manero_backend.Interfaces.Users.Service;
+﻿using Manero_backend.DTOs.User;
+using Manero_backend.Interfaces.Users.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +26,18 @@ namespace Manero_backend.Controllers
                 return Ok(respons);
             }
             return BadRequest("Invalid ID");
+        }
+        //[Authorize]
+        [HttpGet("all")]
+        public async Task<IEnumerable<UserResponse>> GetAllAsync()
+        {
+            return await _userService.GetAllAsync();
+        }
+        //[Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            return await _userService.DeleteAsync(id);
         }
     }
 }
