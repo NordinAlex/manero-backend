@@ -11,28 +11,21 @@ namespace Manero_backend.DTOs.Product
     public class ProductResponse
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public decimal Price { get; set; }
-        public string Description { get; set; } = null!;
-        public int Quantity { get; set; }
-        public string SKU { get; set; } = null!;
-
-        public int BrandEntityId { get; set; }
-        public string BrandEntity { get; set; } = null!;
-
-        public int WishlistEntityId { get; set; }
-        public string? Wishlist { get; set; }
-
-        public string? ImageAlt { get; set; }
-        public string? ImageName { get; set; }
-        [NotMapped]
-        public string? ImageFile { get; set; }
-
-        public ICollection<string>? Images { get; set; } 
-        public ICollection<string>? ReviewEntity { get; set; } 
-        public ICollection<string> Sizes { get; set; } = null!; 
-        public ICollection<string> Tags { get; set; } = null!; 
-        public ICollection<string> Colors { get; set; } = null!; 
+        public string Name { get; set; } = null!;       
+        public string Description { get; set; } = string.Empty;  
+        public string Brand { get; set; } = null!;
+        public ICollection<string> Tags { get; set; } = null!;      
         public ICollection<string> Type { get; set; } = null!;
+    }
+    public class ProductItemResponse  // Product Variation Request
+    {
+        public string Color { get; set; } = null!;
+        public string Size { get; set; } = null!;
+        public decimal Price { get; set; }
+        public int Stock { get; set; }
+        public int SizesIds { get; set; }
+        public int ColorsIds { get; set; }
+        public ICollection<string>? ImageAlt { get; set; }
+        public ICollection<string>? ImageName { get; set; }       
     }
 }

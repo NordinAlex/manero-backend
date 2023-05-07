@@ -32,17 +32,17 @@ namespace Manero_backend.Repository
 
         public async Task<IEnumerable<ProductEntity>> GetAllProductAsync()
         {
-            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
+            return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).ToListAsync();
         }
 
         public async Task<ProductEntity> GetProductByIdAsync(int id)
         {
-            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).FirstOrDefaultAsync(a => a.Id == id);
+            return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId)
         {
-            return await _context.Products.Include(a => a.BrandEntity).Include(x => x.Wishlist).Include(t => t.Images).Include(z => z.ReviewEntity).Include(y => y.Sizes).Include(p => p.Tags).Include(m => m.Colors).Include(c => c.Type).ToListAsync();
+            return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).ToListAsync();
         }
 
         public async Task UpdateProductAsync(ProductEntity product)
