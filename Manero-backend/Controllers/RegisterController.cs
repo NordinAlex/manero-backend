@@ -25,7 +25,9 @@ namespace Manero_backend.Controllers
         public async Task<IActionResult> Create(UserRequest userRequest)
         {
             if(ModelState.IsValid) {
-                 var result = await _registerService.CreateUserAsync(userRequest);
+                var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
+                if (checkemail == null) { return BadRequest("Email exists"); };
+                var result = await _registerService.CreateUserAsync(userRequest);
                 if(result != null)
                 {
                     return Created("", result);

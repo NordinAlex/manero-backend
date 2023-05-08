@@ -26,9 +26,9 @@ namespace Manero_backend.Services
             {
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded) { return StatusFactory<OkResult>.Create(); }
-                else { return StatusFactory<NotFoundResult>.Create(); } // FACTORY?
+                else { return StatusFactory<NotFoundResult>.Create(); } 
             }
-            return StatusFactory<BadRequestResult>.Create(); //FACTORY?
+            return StatusFactory<BadRequestResult>.Create();
         }
 
         public async Task<ICollection<UserResponse>> GetAllAsync() //Patrik
