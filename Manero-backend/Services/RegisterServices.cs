@@ -47,6 +47,7 @@ namespace Manero_backend.Services
             {
                 await _userManager.CreateAsync(entity, userRequest.Password);
                 await _userManager.AddToRoleAsync(entity, "User");
+                // Behöver vi denna?
                 await _userRepo.SaveDBAsync();
                 return entity;
             }
