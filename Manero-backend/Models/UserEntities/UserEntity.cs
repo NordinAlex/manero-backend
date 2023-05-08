@@ -8,15 +8,8 @@ namespace Manero_backend.Models.UserEntities
 {
     public class UserEntity : IdentityUser, IUserEntity
     {
-        public UserEntity()
-        {
-            this.Addresses = new HashSet<AddressEntity>();
-        }
-
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public virtual ICollection<AddressEntity> Addresses { get; set; } 
-        public virtual ICollection<OrderEntity> Orders { get; set; }
 
         public static implicit operator UserResponse(UserEntity entity)
         {
