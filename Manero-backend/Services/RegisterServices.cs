@@ -1,10 +1,12 @@
 ﻿using Manero_backend.DTOs.User;
 using Manero_backend.Factories;
+using Manero_backend.Interfaces.Users.Models;
 using Manero_backend.Interfaces.Users.Repositories;
 using Manero_backend.Interfaces.Users.Service;
 using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Services
 {
@@ -20,9 +22,16 @@ namespace Manero_backend.Services
             _roleManager = roleManager;
             _userManager = userManager;
         }
+        
 
+        public async Task<UserResponse> CheckEmailAsync(string email)
+        {
+         return  await _userManager.FindByEmailAsync(email) ?? null!;
+        }
         public async Task<UserResponse> CreateUserAsync(UserRequest userRequest)
         {
+            
+            
             var entity = UserFactory.CreateUserEntity();
 
             entity.Email = userRequest.Email;
@@ -31,7 +40,7 @@ namespace Manero_backend.Services
             entity.PhoneNumber = userRequest.PhoneNumber;
             entity.UserName = userRequest.Email;
 
-            var result = await _userRepo.CheckAsync();
+            var result = await _userManager.Users.AnyAsync();
             if (!result)
             {
                 try
@@ -52,26 +61,5 @@ namespace Manero_backend.Services
             }
             return null!;
         }
-
-        public async Task<IActionResult> DeleteUserAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<UserResponse> GetUserByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<UserResponse> UpdateUserAsync(int id, UserRequest userRequest)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
