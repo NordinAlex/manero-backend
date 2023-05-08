@@ -8,5 +8,7 @@ namespace Manero_backend.Interfaces.Users.Service
         public Task<UserResponse> GetAsync(string id);
         public Task<ICollection<UserResponse>> GetAllAsync();
         public Task<IActionResult> DeleteAsync(string id);
+
+        public Task<UserResponse> UpdateAsync(UpdateUser updateUser, string id);
     }
 }

@@ -16,9 +16,7 @@ namespace Manero_backend.Context
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<ColorEntity> Colors { get; set; }
         public DbSet<ImagesEntity> Images { get; set; }
-        public DbSet<ProductColorEntity> ProductColors { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<ProductSizeEntity> ProductSizes { get; set; }
         public DbSet<ProductTagsEntity> ProductTags { get; set; }
         public DbSet<ProductTypeEntity> ProductTypes { get; set; }
         public DbSet<SizeEntity> Sizes { get; set; }
@@ -32,63 +30,33 @@ namespace Manero_backend.Context
         public DbSet<ReviewEntity> Reviews { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Brand and Product relationship
-            modelBuilder.Entity<ProductColorEntity>()
-               .HasKey(aa => new { aa.ProductEntityId, aa.ColorEntityId });
-
-            modelBuilder.Entity<ProductColorEntity>()
-                .HasOne(aa => aa.ProductEntity)
-                .WithMany(a => a.Colors)
-                .HasForeignKey(aa => aa.ProductEntityId);
-
-            modelBuilder.Entity<ProductColorEntity>()
-                .HasOne(aa => aa.ColorEntity)
-                .WithMany(a => a.ProductColor)
-                .HasForeignKey(aa => aa.ColorEntityId);
-
-
-            // Size and Product relationship
-            modelBuilder.Entity<ProductSizeEntity>()
-                .HasKey(at => new { at.ProductEntityId, at.SizeEntityId });
-
-            modelBuilder.Entity<ProductSizeEntity>()
-                .HasOne(at => at.ProductEntity)
-                .WithMany(a => a.Sizes)
-                .HasForeignKey(at => at.ProductEntityId);
-
-            modelBuilder.Entity<ProductSizeEntity>()
-                .HasOne(at => at.SizeEntity)
-                .WithMany(t => t.ProductSize)
-                .HasForeignKey(at => at.SizeEntityId);
-
-
             // Tags and Product relationship
             modelBuilder.Entity<ProductTagsEntity>()
-                .HasKey(at => new { at.ProductEntityId, at.TagsEntityId });
+                .HasKey(pt => new { pt.ProductEntityId, pt.TagsEntityId });
 
             modelBuilder.Entity<ProductTagsEntity>()
-                .HasOne(at => at.ProductEntity)
-                .WithMany(a => a.Tags)
-                .HasForeignKey(at => at.ProductEntityId);
+                .HasOne(pt => pt.ProductEntity)
+                .WithMany(p => p.Tags)
+                .HasForeignKey(pt => pt.ProductEntityId);
 
             modelBuilder.Entity<ProductTagsEntity>()
-                .HasOne(at => at.TagsEntity)
+                .HasOne(pt => pt.TagsEntity)
                 .WithMany(t => t.ProductTags)
-                .HasForeignKey(at => at.TagsEntityId);
+                .HasForeignKey(pt => pt.TagsEntityId);
 
             // Type and Product relationship 
             modelBuilder.Entity<ProductTypeEntity>()
-            .HasKey(at => new { at.ProductEntityId, at.TypeEntityId });
+            .HasKey(pt => new { pt.ProductEntityId, pt.TypeEntityId });
 
             modelBuilder.Entity<ProductTypeEntity>()
-                .HasOne(at => at.ProductEntity)
-                .WithMany(a => a.Type)
-                .HasForeignKey(at => at.ProductEntityId);
+                .HasOne(pt => pt.ProductEntity)
+                .WithMany(p => p.Type)
+                .HasForeignKey(pt => pt.ProductEntityId);
 
             modelBuilder.Entity<ProductTypeEntity>()
-                .HasOne(at => at.TypeEntity)
+                .HasOne(pt => pt.TypeEntity)
                 .WithMany(t => t.ProductTypes)
-                .HasForeignKey(at => at.TypeEntityId);
+                .HasForeignKey(pt => pt.TypeEntityId);
 
             //order and productItem relationship
 

@@ -1,11 +1,12 @@
-﻿using Manero_backend.Interfaces.Order;
+﻿using Manero_backend.DTOs.Order;
+using Manero_backend.Interfaces.Order;
 using Manero_backend.Models.OrderEntities;
 
 namespace Manero_backend.Repository
 {
     public class OrderRepository : IOrderRepository
     {
-        public Task CreateOrderAsync(OrderEntity orderEntity)
+        public Task<OrderEntity> CreateOrderAsync(OrderEntity orderEntity)
         {
             throw new NotImplementedException();
         }

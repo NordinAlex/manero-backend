@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Manero_backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230503205312_Productdb")]
+    [Migration("20230507105414_Productdb")]
     partial class Productdb
     {
         /// <inheritdoc />
@@ -24,6 +24,53 @@ namespace Manero_backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Manero_backend.Models.OrderEntities.OrderEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ShippingAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Manero_backend.Models.OrderEntities.OrderLineEntity", b =>
+                {
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductItemId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderLines");
+                });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.BrandEntity", b =>
                 {
@@ -76,26 +123,16 @@ namespace Manero_backend.Migrations
                     b.Property<int>("ProductEntityid")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductItemEntityId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductEntityid");
 
+                    b.HasIndex("ProductItemEntityId");
+
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductColorEntity", b =>
-                {
-                    b.Property<int>("ProductEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ColorEntityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductEntityId", "ColorEntityId");
-
-                    b.HasIndex("ColorEntityId");
-
-                    b.ToTable("ProductColors");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductEntity", b =>
@@ -117,59 +154,16 @@ namespace Manero_backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("QuantityL")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityM")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityOneSize")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityS")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityXL")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityXS")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityXXL")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SKU")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("WishlistId")
+                    b.Property<int?>("WishlistEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandEntityId");
 
-                    b.HasIndex("WishlistId");
+                    b.HasIndex("WishlistEntityId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductSizeEntity", b =>
-                {
-                    b.Property<int>("ProductEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SizeEntityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductEntityId", "SizeEntityId");
-
-                    b.HasIndex("SizeEntityId");
-
-                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductTagsEntity", b =>
@@ -253,6 +247,44 @@ namespace Manero_backend.Migrations
                     b.ToTable("Types");
                 });
 
+            modelBuilder.Entity("Manero_backend.Models.ProductItemEntities.ProductItemEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityInStock")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductItems");
+                });
+
             modelBuilder.Entity("Manero_backend.Models.UserProductEntities.ReviewEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -295,6 +327,9 @@ namespace Manero_backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -303,34 +338,38 @@ namespace Manero_backend.Migrations
                     b.ToTable("Wishlists");
                 });
 
+            modelBuilder.Entity("Manero_backend.Models.OrderEntities.OrderLineEntity", b =>
+                {
+                    b.HasOne("Manero_backend.Models.OrderEntities.OrderEntity", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Manero_backend.Models.ProductItemEntities.ProductItemEntity", "ProductItem")
+                        .WithMany()
+                        .HasForeignKey("ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ProductItem");
+                });
+
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ImagesEntity", b =>
                 {
                     b.HasOne("Manero_backend.Models.ProductEntities.ProductEntity", "Product")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("ProductEntityid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Manero_backend.Models.ProductItemEntities.ProductItemEntity", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProductItemEntityId");
+
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductColorEntity", b =>
-                {
-                    b.HasOne("Manero_backend.Models.ProductEntities.ColorEntity", "ColorEntity")
-                        .WithMany("ProductColor")
-                        .HasForeignKey("ColorEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Manero_backend.Models.ProductEntities.ProductEntity", "ProductEntity")
-                        .WithMany("Colors")
-                        .HasForeignKey("ProductEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ColorEntity");
-
-                    b.Navigation("ProductEntity");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductEntity", b =>
@@ -341,32 +380,11 @@ namespace Manero_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Manero_backend.Models.UserProductEntities.WishlistEntity", "Wishlist")
+                    b.HasOne("Manero_backend.Models.UserProductEntities.WishlistEntity", null)
                         .WithMany("Products")
-                        .HasForeignKey("WishlistId");
+                        .HasForeignKey("WishlistEntityId");
 
                     b.Navigation("BrandEntity");
-
-                    b.Navigation("Wishlist");
-                });
-
-            modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductSizeEntity", b =>
-                {
-                    b.HasOne("Manero_backend.Models.ProductEntities.ProductEntity", "ProductEntity")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Manero_backend.Models.ProductEntities.SizeEntity", "SizeEntity")
-                        .WithMany("ProductSize")
-                        .HasForeignKey("SizeEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductEntity");
-
-                    b.Navigation("SizeEntity");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductTagsEntity", b =>
@@ -407,6 +425,33 @@ namespace Manero_backend.Migrations
                     b.Navigation("TypeEntity");
                 });
 
+            modelBuilder.Entity("Manero_backend.Models.ProductItemEntities.ProductItemEntity", b =>
+                {
+                    b.HasOne("Manero_backend.Models.ProductEntities.ColorEntity", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Manero_backend.Models.ProductEntities.ProductEntity", "Product")
+                        .WithMany("Variations")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Manero_backend.Models.ProductEntities.SizeEntity", "Size")
+                        .WithMany()
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+                });
+
             modelBuilder.Entity("Manero_backend.Models.UserProductEntities.ReviewEntity", b =>
                 {
                     b.HasOne("Manero_backend.Models.ProductEntities.ProductEntity", null)
@@ -416,29 +461,15 @@ namespace Manero_backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Manero_backend.Models.ProductEntities.ColorEntity", b =>
-                {
-                    b.Navigation("ProductColor");
-                });
-
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductEntity", b =>
                 {
-                    b.Navigation("Colors");
-
-                    b.Navigation("Images");
-
                     b.Navigation("ReviewEntity");
-
-                    b.Navigation("Sizes");
 
                     b.Navigation("Tags");
 
                     b.Navigation("Type");
-                });
 
-            modelBuilder.Entity("Manero_backend.Models.ProductEntities.SizeEntity", b =>
-                {
-                    b.Navigation("ProductSize");
+                    b.Navigation("Variations");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.TagsEntity", b =>
@@ -449,6 +480,11 @@ namespace Manero_backend.Migrations
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.TypeEntity", b =>
                 {
                     b.Navigation("ProductTypes");
+                });
+
+            modelBuilder.Entity("Manero_backend.Models.ProductItemEntities.ProductItemEntity", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.UserProductEntities.WishlistEntity", b =>

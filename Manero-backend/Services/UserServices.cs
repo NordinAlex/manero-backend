@@ -48,7 +48,23 @@ namespace Manero_backend.Services
 
         public async Task<UserResponse> GetAsync(string id)
         {
-            return await _userManager.Users.SingleOrDefaultAsync(x => x.Id == id) ?? null!;
+            return await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id) ?? null!;
+        }
+
+        public async Task<UserResponse> UpdateAsync(UpdateUser updateUser, string id)
+        {
+            var entity = await _userManager.FindByIdAsync(id);
+
+            if (entity != null)
+            {
+                entity.FirstName = updateUser.FirstName;
+                entity.LastName = updateUser.LastName;
+                entity.PhoneNumber = updateUser.PhoneNumber;
+
+                await _userManager.UpdateAsync(entity);
+                return entity;
+            }
+            return null!;
         }
     }
 }

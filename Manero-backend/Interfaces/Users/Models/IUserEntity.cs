@@ -8,7 +8,6 @@ namespace Manero_backend.Interfaces.Users.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ICollection<AddressEntity> Addresses { get; set; }
-        public ICollection<OrderEntity> Orders { get; set; }
+      
     }
 }

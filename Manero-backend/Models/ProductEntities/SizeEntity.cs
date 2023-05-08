@@ -8,6 +8,5 @@ namespace Manero_backend.Models.ProductEntities
         public int Id { get; set; }
         public string Size { get; set; } = null!;
 
-        public ICollection<ProductSizeEntity> ProductSize { get; set; } = null!; // size kan ha flera produkter
     }
 }

@@ -13,38 +13,24 @@ namespace Manero_backend.Models
             {
                 Id = product.Id,
                 Name = product.Name,
-                Price = product.Price,
                 Description = product.Description,
-                Quantity = product.QuantityS,
-                SKU = product.SKU,
-                BrandEntityId = product.BrandEntityId,
-                BrandEntity = brands.FirstOrDefault(a => a.Id == product.BrandEntityId)?.BrandName,
-                //WishlistEntityId = product.WishlistEntityId,
-
-                Colors = product.Colors?.Select(pc => colors.FirstOrDefault(c => c.Id == pc.ColorEntityId)?.Color).ToList() ?? new List<string>(),
-                Sizes = product.Sizes?.Select(ps => sizes.FirstOrDefault(s => s.Id == ps.SizeEntityId)?.Size).ToList() ?? new List<string>(),
+                Brand = brands.FirstOrDefault(a => a.Id == product.BrandEntityId)?.BrandName,                
                 Tags = product.Tags?.Select(pt => tags.FirstOrDefault(t => t.Id == pt.TagsEntityId)?.Tag).ToList() ?? new List<string>(),
                 Type = product.Type?.Select(pty => types.FirstOrDefault(ty => ty.Id == pty.TypeEntityId)?.Type).ToList() ?? new List<string>(),
             };
         }
         public static ProductEntity ToProductEntity(this ProductRequest request)
         {
-            var ProductTagsEntity = request.TagsIds.Select(TagId => new ProductTagsEntity { TagsEntityId = TagId }).ToList();
-            var ProductSizeEntity = request.SizesIds.Select(sId => new ProductSizeEntity { SizeEntityId = sId }).ToList();
+            var ProductTagsEntity = request.TagsIds.Select(TagId => new ProductTagsEntity { TagsEntityId = TagId }).ToList();           
             var ProductTypeEntity = request.TypeIds.Select(tId => new ProductTypeEntity { TypeEntityId = tId }).ToList();
-            var ProductColorEntity = request.ColorsIds.Select(colorId => new ProductColorEntity { ColorEntityId = colorId }).ToList();
+         
             return new ProductEntity
             {
-                Name = request.Name,
-                Price = request.Price,
-                Description = request.Description,
-                QuantityS = request.Quantity,
-                SKU = request.SKU,
-                BrandEntityId = request.BrandEntityId,
+                Name = request.Name,               
+                BrandEntityId = request.BrandId,
                 //WishlistEntityId = request.WishlistEntityId,
                 Tags = ProductTagsEntity,
-                Sizes = ProductSizeEntity,
-                Colors = ProductColorEntity,
+             
                 Type = ProductTypeEntity,
 
 
@@ -54,12 +40,10 @@ namespace Manero_backend.Models
 
         public static void UpdateProductEntity(this ProductRequest request, ProductEntity entity)
         {
-            entity.Name = request.Name;
-            entity.Price = request.Price;
+            entity.Name = request.Name;            
             entity.Description = request.Description;
-            entity.QuantityS = request.Quantity;
-            entity.SKU = request.SKU;
-            entity.BrandEntityId = request.BrandEntityId;
+            
+            entity.BrandEntityId = request.BrandId;
             //entity.WishlistEntityId = request.WishlistEntityId;            
 
         }

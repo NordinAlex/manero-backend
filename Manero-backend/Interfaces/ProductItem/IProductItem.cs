@@ -13,5 +13,6 @@ namespace Manero_backend.Interfaces.ProductItem
         public string SKU { get; set; }
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
+        public ICollection<ImagesEntity>? Images { get; set; }
     }
 }
