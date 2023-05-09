@@ -28,7 +28,7 @@ namespace Manero_backend.Controllers
             if(ModelState.IsValid) {
                 //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
                 if (await _registerService.CheckEmailAsync(userRequest.Email)) 
-                { return Conflict("Email exists"); };
+                { return Conflict(new { error = "Email exists" }); };
                 var result = await _registerService.CreateUserAsync(userRequest);
                 if(result != null)
                 {
@@ -39,7 +39,7 @@ namespace Manero_backend.Controllers
                 var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
                 return BadRequest(message);
             }
-            return BadRequest(userRequest);
+            return BadRequest(ModelState);
         }
 
       
