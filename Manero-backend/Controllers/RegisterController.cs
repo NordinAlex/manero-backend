@@ -1,4 +1,5 @@
 ﻿using Manero_backend.DTOs.User;
+using Manero_backend.Factories;
 using Manero_backend.Interfaces.Users.Service;
 using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Http;
@@ -27,19 +28,23 @@ namespace Manero_backend.Controllers
         {
             if(ModelState.IsValid) {
                 //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
-                if (await _registerService.CheckEmailAsync(userRequest.Email)) 
-                { return Conflict(new { error = "Email exists" }); };
+                if (await _registerService.CheckEmailAsync(userRequest.Email))
+                {
+                    return Conflict(UserFactory.CreateUserResponsError("Email already exist",userRequest));
+                }
                 var result = await _registerService.CreateUserAsync(userRequest);
                 if(result != null)
                 {
                     return Created("", result);
                 }
-            } else
+                return BadRequest(UserFactory.CreateUserResponsError("Unexpected error :( Contact support", userRequest));
+            } 
+            return BadRequest(ModelState);
+            /*else
             {
                 var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
                 return BadRequest(message);
-            }
-            return BadRequest(ModelState);
+            }*/
         }
 
       
