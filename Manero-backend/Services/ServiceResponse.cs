@@ -1,6 +1,10 @@
 ﻿namespace Manero_backend.Services
 {
-    // ServiceResponse for better error handling and response messages to the client 
+
+    /// <summary>
+    /// 🙂 👍 ServiceResponse for better error handling and response messages to the client.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ServiceResponse<T>
     {
         public T Data { get; set; } = default!;
