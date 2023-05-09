@@ -35,7 +35,7 @@ namespace Manero_backend.Controllers
             } else
             {
                 var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
-                BadRequest(message);
+                return BadRequest(message);
             }
             return BadRequest(userRequest);
         }
