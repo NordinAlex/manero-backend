@@ -14,13 +14,13 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public async Task AddProductAsync(ProductEntity product)
+        public async Task AddAsync(ProductEntity product)
         {
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteProductAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product != null)
@@ -30,22 +30,22 @@ namespace Manero_backend.Repository
             }
         }
 
-        public async Task<IEnumerable<ProductEntity>> GetAllProductAsync()
+        public async Task<IEnumerable<ProductEntity>> GetAllAsync()
         {
-            return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).ToListAsync();
+            return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(c => c.Variants).ToListAsync();
         }
 
-        public async Task<ProductEntity> GetProductByIdAsync(int id)
+        public async Task<ProductEntity> GetByIdAsync(int id)
         {
             return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId)
+        public async Task<IEnumerable<ProductEntity>> GetByTypeIdAsync(int TypeId)
         {
             return await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).ToListAsync();
         }
 
-        public async Task UpdateProductAsync(ProductEntity product)
+        public async Task UpdateAsync(ProductEntity product)
         {
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();

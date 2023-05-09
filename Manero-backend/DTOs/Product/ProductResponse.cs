@@ -17,7 +17,7 @@ namespace Manero_backend.DTOs.Product
         public ICollection<string> Tags { get; set; } = null!;      
         public ICollection<string> Type { get; set; } = null!;
     }
-    public class ProductItemResponse  // Product Variation Request
+    public class ProductItemResponse  // Product Variation
     {
         public string Color { get; set; } = null!;
         public string Size { get; set; } = null!;

@@ -1,14 +1,10 @@
-﻿using Manero_backend.Models.ProductEntities;
+﻿using Manero_backend.Interfaces.Product.Repositories;
+using Manero_backend.Models.ProductEntities;
 
 namespace Manero_backend.Interfaces.Product
 {
-    public interface IProductRepository
+    public interface IProductRepository : IRepository<ProductEntity>
     {
-        Task<IEnumerable<ProductEntity>> GetAllProductAsync();
-        Task<ProductEntity> GetProductByIdAsync(int id);
-        Task<IEnumerable<ProductEntity>> GetProductByTypeIdAsync(int TypeId);
-        Task AddProductAsync(ProductEntity product);
-        Task UpdateProductAsync(ProductEntity product);
-        Task DeleteProductAsync(int id);
+        
     }
 }
