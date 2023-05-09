@@ -1,5 +1,7 @@
 ﻿using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product.Services;
+using Manero_backend.Migrations;
+using Manero_backend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,20 +20,79 @@ namespace Manero_backend.Controllers
 
 
         // GET: api/Product
-        [HttpGet]      
-        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts()
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<ProductResponse>>>> GetAllProducts()
         {
-            var product = await _productService.GetAllProductAsync();
-            return Ok(product);
+            if (!ModelState.IsValid)
+            {
+                var response = new ServiceResponse<IEnumerable<ProductResponse>>
+                {
+                    Success = false,
+                    Message = "Sorry 😒 Invalid model" + ModelState 
+                };
+                response.Extensions = new Dictionary<string, object>
+                {
+                    ["errors"] = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                };
+
+                return BadRequest(response);
+            }
+            try
+            {
+                var product = await _productService.GetAllProductAsync();
+
+                var response = new ServiceResponse<IEnumerable<ProductResponse>>
+                {
+                    Data = product
+                };
+               
+                if (!product.Any()) // Kontrollera om listan med produkter är tom
+                {
+                    response.Message = "No products found in the database. 😱";
+                }
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(" OPPS \U0001fae3 \U0001fae2  : " + e.Message + "\U0001f937‍♀️");
+            }
+
         }
 
-    
+
         // POST: api/Product
         [HttpPost]
-        public async Task<ActionResult<ProductResponse>> CreateProduct([FromBody] ProductRequest productRequest)
+        public async Task<ActionResult<ServiceResponse<ProductResponse>>> CreateProduct([FromBody] ProductRequest productRequest)
         {
-            var product = await _productService.CreateProductAsync(productRequest);
-            return Ok(product);
+
+            if (!ModelState.IsValid)
+            {
+                var response = new ServiceResponse<IEnumerable<ProductResponse>>
+                {
+                    Success = false,
+                    Message = "Sorry 😒 Invalid model" + ModelState
+                };
+                response.Extensions = new Dictionary<string, object>
+                {
+                    ["errors"] = ModelState.SelectMany(x => x.Value.Errors.Select(e => e.ErrorMessage)).ToList()
+                };
+
+                return BadRequest(response);
+            }
+            try
+            {
+                var product = await _productService.CreateProductAsync(productRequest);
+                var response = new ServiceResponse<ProductResponse>
+                {
+                    Data = product
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(" OPPS \U0001fae2  : " + e.Message + " \U0001f937‍♀️");
+            }
+
         }
     }
 }

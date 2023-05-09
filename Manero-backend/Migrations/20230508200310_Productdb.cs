@@ -25,6 +25,20 @@ namespace Manero_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CategoryEntity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RouteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryEntity", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Colors",
                 columns: table => new
                 {
@@ -116,6 +130,8 @@ namespace Manero_backend.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandEntityId = table.Column<int>(type: "int", nullable: false),
+                    CategoryEntityId = table.Column<int>(type: "int", nullable: false),
+                    Featured = table.Column<bool>(type: "bit", nullable: false),
                     WishlistEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -125,6 +141,12 @@ namespace Manero_backend.Migrations
                         name: "FK_Products_Brands_BrandEntityId",
                         column: x => x.BrandEntityId,
                         principalTable: "Brands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_CategoryEntity_CategoryEntityId",
+                        column: x => x.CategoryEntityId,
+                        principalTable: "CategoryEntity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -330,6 +352,11 @@ namespace Manero_backend.Migrations
                 column: "BrandEntityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryEntityId",
+                table: "Products",
+                column: "CategoryEntityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_WishlistEntityId",
                 table: "Products",
                 column: "WishlistEntityId");
@@ -391,6 +418,9 @@ namespace Manero_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Brands");
+
+            migrationBuilder.DropTable(
+                name: "CategoryEntity");
 
             migrationBuilder.DropTable(
                 name: "Wishlists");

@@ -25,6 +25,7 @@ namespace Manero_backend.Context
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<OrderLineEntity> OrderLines { get; set; }
         public DbSet<ProductItemEntity> ProductItems { get; set; }
+        public DbSet<CategoryEntity> Category { get; set; }
 
         public DbSet<WishlistEntity> Wishlists { get; set; }
         public DbSet<ReviewEntity> Reviews { get; set; }

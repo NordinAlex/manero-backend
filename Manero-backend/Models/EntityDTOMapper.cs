@@ -1,23 +1,26 @@
 ﻿using Azure;
 using Manero_backend.DTOs.Product;
 using Manero_backend.Models.ProductEntities;
+using Manero_backend.Models.ProductItemEntities;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Manero_backend.Models
 {
     public static class EntityDTOMapper
     {
-        public static ProductResponse ToProductResponse(this ProductEntity product, IEnumerable<TagsEntity> tags, IEnumerable<BrandEntity> brands, IEnumerable<ColorEntity> colors, IEnumerable<ImagesEntity> images,IEnumerable<SizeEntity> sizes,  IEnumerable<TypeEntity> types)
+        public static ProductResponse ToProductResponse(this ProductEntity product, IEnumerable<TagsEntity> tags, IEnumerable<BrandEntity> brands, IEnumerable<ColorEntity> colors, IEnumerable<ImagesEntity> images,IEnumerable<SizeEntity> sizes,  IEnumerable<TypeEntity> types, IEnumerable<ProductItemEntity> items)
         {
             return new ProductResponse
             {
                 Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
+              
                 Brand = brands.FirstOrDefault(a => a.Id == product.BrandEntityId)?.BrandName,                
                 Tags = product.Tags?.Select(pt => tags.FirstOrDefault(t => t.Id == pt.TagsEntityId)?.Tag).ToList() ?? new List<string>(),
                 Type = product.Type?.Select(pty => types.FirstOrDefault(ty => ty.Id == pty.TypeEntityId)?.Type).ToList() ?? new List<string>(),
             };
+         
         }
         public static ProductEntity ToProductEntity(this ProductRequest request)
         {
