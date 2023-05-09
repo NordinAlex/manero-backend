@@ -8,6 +8,6 @@ namespace Manero_backend.Interfaces.Users.Service
     {
         Task<UserResponse> CreateUserAsync(UserRequest userRequest);
 
-        Task<UserResponse> CheckEmailAsync(string email);
+        Task<bool> CheckEmailAsync(string email);
     }
 }

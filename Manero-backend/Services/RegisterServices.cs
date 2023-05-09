@@ -24,9 +24,9 @@ namespace Manero_backend.Services
         }
         
 
-        public async Task<UserResponse> CheckEmailAsync(string email)
+        public async Task<bool> CheckEmailAsync(string email)
         {
-         return  await _userManager.FindByEmailAsync(email) ?? null!;
+               return await _userManager.Users.AnyAsync(x => x.Email == email);
         }
         public async Task<UserResponse> CreateUserAsync(UserRequest userRequest)
         {
@@ -54,11 +54,13 @@ namespace Manero_backend.Services
                 catch { }
             } else
             {
+                try
+                {
                 await _userManager.CreateAsync(entity, userRequest.Password);
                 await _userManager.AddToRoleAsync(entity, "User");
-                // Behöver vi denna?
-                await _userRepo.SaveDBAsync();
                 return entity;
+                }
+                catch { }
             }
             return null!;
         }

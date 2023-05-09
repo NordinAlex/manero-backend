@@ -4,6 +4,7 @@ using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Manero_backend.Controllers
@@ -25,8 +26,9 @@ namespace Manero_backend.Controllers
         public async Task<IActionResult> Create(UserRequest userRequest)
         {
             if(ModelState.IsValid) {
-                var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
-                if (checkemail == null) { return BadRequest("Email exists"); };
+                //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
+                if (await _registerService.CheckEmailAsync(userRequest.Email)) 
+                { return Conflict("Email exists"); };
                 var result = await _registerService.CreateUserAsync(userRequest);
                 if(result != null)
                 {

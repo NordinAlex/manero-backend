@@ -22,7 +22,7 @@ namespace Manero_backend.Services
         public async Task<IActionResult> DeleteAsync(string id) // INTE TESTAD PATRIK
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
+            if (user != null!)
             {
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded) { return StatusFactory<OkResult>.Create(); }
