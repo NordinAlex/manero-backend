@@ -8,13 +8,14 @@ namespace Manero_backend.Factories
         public static UserEntity CreateUserEntity() => new();
         public static UserResponse CreateUserResponse() => new();
         public static UserResponsError CreateUserResponsError() => new();
-        public static UserResponse CreateUserResponse(string Error, UserRequest req) => new()
+        public static UserResponse CreateUserResponse(string ErrorMsg,bool Error, UserRequest req) => new()
         {
-            StatusMessage = Error,
+            StatusMessage = ErrorMsg,
             FirstName=req.FirstName,
             LastName=req.LastName,
             PhoneNumber=req.PhoneNumber ?? null!,
-            Email=req.Email
+            Email=req.Email,
+            Error=Error,
         };
     }
 }

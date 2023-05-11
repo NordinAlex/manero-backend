@@ -42,5 +42,12 @@ namespace Manero_backend.Controllers
             } 
             return BadRequest(ModelState);
         }
+        /*[HttpPost("login")]
+        public async Task<IActionResult<string>> LoginAsync(LoginReq loginReq)
+        {
+            if(ModelState.IsValid) { }
+            return null!;
+        }*/
+        
     }
 }
