@@ -21,7 +21,6 @@ namespace Manero_backend.Services
                 new Claim(ClaimTypes.GivenName, entity.FirstName!),
                 new Claim(ClaimTypes.Surname, entity.LastName!),
                 new Claim(ClaimTypes.Email, entity.Email!),
-                new Claim(ClaimTypes.Name, entity.Email!),
                 new Claim(ClaimTypes.Role, role),
                 new Claim("DisplayName", $"{entity.FirstName} {entity.LastName}")
             };
