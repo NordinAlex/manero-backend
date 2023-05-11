@@ -112,10 +112,8 @@ namespace Manero_backend.Services
             var sizes = await _sizeRepository.GetAllSizeAsync();
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
-            var productResponse = products.ToProductResponse(tags, brands, colors, images, sizes, types);
-            productResponse.Variants = products.Variants.Select(v => v.ToProductItemResponse()).ToList();
 
-            return productResponse;
+            return products.ToProductResponse(tags, brands, colors, images, sizes, types); 
         }
 
         public async Task<IEnumerable<ProductResponse>> GetProductByTypeIdAsync(int TypeId)
@@ -136,5 +134,7 @@ namespace Manero_backend.Services
             // Ilona
             throw new NotImplementedException();
         }
+
+        // Update, delete, get by id, get all, create, get by type, get catagory , 
     }
 }

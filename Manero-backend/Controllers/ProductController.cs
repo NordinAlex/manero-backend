@@ -99,9 +99,21 @@ namespace Manero_backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductByIdAsync(int id)
         {
+
             var product = await _productService.GetProductByIdAsync(id);
-            if (product == null) return NotFound();
-            return Ok(product);
+            var serviceResponse = new ServiceResponse<ProductResponse>();
+
+            if (product == null)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Product not found  \U0001f937‍♀️ ";
+                return NotFound(serviceResponse);
+            }
+            else
+            {
+                serviceResponse.Data = product;
+                return Ok(serviceResponse);
+            }
         }
     }
 }

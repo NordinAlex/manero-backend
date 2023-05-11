@@ -12,6 +12,10 @@ namespace Manero_backend.Models
     {
         public static ProductResponse ToProductResponse(this ProductEntity product, IEnumerable<TagsEntity> tags, IEnumerable<BrandEntity> brands, IEnumerable<ColorEntity> colors, IEnumerable<ImagesEntity> images, IEnumerable<SizeEntity> sizes, IEnumerable<TypeEntity> types)
         {
+            if (product == null)
+            {
+                return null!;
+            }
             return new ProductResponse
             {
                 Id = product.Id,
