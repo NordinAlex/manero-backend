@@ -13,9 +13,37 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
+        public async Task<ImagesEntity> AddAsync(ImagesEntity image)
+        {
+            _context.Images.Add(image);
+            await _context.SaveChangesAsync();
+            return image;
+        }
+
         public async Task<IEnumerable<ImagesEntity>> GetAllImageAsync()
         {
             return await _context.Images.ToListAsync();
+        }
+
+        public async Task<ImagesEntity> GetByIdAsync(int id)
+        {
+            return await _context.Images.FindAsync(id);
+        }
+
+        public async Task UpdateAsync(ImagesEntity image)
+        {
+            _context.Images.Update(image);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var image = await GetByIdAsync(id);
+            if (image != null)
+            {
+                _context.Images.Remove(image);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Manero_backend.Models.ProductItemEntities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manero_backend.Models.ProductEntities
 {
@@ -6,9 +7,8 @@ namespace Manero_backend.Models.ProductEntities
     {
         public int Id { get; set; }
         public string? ImageAlt { get; set; }
-        public string? ImageName { get; set; }      
+        public string? ImageName { get; set; }
+        public ProductItemEntity? ProductItemEntity { get; set; }
 
-        public int ProductEntityid { get; set; }
-        public ProductEntity? Product { get; set; } // image kan ha en produkt
     }
 }

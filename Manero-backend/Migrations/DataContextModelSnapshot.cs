@@ -77,6 +77,9 @@ namespace Manero_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BrandCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BrandName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -98,9 +101,6 @@ namespace Manero_backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RouteUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Category");
@@ -116,6 +116,9 @@ namespace Manero_backend.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ColorCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -137,15 +140,10 @@ namespace Manero_backend.Migrations
                     b.Property<string>("ImageName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductEntityid")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ProductItemEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductEntityid");
 
                     b.HasIndex("ProductItemEntityId");
 
@@ -384,17 +382,12 @@ namespace Manero_backend.Migrations
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ImagesEntity", b =>
                 {
-                    b.HasOne("Manero_backend.Models.ProductEntities.ProductEntity", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductEntityid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Manero_backend.Models.ProductItemEntities.ProductItemEntity", null)
+                    b.HasOne("Manero_backend.Models.ProductItemEntities.ProductItemEntity", "ProductItemEntity")
                         .WithMany("Images")
-                        .HasForeignKey("ProductItemEntityId");
+                        .HasForeignKey("ProductItemEntityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductItemEntity");
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductEntity", b =>

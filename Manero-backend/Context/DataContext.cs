@@ -59,6 +59,19 @@ namespace Manero_backend.Context
                 .WithMany(t => t.ProductTypes)
                 .HasForeignKey(pt => pt.TypeEntityId);
 
+            // Product and ProductItem relationship
+            modelBuilder.Entity<ProductEntity>()
+              .HasMany(p => p.Variants)
+              .WithOne(i => i.Product)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            // ProductItem and Image relationship
+            modelBuilder.Entity<ProductItemEntity>()
+             .HasMany(p => p.Images)
+             .WithOne(i => i.ProductItemEntity)
+             .OnDelete(DeleteBehavior.Cascade);
+
+
             //order and productItem relationship
 
             modelBuilder.Entity<OrderLineEntity>()
