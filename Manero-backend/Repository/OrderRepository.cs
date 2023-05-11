@@ -1,29 +1,58 @@
-﻿using Manero_backend.DTOs.Order;
+﻿using Manero_backend.Context;
+using Manero_backend.DTOs.Order;
 using Manero_backend.Interfaces.Order;
 using Manero_backend.Models.OrderEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Repository
 {
     public class OrderRepository : IOrderRepository
     {
-        public Task<OrderEntity> CreateOrderAsync(OrderEntity orderEntity)
+        private readonly DataContext _context;
+
+        public OrderRepository(DataContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteOrderAsync(OrderEntity orderEntity)
+        public async Task<OrderEntity> CreateOrderAsync(OrderEntity orderEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Orders.Add(orderEntity);
+                await _context.SaveChangesAsync();
+                return orderEntity;
+            }
+
+            catch (Exception ex)
+            {
+                return null!;
+            }
         }
 
-        public Task<IEnumerable<OrderEntity>> GetAllOrdersAsync()
+        public async Task<bool> DeleteOrderAsync(OrderEntity orderEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Orders.Remove(orderEntity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
-        public Task<OrderEntity> GetOrderByIdAsync(int id)
+        public async Task<IEnumerable<OrderEntity>> GetAllOrdersAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Orders.ToListAsync();
+        }
+
+        public async Task<OrderEntity> GetOrderByIdAsync(int id)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
+            return order!;
         }
     }
 }

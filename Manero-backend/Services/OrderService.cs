@@ -16,34 +16,51 @@ namespace Manero_backend.Services
             _orderLineService = orderLineService;
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest)
+        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) // inte färdig
         {
-            var entity = OrderFactory.CreateOrderEntity();
-            entity.OrderDate = orderRequest.OrderDate = DateTime.Now;
-            entity.UserId = orderRequest.UserId;
-            entity.ShippingAddressId = orderRequest.ShippingAddressId;
-            entity.TotalPrice = orderRequest.TotalPrice;
+            var entity = orderRequest;
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);
             await _orderLineService.CreateOrderLineAsync(orderRequest, addedOrderEntity);
-            
 
-            var res = OrderFactory.CreateOrderResponse();
+
+            OrderResponse res = await _orderRepo.GetOrderByIdAsync(addedOrderEntity.Id);
             return res;
         }
 
-        public Task<bool> DeleteOrderAsync(int id)
+        public async Task<bool> DeleteOrderAsync(int id)
         {
-            throw new NotImplementedException();
+            var order = await _orderRepo.GetOrderByIdAsync(id);
+            return await _orderRepo.DeleteOrderAsync(order);
+            
         }
 
-        public Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
+        public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
         {
-            throw new NotImplementedException();
+            var orders = await _orderRepo.GetAllOrdersAsync();
+            var resList = new List<OrderResponse>();
+            foreach (var order in orders)
+            {
+                resList.Add(order);
+            }
+            return resList;
         }
 
-        public Task<OrderResponse> GetOrderByIdAsync()
+        public async Task<OrderResponse> GetOrderByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            OrderResponse res = await _orderRepo.GetOrderByIdAsync(id);
+            return res;
+        }
+
+        public async Task<IEnumerable<OrderResponse>> GetOrdersForUser(string id)
+        {
+            var orders = await _orderRepo.GetAllOrdersAsync();
+            var userOrders = orders.Where(x => x.UserId == id);
+            var resList = new List<OrderResponse>();
+            foreach (var order in userOrders)
+            {
+                resList.Add(order);
+            }
+            return resList;
         }
     }
 }
