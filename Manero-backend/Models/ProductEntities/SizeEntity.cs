@@ -6,7 +6,7 @@ namespace Manero_backend.Models.ProductEntities
     {
         [Key]
         public int Id { get; set; }
-        public string Size { get; set; } = null!;
+        public string Size { get; set; } = null!;       
 
     }
 }

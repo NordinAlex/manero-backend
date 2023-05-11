@@ -17,7 +17,10 @@ namespace Manero_backend.Repository
         {
             return await _context.Sizes.ToListAsync();
         }
-
+        public async Task<SizeEntity> GetBySizeAsync(int size)
+        {
+            return await _context.Sizes.FirstOrDefaultAsync(c => c.Id == size);
+        }
 
     }
 }

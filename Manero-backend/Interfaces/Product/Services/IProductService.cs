@@ -1,4 +1,6 @@
 ﻿using Manero_backend.DTOs.Product;
+using Manero_backend.Models.ProductEntities;
+using Manero_backend.Services;
 
 namespace Manero_backend.Interfaces.Product.Services
 {
@@ -10,5 +12,6 @@ namespace Manero_backend.Interfaces.Product.Services
         Task<ProductResponse> CreateProductAsync(ProductRequest productRequest);
         Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest);
         Task DeleteProductAsync(int id);
+        //Task<ServiceResponse<IEnumerable<ProductEntity>>> GetProductsByCategory(string categoryName);
     }
 }

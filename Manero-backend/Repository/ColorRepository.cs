@@ -18,5 +18,10 @@ namespace Manero_backend.Repository
         {
             return await _context.Colors.ToListAsync();
         }
+        public async Task<ColorEntity> GetByColorAsync(int color)
+        {
+            return await _context.Colors.FirstOrDefaultAsync(c => c.Id == color);
+        }
+
     }
 }

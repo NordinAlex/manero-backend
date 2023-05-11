@@ -17,7 +17,8 @@ namespace Manero_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BrandCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,17 +26,16 @@ namespace Manero_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryEntity",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RouteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryEntity", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,7 +44,8 @@ namespace Manero_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ColorCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -144,9 +145,9 @@ namespace Manero_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_CategoryEntity_CategoryEntityId",
+                        name: "FK_Products_Category_CategoryEntityId",
                         column: x => x.CategoryEntityId,
-                        principalTable: "CategoryEntity",
+                        principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -271,7 +272,6 @@ namespace Manero_backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageAlt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductEntityid = table.Column<int>(type: "int", nullable: false),
                     ProductItemEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -281,11 +281,6 @@ namespace Manero_backend.Migrations
                         name: "FK_Images_ProductItems_ProductItemEntityId",
                         column: x => x.ProductItemEntityId,
                         principalTable: "ProductItems",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Images_Products_ProductEntityid",
-                        column: x => x.ProductEntityid,
-                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -315,11 +310,6 @@ namespace Manero_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_ProductEntityid",
-                table: "Images",
-                column: "ProductEntityid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_ProductItemEntityId",
@@ -420,7 +410,7 @@ namespace Manero_backend.Migrations
                 name: "Brands");
 
             migrationBuilder.DropTable(
-                name: "CategoryEntity");
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "Wishlists");

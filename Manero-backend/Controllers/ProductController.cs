@@ -4,6 +4,7 @@ using Manero_backend.Migrations;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_backend.Controllers
 {
@@ -88,9 +89,9 @@ namespace Manero_backend.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception e)
+            catch (DbUpdateException ex)
             {
-                return BadRequest(" OPPS \U0001fae2  : " + e.Message + " \U0001f937‍♀️");
+                return BadRequest(" OPPS \U0001fae2  : " + ex.InnerException?.Message + " \U0001f937‍♀️");
             }
 
         }

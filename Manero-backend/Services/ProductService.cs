@@ -1,8 +1,11 @@
-﻿using Manero_backend.DTOs.Product;
+﻿using Azure.Core;
+using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Interfaces.Product.Services;
 using Manero_backend.Models;
+using Manero_backend.Models.ProductEntities;
+using Manero_backend.Models.ProductItemEntities;
 using Manero_backend.Repository;
 using System.Linq;
 
@@ -43,7 +46,41 @@ namespace Manero_backend.Services
             var Item = await _productItemRepository.GetAllAsync();
             var products = productRequest.ToProductEntity();
             await _productRepository.AddAsync(products);
-            return products.ToProductResponse(tags, brands, colors, images, sizes, types, Item);
+            var productEntity = productRequest.ToProductEntity();
+
+            foreach (var variantRequest in productRequest.Variants)
+            {
+                var brandE = await _brandRepository.GetByIdAsync(productEntity.BrandEntityId);
+                //var brandE = await _brandRepository.GetByBrandNameAsync(productEntity.BrandEntityId.ToString());
+                var colorEntity = await _colorRepository.GetByColorAsync(variantRequest.Color);
+                var sizeEntity = await _sizeRepository.GetBySizeAsync(variantRequest.Size);
+                var imageEntities = variantRequest.ImageName?.Zip(variantRequest.ImageAlt, (name, alt) => new ImagesEntity { ImageName = name, ImageAlt = alt }).ToList();
+
+                var productItemEntity = new ProductItemEntity
+                {
+                    Product = products,
+                    Color = colorEntity,
+                    Size = sizeEntity,
+                    SKU = $"{brandE?.BrandCode}-{colorEntity.ColorCode}-{sizeEntity.Size}-{productRequest.ProductSR}",
+                    //SKU = $"{(products.BrandEntity.BrandName == brandE.BrandName ? brandE.BrandCode : brandE.BrandCode)}-{colorEntity.ColorCode}-{sizeEntity.Size}-{"1022"}",
+                    //SKU = $"{products.BrandEntity.BrandName.Substring(0,2)}-{colorEntity.ColorCode}-{sizeEntity.Size}-{"1022"} ",                  
+                    QuantityInStock = variantRequest.Stock,
+                    Price = variantRequest.Price,
+                    Images = imageEntities,
+                };
+                //foreach (var image in imageEntities)
+                //{
+                //    image.Id = productItemEntity.Id;
+                //}
+
+                products.Variants.Add(productItemEntity);
+            }
+
+
+            await _productRepository.UpdateAsync(products);
+
+
+            return products.ToProductResponse(tags, brands, colors, images, sizes, types);
         }
 
         public Task DeleteProductAsync(int id)
@@ -62,8 +99,7 @@ namespace Manero_backend.Services
             var sizes = await _sizeRepository.GetAllSizeAsync();
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
-            var items = await _productItemRepository.GetAllAsync();
-            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types, items));
+            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
 
         public async Task<ProductResponse> GetProductByIdAsync(int id)
@@ -76,8 +112,10 @@ namespace Manero_backend.Services
             var sizes = await _sizeRepository.GetAllSizeAsync();
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
-            var items = await _productItemRepository.GetAllAsync();
-            return products.ToProductResponse(tags, brands, colors, images, sizes, types,items );
+            var productResponse = products.ToProductResponse(tags, brands, colors, images, sizes, types);
+            productResponse.Variants = products.Variants.Select(v => v.ToProductItemResponse()).ToList();
+
+            return productResponse;
         }
 
         public async Task<IEnumerable<ProductResponse>> GetProductByTypeIdAsync(int TypeId)
@@ -90,7 +128,7 @@ namespace Manero_backend.Services
             var tags = await _tagRepository.GetAllTagAsync();
             var types = await _typeRepository.GetAllTypeAsync();
             var items = await _productItemRepository.GetAllAsync();
-            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types,items));
+            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
 
         public Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest)

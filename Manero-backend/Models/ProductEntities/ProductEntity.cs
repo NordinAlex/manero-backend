@@ -20,6 +20,6 @@ namespace Manero_backend.Models.ProductEntities
         public ICollection<ReviewEntity>? ReviewEntity { get; set; } // en product kan ha flera reviews      
         public ICollection<ProductTagsEntity> Tags { get; set; } = null!; // en product kan ha flera tags som t.ex. tröja och sport   
         public ICollection<ProductTypeEntity> Type { get; set; } = null!; // en product kan ha flera typer som t.ex. NEW, SALE och TOP
-        public ICollection<ProductItemEntity> Variants { get; set; } = null!; // en product kan ha flera varianter        
+        public ICollection<ProductItemEntity> Variants { get; set; } = new List<ProductItemEntity>(); // en product kan ha flera varianter        
     }
 }
