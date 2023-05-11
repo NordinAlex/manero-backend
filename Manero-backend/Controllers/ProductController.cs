@@ -95,5 +95,13 @@ namespace Manero_backend.Controllers
             }
 
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductByIdAsync(int id)
+        {
+            var article = await _productService.GetProductByIdAsync(id);
+            if (article == null) return NotFound();
+            return Ok(article);
+        }
     }
 }
