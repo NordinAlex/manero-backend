@@ -1,5 +1,6 @@
 ﻿using Manero_backend.DTOs.User;
 using Manero_backend.Factories;
+using Manero_backend.Interfaces.Users.Models;
 using Manero_backend.Interfaces.Users.Service;
 using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Http;
@@ -15,12 +16,13 @@ namespace Manero_backend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<UserEntity> _userManager;
-        private readonly IRegisterService _registerService;
+        private readonly IAuthService _authService;
 
-        public AuthController(UserManager<UserEntity> userManager, IRegisterService registerService)
+
+        public AuthController(UserManager<UserEntity> userManager, IAuthService authService)
         {
             _userManager = userManager;
-            _registerService = registerService;
+            _authService = authService;
         }
 
         [HttpPost]
@@ -28,11 +30,11 @@ namespace Manero_backend.Controllers
         {
             if(ModelState.IsValid) {
                 //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
-                if (await _registerService.CheckEmailAsync(userRequest.Email))
+                if (await _authService.CheckEmailAsync(userRequest.Email))
                 {
                     return Conflict(UserFactory.CreateUserResponse("Email already exist",true,userRequest));
                 }
-                var result = await _registerService.CreateUserAsync(userRequest);
+                var result = await _authService.CreateUserAsync(userRequest);
                 if(result != null)
                 {
                     if(!result.Error)
@@ -42,12 +44,19 @@ namespace Manero_backend.Controllers
             } 
             return BadRequest(ModelState);
         }
-        /*[HttpPost("login")]
-        public async Task<IActionResult<string>> LoginAsync(LoginReq loginReq)
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(LogInReq loginReq)
         {
-            if(ModelState.IsValid) { }
-            return null!;
-        }*/
+
+            if(ModelState.IsValid) 
+            {
+                if (await _authService.CheckEmailAsync(loginReq.Email))
+                { var result = await _authService.LogInAsync(loginReq);
+                    return Ok(result);
+                }
+            }
+            return BadRequest();
+        }
         
     }
 }

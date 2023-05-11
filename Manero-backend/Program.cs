@@ -11,8 +11,11 @@ using Manero_backend.Interfaces.Users.Service;
 using Manero_backend.Models.UserEntities;
 using Manero_backend.Repository;
 using Manero_backend.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -29,6 +32,7 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configura
 
 // Product services
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<TokenService>(); //Interfaces kommer sen PB JBB
 builder.Services.AddScoped<IColorRepository, ColorRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
@@ -41,7 +45,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderLineRepository, OrderLineRepository>();
 builder.Services.AddScoped<IOrderLineService, OrderLineService>();
-builder.Services.AddScoped<IRegisterService, RegisterServices>();
+builder.Services.AddScoped<IAuthService, AuthServices>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
@@ -51,7 +55,36 @@ builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
     x.SignIn.RequireConfirmedAccount = false;
 }).AddEntityFrameworkStores<IdentityContext>();
 
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x => 
+    {
+    x.RequireHttpsMetadata = true;
+    x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["TokenService:Issuer"]!,
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["TokenService:Audience"]!,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenService:Secret"]!))
+        };
+        x.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                if (string.IsNullOrEmpty(context.Principal?.Identity?.Name))
+                { context.Fail("Unauthorized"); }
 
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 
 

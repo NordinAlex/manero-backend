@@ -8,21 +8,26 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Manero_backend.Services
 {
-    public class RegisterServices : IRegisterService
+    public class AuthServices : IAuthService
     {
         private readonly IUserRepository _userRepo;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<UserEntity> _userManager;
+        private readonly SignInManager<UserEntity> _signInManager;
+        private readonly TokenService _tokenService;
 
-        public RegisterServices(IUserRepository userRepo, RoleManager<IdentityRole> roleManager, UserManager<UserEntity> userManager)
+        public AuthServices(IUserRepository userRepo, RoleManager<IdentityRole> roleManager, UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, TokenService tokenService)
         {
             _userRepo = userRepo;
             _roleManager = roleManager;
             _userManager = userManager;
+            _signInManager = signInManager;
+            _tokenService = tokenService;
         }
-        
+
 
         public async Task<bool> CheckEmailAsync(string email)
         {
@@ -69,6 +74,26 @@ namespace Manero_backend.Services
                 }
                 catch { }
             }
+            return null!;
+        }
+
+        public async Task<string> LogInAsync(LogInReq req)
+        {
+            try
+            {
+                var entity = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == req.Email);
+                if (entity != null!)
+                {
+                    var signInResult = await _signInManager.PasswordSignInAsync(entity, req.Password, false, false);
+                if(signInResult.Succeeded)
+                    {
+                        var token = _tokenService.CreateToken(entity, "User");
+                        return token;
+                    }
+                }
+
+            }
+            catch { }
             return null!;
         }
     }
