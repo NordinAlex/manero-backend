@@ -47,8 +47,8 @@ namespace Manero_backend.Services
                 {
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("User"));
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("Admin"));
-                    var re = await _userManager.CreateAsync(entity, userRequest.Password);
-                    var res = await _userManager.AddToRoleAsync(entity, "Admin");
+                    await _userManager.CreateAsync(entity, userRequest.Password);
+                    await _userManager.AddToRoleAsync(entity, "Admin");
                     return entity;
                 }
                 catch { }
@@ -56,9 +56,16 @@ namespace Manero_backend.Services
             {
                 try
                 {
-                await _userManager.CreateAsync(entity, userRequest.Password);
-                await _userManager.AddToRoleAsync(entity, "User");
-                return entity;
+                var saveResult = await _userManager.CreateAsync(entity, userRequest.Password);
+                    if (saveResult.Succeeded)
+                    {
+                            await _userManager.AddToRoleAsync(entity, "User");
+                            return entity;
+                    }
+                    else
+                        {
+                        return UserFactory.CreateUserResponse(saveResult.Errors.FirstOrDefault()!.Description ?? "Error",true, userRequest);
+                        }
                 }
                 catch { }
             }

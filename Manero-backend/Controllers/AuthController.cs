@@ -12,12 +12,12 @@ namespace Manero_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegisterController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly UserManager<UserEntity> _userManager;
         private readonly IRegisterService _registerService;
 
-        public RegisterController(UserManager<UserEntity> userManager, IRegisterService registerService)
+        public AuthController(UserManager<UserEntity> userManager, IRegisterService registerService)
         {
             _userManager = userManager;
             _registerService = registerService;
@@ -30,24 +30,17 @@ namespace Manero_backend.Controllers
                 //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
                 if (await _registerService.CheckEmailAsync(userRequest.Email))
                 {
-                    return Conflict(UserFactory.CreateUserResponsError("Email already exist",userRequest));
+                    return Conflict(UserFactory.CreateUserResponse("Email already exist",true,userRequest));
                 }
                 var result = await _registerService.CreateUserAsync(userRequest);
                 if(result != null)
                 {
+                    if(!result.Error)
                     return Created("", result);
                 }
-                return BadRequest(UserFactory.CreateUserResponsError("Unexpected error :( Contact support", userRequest));
+                return BadRequest(result);
             } 
             return BadRequest(ModelState);
-            /*else
-            {
-                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
-                return BadRequest(message);
-            }*/
         }
-
-      
-
     }
 }

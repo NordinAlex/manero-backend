@@ -8,9 +8,9 @@ namespace Manero_backend.Factories
         public static UserEntity CreateUserEntity() => new();
         public static UserResponse CreateUserResponse() => new();
         public static UserResponsError CreateUserResponsError() => new();
-        public static UserResponsError CreateUserResponsError(string Error, UserRequest req) => new()
+        public static UserResponse CreateUserResponse(string Error, UserRequest req) => new()
         {
-            ErrorMessage=Error,
+            StatusMessage = Error,
             FirstName=req.FirstName,
             LastName=req.LastName,
             PhoneNumber=req.PhoneNumber ?? null!,
