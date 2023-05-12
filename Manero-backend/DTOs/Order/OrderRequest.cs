@@ -7,7 +7,7 @@ using Manero_backend.Models.ProductItemEntities;
 
 namespace Manero_backend.DTOs.Order
 {
-    public class OrderRequest
+    public class OrderRequest : IOrderRequest
     {
         
         public string UserId { get; set; } = null!;

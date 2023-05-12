@@ -1,4 +1,5 @@
 ﻿using Manero_backend.DTOs.Order;
+using Manero_backend.Factories;
 using Manero_backend.Interfaces.Order;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Http;
@@ -39,9 +40,14 @@ namespace Manero_backend.Controllers
             return await _orderService.GetOrdersForUser(id);
         }
         [HttpDelete("id")]
-        public async Task<bool> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return await _orderService.DeleteOrderAsync(id);
+            var result = await _orderService.DeleteOrderAsync(id);
+            if (result)
+            {
+                return StatusFactory<OkResult>.Create();
+            }
+            return StatusFactory<BadRequestResult>.Create();
         }
     }
 }

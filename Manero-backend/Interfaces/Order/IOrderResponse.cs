@@ -1,6 +1,9 @@
-﻿namespace Manero_backend.Interfaces.Order
+﻿using Manero_backend.Models.UserEntities;
+
+namespace Manero_backend.Interfaces.Order
 {
-    public interface IOrderResponse : IOrderWithAddressId
+    public interface IOrderResponse : IOrder
     {
+        public AddressEntity Address { get; set; }
     }
 }
