@@ -23,6 +23,11 @@ namespace Manero_backend.Controllers
             OrderResponse res = await _orderService.CreateOrderAsync(orderRequest);
             return Created("", res);
         }
+        [HttpGet("id")]
+        public async Task<OrderResponse> Read(int id)
+        {
+            return await _orderService.GetOrderByIdAsync(id);
+        }
         [HttpGet]
         public async Task<IEnumerable<OrderResponse>> ReadAll()
         {
@@ -32,6 +37,11 @@ namespace Manero_backend.Controllers
         public async Task<IEnumerable<OrderResponse>> ReadAllByUser(string id)
         {
             return await _orderService.GetOrdersForUser(id);
+        }
+        [HttpDelete("id")]
+        public async Task<bool> Delete(int id)
+        {
+            return await _orderService.DeleteOrderAsync(id);
         }
     }
 }

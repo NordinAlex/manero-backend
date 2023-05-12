@@ -18,11 +18,11 @@ namespace Manero_backend.Models.OrderEntities
         public static implicit operator OrderResponse(OrderEntity orderEntity)
         {
             var res = OrderFactory.CreateOrderResponse();
-            res.OrderId = orderEntity.Id;
+            res.Id = orderEntity.Id;
             res.UserId = orderEntity.UserId;
             res.OrderDate = orderEntity.OrderDate;
-            res.ShippingAddressId = orderEntity.ShippingAddressId;
             res.TotalPrice = orderEntity.TotalPrice;
+            res.ShippingAddressId = orderEntity.ShippingAddressId;
 
             return res;
             
