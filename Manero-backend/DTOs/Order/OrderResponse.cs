@@ -5,8 +5,8 @@ using Manero_backend.Models.UserEntities;
 
 namespace Manero_backend.DTOs.Order
 {
-    public class OrderResponse : OrderBase, IOrder 
+    public class OrderResponse : OrderBase, IOrderWithAddressId
     {
-
+        public int ShippingAddressId { get; set; }
     }
 }

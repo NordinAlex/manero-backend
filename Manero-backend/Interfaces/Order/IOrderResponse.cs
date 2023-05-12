@@ -1,6 +1,6 @@
 ﻿namespace Manero_backend.Interfaces.Order
 {
-    public interface IOrderResponse : IOrder 
+    public interface IOrderResponse : IOrderWithAddressId
     {
     }
 }

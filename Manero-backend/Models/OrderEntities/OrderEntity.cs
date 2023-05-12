@@ -1,4 +1,5 @@
-﻿using Manero_backend.DTOs.Order;
+﻿using Manero_backend.BaseModels.Order;
+using Manero_backend.DTOs.Order;
 using Manero_backend.DTOs.ProductItem;
 using Manero_backend.Factories;
 using Manero_backend.Interfaces.Order;
@@ -6,7 +7,7 @@ using Manero_backend.Models.UserEntities;
 
 namespace Manero_backend.Models.OrderEntities
 {
-    public class OrderEntity : IOrder
+    public class OrderEntity : OrderBase, IOrderWithAddressId
     {
         public int Id { get; set; }
         public string UserId { get; set; } = null!;
