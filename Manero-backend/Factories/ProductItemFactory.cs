@@ -4,6 +4,6 @@ namespace Manero_backend.Factories
 {
     public static class ProductItemFactory
     {
-        public static ProductItemOrderRequestModel CreateProductItemModel() => new();
+        public static ProductItemOrderModel CreateProductItemModel() => new();
     }
 }

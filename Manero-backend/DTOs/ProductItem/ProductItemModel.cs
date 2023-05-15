@@ -3,9 +3,10 @@ using Manero_backend.Models.ProductEntities;
 
 namespace Manero_backend.DTOs.ProductItem
 {
-    public class ProductItemOrderRequestModel
+    public class ProductItemOrderModel
     {
         public int Id { get; set; }
+        public string Name { get; set; } = null!;
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal LinePrice

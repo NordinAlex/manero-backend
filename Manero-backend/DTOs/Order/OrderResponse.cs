@@ -8,6 +8,6 @@ namespace Manero_backend.DTOs.Order
 {
     public class OrderResponse : OrderBase, IOrderResponse
     {
-        public List<ProductItemOrderRequestModel> ProductItems { get; set; } = null!;
+        public List<ProductItemOrderModel> ProductItems { get; set; } = null!;
     }
 }

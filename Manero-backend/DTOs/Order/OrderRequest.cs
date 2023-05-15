@@ -14,7 +14,7 @@ namespace Manero_backend.DTOs.Order
         public string CustomerFirstName { get; set; } = null!;
         public string CustomerLastName { get; set; } = null!;
         public DateTime OrderDate { get; set; }
-        public List<ProductItemOrderRequestModel> ProductItems { get; set; } = null!;
+        public List<ProductItemOrderModel> ProductItems { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string City { get; set; } = null!;
         public string PostalCode { get; set; } = null!;
