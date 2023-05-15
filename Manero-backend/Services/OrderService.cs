@@ -16,7 +16,7 @@ namespace Manero_backend.Services
             _orderLineService = orderLineService;
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) // inte färdig
+        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) 
         {
             var entity = orderRequest;
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);

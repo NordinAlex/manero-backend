@@ -4,6 +4,6 @@ namespace Manero_backend.Interfaces.Order
 {
     public interface IOrderResponse : IOrder
     {
-        public AddressEntity Address { get; set; }
+        
     }
 }

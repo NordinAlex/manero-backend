@@ -11,16 +11,23 @@ namespace Manero_backend.DTOs.Order
     {
         
         public string UserId { get; set; } = null!;
+        public string CustomerFirstName { get; set; } = null!;
+        public string CustomerLastName { get; set; } = null!;
         public DateTime OrderDate { get; set; }
-        public int ShippingAddressId { get; set; }
         public List<ProductItemOrderRequestModel> ProductItems { get; set; } = null!;
+        public string Address { get; set; } = null!;
+        public string City { get; set; } = null!;
+        public string PostalCode { get; set; } = null!;
 
         public static implicit operator OrderEntity(OrderRequest orderRequest)
         {
             var orderEntity = OrderFactory.CreateOrderEntity();
             orderEntity.UserId = orderRequest.UserId;
             orderEntity.OrderDate = orderRequest.OrderDate = DateTime.Now;
-            orderEntity.ShippingAddressId = orderRequest.ShippingAddressId;
+            orderEntity.CustomerName = $"{orderRequest.CustomerFirstName} {orderRequest.CustomerLastName}";
+            orderEntity.Address = orderRequest.Address;
+            orderEntity.City = orderRequest.City;
+            orderEntity.PostalCode = orderRequest.PostalCode;
             foreach(var item in orderRequest.ProductItems) 
             {
                 orderEntity.TotalPrice += item.Price * item.Quantity;

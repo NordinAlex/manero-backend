@@ -3,8 +3,10 @@ using Manero_backend.Models.ProductItemEntities;
 
 namespace Manero_backend.Interfaces.Order
 {
-    public interface IOrderRequest : IOrderWithAddressId
+    public interface IOrderRequest : IOrder
     {
+        public string CustomerFirstName { get; set; }
+        public string CustomerLastName { get; set; }
         public List<ProductItemOrderRequestModel> ProductItems { get; set; }
     }
 }

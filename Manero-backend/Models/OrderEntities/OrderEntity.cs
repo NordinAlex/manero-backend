@@ -7,9 +7,8 @@ using Manero_backend.Models.UserEntities;
 
 namespace Manero_backend.Models.OrderEntities
 {
-    public class OrderEntity : OrderBase, IOrderWithAddressId
+    public class OrderEntity : OrderBase
     {
-        public int ShippingAddressId { get; set; }
         public List<OrderLineEntity> OrderLines { get; set; } = null!;
 
         public static implicit operator OrderResponse(OrderEntity orderEntity)
@@ -17,10 +16,13 @@ namespace Manero_backend.Models.OrderEntities
             var res = OrderFactory.CreateOrderResponse();
             res.Id = orderEntity.Id;
             res.UserId = orderEntity.UserId;
+            res.CustomerName = orderEntity.CustomerName;
             res.OrderDate = orderEntity.OrderDate;
             res.TotalPrice = orderEntity.TotalPrice;
-            res.ShippingAddressId = orderEntity.ShippingAddressId;
-
+            res.Address = orderEntity.Address;
+            res.City = orderEntity.City;
+            res.PostalCode = orderEntity.PostalCode;
+            
             return res;
             
         }
