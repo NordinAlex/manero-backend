@@ -17,11 +17,10 @@ namespace Manero_backend.Services
 
         public async Task<bool> CreateOrderLineAsync(OrderRequest orderRequest, OrderEntity orderEntity)
         {
-            var orderLineEntity = OrderLineFactory.CreateOrderLineEntity();
+            
             foreach(var product in orderRequest.ProductItems)
             {
-                orderLineEntity.OrderId = orderEntity.Id;
-                orderLineEntity.ProductItemId = product.ProductId;
+                var orderLineEntity = OrderLineFactory.CreateOrderLineEntity(orderEntity.Id, product.Id, product.LinePrice, product.Quantity);
                 await _orderLineRepo.CreateAsync(orderLineEntity);
             }
             return true;

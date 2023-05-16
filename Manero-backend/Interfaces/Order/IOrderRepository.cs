@@ -7,7 +7,7 @@ namespace Manero_backend.Interfaces.Order
     {
        Task<OrderEntity> CreateOrderAsync(OrderEntity orderEntity);
        Task<IEnumerable<OrderEntity>> GetAllOrdersAsync();
-       Task DeleteOrderAsync(OrderEntity orderEntity);
+       Task<bool> DeleteOrderAsync(OrderEntity orderEntity);
        Task<OrderEntity> GetOrderByIdAsync(int id);
        
     }

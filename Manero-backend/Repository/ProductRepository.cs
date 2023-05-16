@@ -37,7 +37,7 @@ namespace Manero_backend.Repository
 
         public async Task<ProductEntity> GetByIdAsync(int id)
         {
-            var product = await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).FirstOrDefaultAsync(a => a.Id == id);
+            var product = await _context.Products.Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Variants).FirstOrDefaultAsync(a => a.Id == id);
             return product!;
         }
 
