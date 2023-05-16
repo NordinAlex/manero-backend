@@ -57,9 +57,12 @@ namespace Manero_backend.Services
 
             if (entity != null)
             {
-                entity.FirstName = updateUser.FirstName;
-                entity.LastName = updateUser.LastName;
-                entity.PhoneNumber = updateUser.PhoneNumber;
+                if(updateUser.FirstName != null) 
+                    entity.FirstName = updateUser.FirstName;
+                if (updateUser.LastName != null)
+                    entity.LastName = updateUser.LastName;
+                if (updateUser.PhoneNumber != null)
+                    entity.PhoneNumber = updateUser.PhoneNumber;
 
                 await _userManager.UpdateAsync(entity);
                 return entity;

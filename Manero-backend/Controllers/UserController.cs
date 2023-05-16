@@ -41,7 +41,7 @@ namespace Manero_backend.Controllers
             return await _userService.DeleteAsync(id);
         }
         [Authorize]
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateAsync(UpdateUser updateUser)
         {
             var result = await _userService.UpdateAsync(updateUser, User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
