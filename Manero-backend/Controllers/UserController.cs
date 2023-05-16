@@ -3,6 +3,7 @@ using Manero_backend.Interfaces.Users.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Manero_backend.Controllers
 {
@@ -39,11 +40,11 @@ namespace Manero_backend.Controllers
         {
             return await _userService.DeleteAsync(id);
         }
-        //[Authorize]
+        [Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(UpdateUser updateUser, string id)
+        public async Task<IActionResult> UpdateAsync(UpdateUser updateUser)
         {
-            var result = await _userService.UpdateAsync(updateUser, id);
+            var result = await _userService.UpdateAsync(updateUser, User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
 
             if (result != null)
             {

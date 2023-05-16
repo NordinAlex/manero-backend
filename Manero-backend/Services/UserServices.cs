@@ -51,9 +51,9 @@ namespace Manero_backend.Services
             return await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id) ?? null!;
         }
 
-        public async Task<UserResponse> UpdateAsync(UpdateUser updateUser, string id)
+        public async Task<UserResponse> UpdateAsync(UpdateUser updateUser, string email) // EJ TESTAD
         {
-            var entity = await _userManager.FindByIdAsync(id);
+            var entity = await _userManager.FindByEmailAsync(email);
 
             if (entity != null)
             {
