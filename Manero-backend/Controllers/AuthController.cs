@@ -55,7 +55,7 @@ namespace Manero_backend.Controllers
                     return Ok(result);
                 }
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         
     }

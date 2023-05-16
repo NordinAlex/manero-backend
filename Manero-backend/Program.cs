@@ -32,7 +32,7 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configura
 
 // Product services
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
-builder.Services.AddScoped<TokenService>(); //Interfaces kommer sen PB JBB
+builder.Services.AddScoped<TokenService>(); //Interfaces kommer sen PB JBB // Vill vi ha denna som Scoped?(PB)
 builder.Services.AddScoped<IColorRepository, ColorRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
@@ -55,6 +55,7 @@ builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
     x.SignIn.RequireConfirmedAccount = false;
 }).AddEntityFrameworkStores<IdentityContext>();
 
+// Authentication
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -80,6 +81,7 @@ builder.Services.AddAuthentication(x =>
             {
                 if (string.IsNullOrEmpty(context.Principal?.Identity?.Name))
                 { context.Fail("Unauthorized"); }
+                //Cheacka flera saker, nu kollar vi Name(email), vi kan kolla mer värden
 
                 return Task.CompletedTask;
             }

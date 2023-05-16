@@ -13,8 +13,8 @@ namespace Manero_backend.Services
         {
             _configuration = configuration;
         }
-
-        public string CreateToken(UserEntity entity, string role)
+        //Async await ? (PB)
+        public string CreateToken(UserEntity entity, string role) 
         {
             var claims = new List<Claim>()
             {
