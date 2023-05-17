@@ -165,7 +165,7 @@ namespace Manero_backend.Controllers
         {
             try
             {
-                var success = await _productService.DeleteProductAsync(int id);
+                var success = await _productService.DeleteProductAsync( id);
                 var response = new ServiceResponse<bool>
                 {
                     Data = success,
