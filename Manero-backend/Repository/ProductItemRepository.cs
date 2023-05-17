@@ -1,7 +1,10 @@
 ﻿using Manero_backend.Context;
+using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product.Repositories;
+using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.ProductItemEntities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Manero_backend.Repository
 {
@@ -30,6 +33,16 @@ namespace Manero_backend.Repository
         }
 
         public Task<ProductItemEntity> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<ProductEntity>> GetBySearchAndFilterAsync(SearchFilterCriteria criteria)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<ProductItemEntity>> GetBySearchAsync(Expression<Func<ProductEntity, bool>> predicate)
         {
             throw new NotImplementedException();
         }
