@@ -86,7 +86,7 @@ namespace Manero_backend.Services
         public Task DeleteProductAsync(int id)
         {
             // Ilona
-            throw new NotImplementedException();
+            await _productRepository.DeleteProduct(id);
         }
 
         public async Task<IEnumerable<ProductResponse>> GetAllProductAsync()
@@ -132,7 +132,19 @@ namespace Manero_backend.Services
         public Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest)
         {
             // Ilona
-            throw new NotImplementedException();
+            var brands = await _brandRepository.GetAllTags();
+            var colors = await _colorRepository.GetAllColors();
+            var images = await _imageRepository.GetAllImages();
+            var sizes = await _sizeRepository.GetAllSizes();
+            var tags = await _tagRepository.GetAllTags();
+            var types = await _typeRepository.GetAllTypes();
+            var product = await _productRepository.GetProductById(id);
+            if (product == null) return null;
+
+            productRequest.UpdateProduct(product);
+            await _productRepository.UpdateProduct(product);
+
+            return product.ToProductResponse(tags, brands, colors, images, sizes, types);
         }
 
         // Update, delete, get by id, get all, create, get by type, get catagory , 
