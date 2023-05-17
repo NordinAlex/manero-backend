@@ -67,7 +67,7 @@ namespace Manero_backend.Services
 
                 await _userManager.UpdateAsync(entity);
 
-                var token = await _tokenService.CreateToken(entity, "User");
+                var token = _tokenService.CreateToken(entity, "User");
                 return token;
             }
             return null!;
