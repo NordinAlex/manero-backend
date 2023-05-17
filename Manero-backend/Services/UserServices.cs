@@ -13,6 +13,7 @@ namespace Manero_backend.Services
     public class UserServices : IUserService
     {
         private readonly UserManager<UserEntity> _userManager;
+        private readonly TokenService _tokenService;
 
         public UserServices(UserManager<UserEntity> userManager)
         {
@@ -51,7 +52,7 @@ namespace Manero_backend.Services
             return await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id) ?? null!;
         }
 
-        public async Task<UserResponse> UpdateAsync(UpdateUser updateUser, string email) // EJ TESTAD
+        public async Task<string> UpdateAsync(UpdateUser updateUser, string email) // EJ TESTAD
         {
             var entity = await _userManager.FindByEmailAsync(email);
 
@@ -65,7 +66,9 @@ namespace Manero_backend.Services
                     entity.PhoneNumber = updateUser.PhoneNumber;
 
                 await _userManager.UpdateAsync(entity);
-                return entity;
+
+                var token = await _tokenService.CreateToken(entity, "User");
+                return token;
             }
             return null!;
         }
