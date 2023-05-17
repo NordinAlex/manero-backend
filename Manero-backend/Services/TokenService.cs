@@ -18,6 +18,7 @@ namespace Manero_backend.Services
         {
             var claims = new List<Claim>()
             {
+                new Claim(ClaimTypes.Name, entity.UserName!),
                 new Claim(ClaimTypes.GivenName, entity.FirstName!),
                 new Claim(ClaimTypes.Surname, entity.LastName!),
                 new Claim(ClaimTypes.Email, entity.Email!),
