@@ -154,7 +154,30 @@ namespace Manero_backend.Controllers
             return Ok(products);
         }
 
+        public IProductService Get_productService()
+        {
+            return _productService;
+        }
 
+        // DELETE: api/Product/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int id, IProductService _productService)
+        {
+            try
+            {
+                var success = await _productService.DeleteProductAsync(int id);
+                var response = new ServiceResponse<bool>
+                {
+                    Data = success,
+                    Message = success ? "Product deleted successfully" : "Product not found"
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(" OPPS \U0001fae3 \U0001fae2  : " + e.Message + "\U0001f937‍♀️");
+            }
+        }
 
 
 
