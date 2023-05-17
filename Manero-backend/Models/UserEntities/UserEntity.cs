@@ -1,20 +1,31 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Manero_backend.DTOs.User;
+using Manero_backend.Factories;
+using Manero_backend.Interfaces.Users.Models;
+using Manero_backend.Models.OrderEntities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Manero_backend.Models.UserEntities
 {
-    public class UserEntity : IdentityUser
+    public class UserEntity : IdentityUser, IUserEntity
     {
-        [ProtectedPersonalData]
-        public string? Name { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
 
-        [ProtectedPersonalData]
-        public string? Password { get; set; }
+        public static implicit operator UserResponse(UserEntity entity)
+        {
+            if(entity != null)
+            {
+                var result = UserFactory.CreateUserResponse();
 
-        [ProtectedPersonalData]
-        public string? ConfirmPassword { get; set; }
+                result.FirstName = entity.FirstName;
+                result.LastName = entity.LastName;
+                result.PhoneNumber = entity.PhoneNumber;
+                result.Email = entity.Email;
 
-        public ICollection<UserAddressEntity> UserAddresses { get; set; } = new HashSet<UserAddressEntity>();
+                return result;
+            }
+            return null!;
+        }
 
-        public ICollection<UserCompanyEntity> UserCompanies { get; set; } = new HashSet<UserCompanyEntity>();
     }
 }
