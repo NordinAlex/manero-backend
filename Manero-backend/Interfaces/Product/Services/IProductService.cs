@@ -1,6 +1,7 @@
 ﻿using Manero_backend.DTOs.Product;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Services;
+using System.Linq.Expressions;
 
 namespace Manero_backend.Interfaces.Product.Services
 {
@@ -12,6 +13,7 @@ namespace Manero_backend.Interfaces.Product.Services
         Task<ProductResponse> CreateProductAsync(ProductRequest productRequest);
         Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest);
         Task DeleteProductAsync(int id);
-        //Task<ServiceResponse<IEnumerable<ProductEntity>>> GetProductsByCategory(string categoryName);
+        Task<IEnumerable<ProductResponse>> GetProductBySearchAsync(Expression<Func<ProductEntity, bool>> predicate);
+        Task<List<SearchFilterCriteria>> GetProductBySearchAndFilterAsync(SearchFilterCriteria criteria);
     }
 }

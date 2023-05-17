@@ -115,5 +115,49 @@ namespace Manero_backend.Controllers
                 return Ok(serviceResponse);
             }
         }
+
+
+        // skapa en metod för search och filter som tar in en parameter och returnerar en lista med produkter som matchar sökningen och filtret och är asynkron
+        // GET: api/Product/search
+        [HttpGet("searchby")]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<ProductResponse>>>> GetProductBySearchAsync([FromQuery] string search)
+        {
+            //var productService = new ProductService();
+            //_productService.GetProductBySearchAsync(x => x.Name == "hej");
+            var product = await _productService.GetProductBySearchAsync(p => p.Name.Contains(search));
+
+            var serviceResponse = new ServiceResponse<IEnumerable<ProductResponse>>();
+            if (product == null)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Product not found  \U0001f937‍♀️ ";
+                return NotFound(serviceResponse);
+            }
+            else
+            {
+                serviceResponse.Data = product;
+                return Ok(serviceResponse);
+            }
+        }
+
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<ProductResponse>>> GetProductBySearchAndFilterAsync([FromQuery] SearchFilterCriteria criteria)
+        {
+            var products = await _productService.GetProductBySearchAndFilterAsync(criteria);
+
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found.");
+            }
+
+            return Ok(products);
+        }
+
+
+
+
+
+
     }
 }

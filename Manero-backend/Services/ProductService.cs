@@ -8,6 +8,7 @@ using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.ProductItemEntities;
 using Manero_backend.Repository;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Manero_backend.Services
 {
@@ -83,10 +84,10 @@ namespace Manero_backend.Services
             return products.ToProductResponse(tags, brands, colors, images, sizes, types);
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
             // Ilona
-            await _productRepository.DeleteProduct(id);
+            await _productRepository.DeleteAsync(id);
         }
 
         public async Task<IEnumerable<ProductResponse>> GetAllProductAsync()
@@ -129,24 +130,52 @@ namespace Manero_backend.Services
             return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
 
-        public Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest)
+        public async Task<ProductResponse> UpdateProductAsync(int id, ProductRequest productRequest)
         {
             // Ilona
-            var brands = await _brandRepository.GetAllTags();
-            var colors = await _colorRepository.GetAllColors();
-            var images = await _imageRepository.GetAllImages();
-            var sizes = await _sizeRepository.GetAllSizes();
-            var tags = await _tagRepository.GetAllTags();
-            var types = await _typeRepository.GetAllTypes();
-            var product = await _productRepository.GetProductById(id);
+            var brands = await _brandRepository.GetAllBrandAsync();
+            var colors = await _colorRepository.GetAllColorAsync();
+            var images = await _imageRepository.GetAllImageAsync();
+            var sizes = await _sizeRepository.GetAllSizeAsync();
+            var tags = await _tagRepository.GetAllTagAsync();
+            var types = await _typeRepository.GetAllTypeAsync();
+            var product = await _productRepository.GetByIdAsync(id);
             if (product == null) return null;
 
-            productRequest.UpdateProduct(product);
-            await _productRepository.UpdateProduct(product);
+            productRequest.UpdateProductEntity(product);
+            await _productRepository.UpdateAsync(product);
 
             return product.ToProductResponse(tags, brands, colors, images, sizes, types);
         }
 
-        // Update, delete, get by id, get all, create, get by type, get catagory , 
+        public async Task<IEnumerable<ProductResponse>> GetProductBySearchAsync(Expression<Func<ProductEntity, bool>> predicate)
+        {
+            var products = await _productRepository.GetBySearchAsync(predicate);
+            var brands = await _brandRepository.GetAllBrandAsync();
+            var colors = await _colorRepository.GetAllColorAsync();
+            var images = await _imageRepository.GetAllImageAsync();
+            var sizes = await _sizeRepository.GetAllSizeAsync();
+            var tags = await _tagRepository.GetAllTagAsync();
+            var types = await _typeRepository.GetAllTypeAsync();
+            var items = await _productItemRepository.GetAllAsync();
+            return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
+        }
+
+
+
+
+        public async Task<List<SearchFilterCriteria>> GetProductBySearchAndFilterAsync(SearchFilterCriteria criteria)
+        {
+
+            var brands = await _brandRepository.GetAllBrandAsync();
+            var colors = await _colorRepository.GetAllColorAsync();
+            var images = await _imageRepository.GetAllImageAsync();
+            var sizes = await _sizeRepository.GetAllSizeAsync();
+            var tags = await _tagRepository.GetAllTagAsync();
+            var types = await _typeRepository.GetAllTypeAsync();
+            var items = await _productItemRepository.GetAllAsync();
+            var products = await _productRepository.GetBySearchAndFilterAsync(criteria);
+            return products.Select(EntityDTOMapper.ToSearchFilterCriteria).ToList();
+        }
     }
 }
