@@ -10,7 +10,8 @@ namespace Manero_backend.DTOs.Product
 {
     public class ProductRequest // Product (product grupp) Request  
     {
-        public string Name { get; set; } = null!;        
+        public string Name { get; set; } = null!;
+        public bool Featured { get; set; } = false;
         public string Description { get; set; } = null!;
         public int ProductSR { get; set; }
         public int BrandId { get; set; }

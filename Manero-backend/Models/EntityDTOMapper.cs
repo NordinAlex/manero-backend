@@ -19,6 +19,7 @@ namespace Manero_backend.Models
             return new ProductResponse
             {
                 Id = product.Id,
+                Featured = product.Featured,
                 Name = product.Name,
                 Description = product.Description,
                 //Brand = product.BrandEntity.BrandName,
@@ -58,6 +59,7 @@ namespace Manero_backend.Models
             return new ProductEntity
             {
                 Name = request.Name,
+                Featured = request.Featured,
                 BrandEntityId = request.BrandId,
                 Description = request.Description,
                 CategoryEntityId = request.CategoryId,
