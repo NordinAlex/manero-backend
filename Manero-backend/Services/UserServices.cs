@@ -15,9 +15,10 @@ namespace Manero_backend.Services
         private readonly UserManager<UserEntity> _userManager;
         private readonly TokenService _tokenService;
 
-        public UserServices(UserManager<UserEntity> userManager)
+        public UserServices(UserManager<UserEntity> userManager, TokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         public async Task<IActionResult> DeleteAsync(string id) // INTE TESTAD PATRIK
@@ -58,11 +59,11 @@ namespace Manero_backend.Services
 
             if (entity != null)
             {
-                if(updateUser.FirstName != null) 
-                    entity.FirstName = updateUser.FirstName;
-                if (updateUser.LastName != null)
-                    entity.LastName = updateUser.LastName;
-                if (updateUser.PhoneNumber != null)
+                if(updateUser.FirstName != "") 
+                    entity.FirstName = updateUser.FirstName!;
+                if (updateUser.LastName != "")
+                    entity.LastName = updateUser.LastName!;
+                if (updateUser.PhoneNumber != "" || updateUser.PhoneNumber != null)
                     entity.PhoneNumber = updateUser.PhoneNumber;
 
                 await _userManager.UpdateAsync(entity);
