@@ -10,6 +10,8 @@ namespace Manero_backend.Models.UserEntities
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
+        public string Issuer { get; set; } = null!;
+        public string? ImageUrl { get; set; }
 
         public static implicit operator UserResponse(UserEntity entity)
         {
@@ -21,6 +23,8 @@ namespace Manero_backend.Models.UserEntities
                 result.LastName = entity.LastName;
                 result.PhoneNumber = entity.PhoneNumber;
                 result.Email = entity.Email;
+                //result.Issuer = entity.Issuer;
+                //result.ImageUrl = entity.ImageUrl;
 
                 return result;
             }

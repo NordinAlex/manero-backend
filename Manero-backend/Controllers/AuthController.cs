@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Manero_backend.Controllers
 {
@@ -30,17 +31,26 @@ namespace Manero_backend.Controllers
         {
             if(ModelState.IsValid) {
                 //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
+                if (!userRequest.Issuer.IsNullOrEmpty())
+                {
+                    var token = await _authService.CreateSocialAsync(userRequest);
+
+                    if(token != null)
+                    {
+                        return Ok(token);
+                    }
+                    return BadRequest("You tried signing in with a different authentication method than the one you used during signup. Please try again using your original authentication method.");
+                }
                 if (await _authService.CheckEmailAsync(userRequest.Email))
                 {
-                    return Conflict(UserFactory.CreateUserResponse("Email already exist",true,userRequest));
+                    return Conflict("Email already exist");
                 }
                 var result = await _authService.CreateUserAsync(userRequest);
                 if(result != null)
                 {
-                    if(!result.Error)
                     return Created("", result);
                 }
-                return BadRequest(result);
+                return BadRequest("Could not create an account");
             } 
             return BadRequest(ModelState);
         }
@@ -48,7 +58,7 @@ namespace Manero_backend.Controllers
         public async Task<IActionResult> LoginAsync(LogInReq loginReq)
         {
 
-            if(ModelState.IsValid) 
+            if (ModelState.IsValid) 
             {
                 if (await _authService.CheckEmailAsync(loginReq.Email))
                 { var result = await _authService.LogInAsync(loginReq);

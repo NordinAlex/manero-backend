@@ -26,5 +26,9 @@ namespace Manero_backend.DTOs.User
         [Display(Name = "PHONE NUMBER")]
         public string? PhoneNumber { get; set; }
 
+        public string? ImageUrl { get; set; }
+
+        public string? Issuer { get; set; }
+
     }
 }

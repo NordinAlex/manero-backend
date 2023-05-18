@@ -3,6 +3,7 @@ using Manero_backend.Factories;
 using Manero_backend.Interfaces.Users.Models;
 using Manero_backend.Interfaces.Users.Repositories;
 using Manero_backend.Interfaces.Users.Service;
+using Manero_backend.Migrations.Identity;
 using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,10 +34,8 @@ namespace Manero_backend.Services
         {
                return await _userManager.Users.AnyAsync(x => x.Email == email);
         }
-        public async Task<UserResponse> CreateUserAsync(UserRequest userRequest)
+        public async Task<string> CreateUserAsync(UserRequest userRequest)
         {
-            
-            
             var entity = UserFactory.CreateUserEntity();
 
             entity.Email = userRequest.Email;
@@ -50,11 +49,12 @@ namespace Manero_backend.Services
             {
                 try
                 {
+                    entity.Issuer = "MANERO";
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("User"));
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("Admin"));
                     await _userManager.CreateAsync(entity, userRequest.Password);
                     await _userManager.AddToRoleAsync(entity, "Admin");
-                    return entity;
+                    return _tokenService.CreateToken(entity, "Admin");
                 }
                 catch { }
             } else
@@ -65,18 +65,34 @@ namespace Manero_backend.Services
                     if (saveResult.Succeeded)
                     {
                             await _userManager.AddToRoleAsync(entity, "User");
-                            return entity;
+                            return _tokenService.CreateToken(entity, "User");
                     }
                     else
-                        {
-                        return UserFactory.CreateUserResponse(saveResult.Errors.FirstOrDefault()!.Description ?? "Error",true, userRequest);
-                        }
+                        { return null!; }
                 }
                 catch { }
             }
             return null!;
         }
 
+        public async Task<string> CreateSocialAsync(UserRequest userRequest)
+        {
+            try
+            {
+                if (!await CheckEmailAsync(userRequest.Email))
+                {
+                    userRequest.Password = "P" + Guid.NewGuid().ToString();
+                    return await CreateUserAsync(userRequest);
+                }
+                if (userRequest.Email != null)
+                {
+                    return _tokenService.CreateToken(await _userManager.Users.FirstOrDefaultAsync(x => x.Email == userRequest.Email), "User");
+                }
+            } catch { }
+            
+            return null!;
+        }
+        // Kontrollera Roll
         public async Task<string> LogInAsync(LogInReq req)
         {
             try

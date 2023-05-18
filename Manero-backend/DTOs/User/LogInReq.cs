@@ -12,6 +12,7 @@ namespace Manero_backend.DTOs.User
         //[Required(ErrorMessage = "PLEASE ENTER A PASSWORD")]
         [DataType(DataType.Password)]
         [Display(Name = "PASSWORD")]
-        public required string Password { get; set; }
+        public string Password { get; set; }
+
     }
 }
