@@ -79,7 +79,18 @@ builder.Services.AddAuthentication(x =>
         {
             OnTokenValidated = context =>
             {
+                var securityToken = context.SecurityToken;
+                if (securityToken != null)
+                {
+                    if (securityToken.Issuer != "MANERO")
+                     context.Fail("Wrong Issuer"); 
+                    if (securityToken.ValidTo < DateTimeOffset.UtcNow)
+                        context.Fail("Tokex expired");
+
+                }
+
                 if (string.IsNullOrEmpty(context.Principal?.Identity?.Name))
+                
                 { context.Fail("Unauthorized"); }
                 //Cheacka flera saker, nu kollar vi Name(email), vi kan kolla mer värden
 

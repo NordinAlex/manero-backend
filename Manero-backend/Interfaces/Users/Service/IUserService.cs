@@ -12,6 +12,6 @@ namespace Manero_backend.Interfaces.Users.Service
         //På deletasync ändrade Oscar, julius från Id till email
         public Task<IActionResult> DeleteAsync(string email);
 
-        public Task<UserResponse> UpdateAsync(UpdateUser updateUser, string id);
+        public Task<string> UpdateAsync(UpdateUser updateUser, string email);
     }
 }
