@@ -27,8 +27,8 @@ namespace Manero_backend.DTOs.User
         public string? PhoneNumber { get; set; }
 
         public string? ImageUrl { get; set; }
-
-        public string? Issuer { get; set; }
+        [Required]
+        public string Issuer { get; set; } = null!;
 
     }
 }

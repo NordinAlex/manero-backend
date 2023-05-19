@@ -44,7 +44,7 @@ namespace Manero_backend.Services
             entity.LastName = userRequest.LastName;
             entity.PhoneNumber = userRequest.PhoneNumber;
             entity.UserName = userRequest.Email;
-            entity.Issuer = "MANERO";
+            entity.Issuer = userRequest.Issuer;
 
             var result = await _userManager.Users.AnyAsync();
             if (!result)
@@ -117,6 +117,10 @@ namespace Manero_backend.Services
         {
 
             var entity = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+            if(entity == null)
+            {
+                return UserFactory.CreateUserResponse("You have no account", true);
+            }
             try
             {
                 if (entity!.Issuer == request.Issuer) 

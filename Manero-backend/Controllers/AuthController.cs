@@ -63,6 +63,8 @@ namespace Manero_backend.Controllers
         [HttpPost("create/external")]
         public async Task<IActionResult> CreateExternalAsync(UserRequest userRequest)
         {
+            if(ModelState.IsValid)
+            {
             var result = await _authService.CreateSocialAsync(userRequest);
 
             if (!result.Error)
@@ -70,6 +72,8 @@ namespace Manero_backend.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+            }
+            return BadRequest(ModelState);
         }
         [HttpPost("login/external")]
         public async Task<IActionResult> LoginAsyncExternalAsync(LogInExternalRequest request)
