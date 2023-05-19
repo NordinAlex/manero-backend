@@ -1,4 +1,5 @@
-﻿using Manero_backend.DTOs.User;
+﻿using Azure.Core;
+using Manero_backend.DTOs.User;
 using Manero_backend.Factories;
 using Manero_backend.Interfaces.Users.Models;
 using Manero_backend.Interfaces.Users.Repositories;
@@ -80,6 +81,8 @@ namespace Manero_backend.Services
             try
             {
                 var entity = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == req.Email);
+                if (entity!.Issuer != "MANERO")
+                    return UserFactory.CreateUserResponse($"You tried signing in with a different authentication method than the one you used during signup. Please try again using your {entity.Issuer} authentication account.", true);
                 if (entity != null!)
                 {
                     var signInResult = await _signInManager.PasswordSignInAsync(entity, req.Password, false, false);
@@ -123,7 +126,7 @@ namespace Manero_backend.Services
             else 
                 {
 
-                    return UserFactory.CreateUserResponse("You tried signing in with a different authentication method than the one you used during signup. Please try again using your original authentication method.",true);
+                    return UserFactory.CreateUserResponse($"You tried signing in with a different authentication method than the one you used during signup. Please try again using your {entity.Issuer} authentication account.",true);
                 }
             }
             catch { return UserFactory.CreateUserResponse("Something went wrong while login", true); }
