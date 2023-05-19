@@ -26,31 +26,21 @@ namespace Manero_backend.Controllers
             _authService = authService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(UserRequest userRequest)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAsync(UserRequest userRequest)
         {
             if(ModelState.IsValid) {
-                //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
-                if (!userRequest.Issuer.IsNullOrEmpty())
-                {
-                    var token = await _authService.CreateSocialAsync(userRequest);
 
-                    if(token != null)
-                    {
-                        return Ok(token);
-                    }
-                    return BadRequest("You tried signing in with a different authentication method than the one you used during signup. Please try again using your original authentication method.");
-                }
                 if (await _authService.CheckEmailAsync(userRequest.Email))
                 {
-                    return Conflict("Email already exist");
+                    return Conflict(UserFactory.CreateUserResponse("Email already exist", userRequest));
                 }
                 var result = await _authService.CreateUserAsync(userRequest);
-                if(result != null)
+                if (result.Error)
                 {
-                    return Created("", result);
+                    return BadRequest(UserFactory.CreateUserResponse("Could not create an account", userRequest));
                 }
-                return BadRequest("Could not create an account");
+                return Created("", result);
             } 
             return BadRequest(ModelState);
         }
@@ -62,11 +52,38 @@ namespace Manero_backend.Controllers
             {
                 if (await _authService.CheckEmailAsync(loginReq.Email))
                 { var result = await _authService.LogInAsync(loginReq);
-                    return Ok(result);
+                    if (!result.Error)
+                        return Ok(result);
+                    else
+                        return BadRequest(result);
                 }
             }
             return BadRequest(ModelState);
         }
-        
+        [HttpPost("create/external")]
+        public async Task<IActionResult> CreateExternalAsync(UserRequest userRequest)
+        {
+            var result = await _authService.CreateSocialAsync(userRequest);
+
+            if (!result.Error)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("login/external")]
+        public async Task<IActionResult> LoginAsyncExternalAsync(LogInExternalRequest request)
+        {
+            if (!request.Issuer.IsNullOrEmpty())
+            {
+                var result = await _authService.LogInExternalAsync(request);
+                if (!result.Error)
+                    return Ok(result);
+                return BadRequest(result);
+            }
+            return BadRequest(UserFactory.CreateUserResponse("Can't login", true));
+        }
+
+
     }
 }

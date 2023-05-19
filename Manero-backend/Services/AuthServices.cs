@@ -32,9 +32,9 @@ namespace Manero_backend.Services
 
         public async Task<bool> CheckEmailAsync(string email)
         {
-               return await _userManager.Users.AnyAsync(x => x.Email == email);
+            return await _userManager.Users.AnyAsync(x => x.Email == email);
         }
-        public async Task<string> CreateUserAsync(UserRequest userRequest)
+        public async Task<UserResponse> CreateUserAsync(UserRequest userRequest)
         {
             var entity = UserFactory.CreateUserEntity();
 
@@ -43,6 +43,7 @@ namespace Manero_backend.Services
             entity.LastName = userRequest.LastName;
             entity.PhoneNumber = userRequest.PhoneNumber;
             entity.UserName = userRequest.Email;
+            entity.Issuer = "MANERO";
 
             var result = await _userManager.Users.AnyAsync();
             if (!result)
@@ -54,46 +55,27 @@ namespace Manero_backend.Services
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("Admin"));
                     await _userManager.CreateAsync(entity, userRequest.Password);
                     await _userManager.AddToRoleAsync(entity, "Admin");
-                    return _tokenService.CreateToken(entity, "Admin");
+                    return UserFactory.CreateUserResponse(_tokenService.CreateToken(entity, "Admin"));
                 }
-                catch { }
+                catch { return UserFactory.CreateUserResponse("Error while saving to database", userRequest); }
             } else
             {
                 try
                 {
-                var saveResult = await _userManager.CreateAsync(entity, userRequest.Password);
+                    var saveResult = await _userManager.CreateAsync(entity, userRequest.Password);
                     if (saveResult.Succeeded)
                     {
-                            await _userManager.AddToRoleAsync(entity, "User");
-                            return _tokenService.CreateToken(entity, "User");
+                        await _userManager.AddToRoleAsync(entity, "User");
+                        return UserFactory.CreateUserResponse(_tokenService.CreateToken(entity, "User"));
                     }
                     else
-                        { return null!; }
+                    { return UserFactory.CreateUserResponse("Error while saveing", userRequest); }
                 }
-                catch { }
+                catch { return UserFactory.CreateUserResponse("Something went wrong", userRequest); }
             }
-            return null!;
-        }
-
-        public async Task<string> CreateSocialAsync(UserRequest userRequest)
-        {
-            try
-            {
-                if (!await CheckEmailAsync(userRequest.Email))
-                {
-                    userRequest.Password = "P" + Guid.NewGuid().ToString();
-                    return await CreateUserAsync(userRequest);
-                }
-                if (userRequest.Email != null)
-                {
-                    return _tokenService.CreateToken(await _userManager.Users.FirstOrDefaultAsync(x => x.Email == userRequest.Email), "User");
-                }
-            } catch { }
-            
-            return null!;
         }
         // Kontrollera Roll
-        public async Task<string> LogInAsync(LogInReq req)
+        public async Task<UserResponse> LogInAsync(LogInReq req)
         {
             try
             {
@@ -101,16 +83,50 @@ namespace Manero_backend.Services
                 if (entity != null!)
                 {
                     var signInResult = await _signInManager.PasswordSignInAsync(entity, req.Password, false, false);
-                if(signInResult.Succeeded)
+                    if (signInResult.Succeeded)
                     {
-                        var token = _tokenService.CreateToken(entity, "User");
-                        return token;
+                        var list = await _userManager.GetRolesAsync(entity);
+                        return UserFactory.CreateUserResponse(_tokenService.CreateToken(entity, list[0]));
                     }
+                    else { return UserFactory.CreateUserResponse("Error while signing in", true); }
                 }
 
             }
-            catch { }
-            return null!;
+            catch { return UserFactory.CreateUserResponse("Something went wrong", true); }
+            return UserFactory.CreateUserResponse("Something went very wrong", true);
+        }
+
+        public async Task<UserResponse> CreateSocialAsync(UserRequest userRequest)
+        {
+            try
+            {
+                if (!await CheckEmailAsync(userRequest.Email)) //Om den inte finns i DB skapa
+                {
+                    userRequest.Password = "P" + Guid.NewGuid().ToString();
+                    return await CreateUserAsync(userRequest);
+                }
+                else { return UserFactory.CreateUserResponse("An account alredy exists on this email -> go to forgott password", true); }
+
+            }
+            catch { return UserFactory.CreateUserResponse("Error while creating", true); }
+        }
+        public async Task<UserResponse> LogInExternalAsync(LogInExternalRequest request)
+        {
+
+            var entity = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+            try
+            {
+                if (entity!.Issuer == request.Issuer) 
+                {
+                    return UserFactory.CreateUserResponse(_tokenService.CreateToken(await _userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email), "User"));
+                }
+            else 
+                {
+
+                    return UserFactory.CreateUserResponse("You tried signing in with a different authentication method than the one you used during signup. Please try again using your original authentication method.",true);
+                }
+            }
+            catch { return UserFactory.CreateUserResponse("Something went wrong while login", true); }
         }
     }
 }

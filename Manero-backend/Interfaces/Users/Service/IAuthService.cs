@@ -6,9 +6,10 @@ namespace Manero_backend.Interfaces.Users.Service
 {
     public interface IAuthService
     {
-        Task<string> CreateUserAsync(UserRequest userRequest);
-        Task<string> CreateSocialAsync(UserRequest userRequest);
+        Task<UserResponse> CreateUserAsync(UserRequest userRequest);
+        Task<UserResponse> CreateSocialAsync(UserRequest userRequest);
         Task<bool> CheckEmailAsync(string email);
-        Task<string> LogInAsync(LogInReq logInReq);
+        Task<UserResponse> LogInAsync(LogInReq logInReq);
+        Task<UserResponse> LogInExternalAsync(LogInExternalRequest request);
     }
 }

@@ -41,17 +41,16 @@ namespace Manero_backend.Services
                 var result = await _userManager.Users.ToListAsync();
                 foreach (var user in result)
                 {
-                    UserResponse response = user;
-                    list.Add(response);
+
                 }
                 return list;
             }
             catch (Exception ex) { return null!; }
         }
 
-        public async Task<UserResponse> GetAsync(string id)
+        public async Task<UserResponse> GetAsync(string email)
         {
-            return await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id) ?? null!;
+            return null!;
         }
 
         public async Task<string> UpdateAsync(UpdateUser updateUser, string email)

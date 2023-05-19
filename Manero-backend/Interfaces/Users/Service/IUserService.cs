@@ -15,3 +15,4 @@ namespace Manero_backend.Interfaces.Users.Service
         public Task<string> UpdateAsync(UpdateUser updateUser, string email);
     }
 }
+
