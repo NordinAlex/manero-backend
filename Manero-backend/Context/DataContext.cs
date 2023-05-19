@@ -1,4 +1,5 @@
 ﻿using Manero_backend.Models;
+using Manero_backend.Models.CartsEntity;
 using Manero_backend.Models.OrderEntities;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.ProductItemEntities;
@@ -29,6 +30,9 @@ namespace Manero_backend.Context
 
         public DbSet<WishlistEntity> Wishlists { get; set; }
         public DbSet<ReviewEntity> Reviews { get; set; }
+
+        public DbSet<CartEntity> Carts { get; set; }
+        public DbSet<CartItemEntity> CartItems { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Tags and Product relationship
