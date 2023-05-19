@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Manero_backend.Context;
+using Manero_backend.Interfaces.Addresses.Service;
 using Manero_backend.Interfaces.Order;
 using Manero_backend.Interfaces.OrderLine;
 using Manero_backend.Interfaces.Product;
@@ -34,6 +35,8 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configura
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<TokenService>(); //Interfaces kommer sen PB JBB // Vill vi ha denna som Scoped?(PB)
 builder.Services.AddScoped<IColorRepository, ColorRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();

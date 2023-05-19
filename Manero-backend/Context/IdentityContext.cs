@@ -11,6 +11,8 @@ namespace Manero_backend.Context
         }
 
         public DbSet<AddressEntity> Addresses { get; set; }
+        public DbSet<AddressTypeEntity> AddressesType { get; set; }
+        public DbSet<UserAddressEntity> UserAddress { get; set; }
     }
 
 
