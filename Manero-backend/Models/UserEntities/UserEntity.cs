@@ -10,7 +10,7 @@ namespace Manero_backend.Models.UserEntities
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public string Issuer { get; set; } = null!;
+        public string CreatedBy { get; set; } = null!;
         public string? ImageUrl { get; set; }
     }
 }

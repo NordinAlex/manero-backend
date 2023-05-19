@@ -29,16 +29,13 @@ namespace Manero_backend.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityTokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = entity.Issuer,
+                Issuer = _configuration["TokenService:Issuer"],
                 Audience = _configuration["TokenService:Audience"],
                 Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey
                 (Encoding.UTF8.GetBytes(_configuration["TokenService:Secret"]!)), SecurityAlgorithms.HmacSha512Signature),
                 Subject = new ClaimsIdentity(claims)
             };
-            if(entity.Issuer == null) { 
-                securityTokenDescriptor.Issuer = _configuration["TokenService:Issuer"]; 
-            }
                
             return tokenHandler.WriteToken(tokenHandler.CreateToken(securityTokenDescriptor));
         }

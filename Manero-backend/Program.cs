@@ -83,7 +83,7 @@ builder.Services.AddAuthentication(x =>
                 if (securityToken != null)
                 {
                     if (securityToken.Issuer != "MANERO")
-                     context.Fail("Wrong Issuer"); 
+                        context.Fail("Wrong Issuer");
                     if (securityToken.ValidTo < DateTimeOffset.UtcNow)
                         context.Fail("Tokex expired");
 
