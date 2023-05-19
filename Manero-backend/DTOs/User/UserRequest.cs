@@ -28,7 +28,7 @@ namespace Manero_backend.DTOs.User
 
         public string? ImageUrl { get; set; }
         [Required]
-        public string Issuer { get; set; } = null!;
+        public string CreatedBy { get; set; } = null!;
 
     }
 }

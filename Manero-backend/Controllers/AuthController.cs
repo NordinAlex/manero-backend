@@ -78,7 +78,7 @@ namespace Manero_backend.Controllers
         [HttpPost("login/external")]
         public async Task<IActionResult> LoginAsyncExternalAsync(LogInExternalRequest request)
         {
-            if (!request.Issuer.IsNullOrEmpty())
+            if (!request.CreatedBy.IsNullOrEmpty())
             {
                 var result = await _authService.LogInExternalAsync(request);
                 if (!result.Error)

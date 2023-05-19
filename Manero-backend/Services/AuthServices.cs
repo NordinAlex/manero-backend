@@ -44,14 +44,15 @@ namespace Manero_backend.Services
             entity.LastName = userRequest.LastName;
             entity.PhoneNumber = userRequest.PhoneNumber;
             entity.UserName = userRequest.Email;
-            entity.Issuer = userRequest.Issuer;
+            entity.CreatedBy = userRequest.CreatedBy;
+            entity.ImageUrl = userRequest.ImageUrl;
 
             var result = await _userManager.Users.AnyAsync();
             if (!result)
             {
                 try
                 {
-                    entity.Issuer = "MANERO";
+                    entity.CreatedBy = "MANERO";
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("User"));
                     await _roleManager.CreateAsync(IdentityRoleFactory.CreateRole("Admin"));
                     await _userManager.CreateAsync(entity, userRequest.Password);
@@ -81,8 +82,8 @@ namespace Manero_backend.Services
             try
             {
                 var entity = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == req.Email);
-                if (entity!.Issuer != "MANERO")
-                    return UserFactory.CreateUserResponse($"You tried signing in with a different authentication method than the one you used during signup. Please try again using your {entity.Issuer} authentication account.", true);
+                if (entity!.CreatedBy != "MANERO")
+                    return UserFactory.CreateUserResponse($"You tried signing in with a different authentication method than the one you used during signup. Please try again using your {entity.CreatedBy} authentication account.", true);
                 if (entity != null!)
                 {
                     var signInResult = await _signInManager.PasswordSignInAsync(entity, req.Password, false, false);
@@ -123,14 +124,14 @@ namespace Manero_backend.Services
             }
             try
             {
-                if (entity!.Issuer == request.Issuer) 
+                if (entity!.CreatedBy == request.CreatedBy) 
                 {
                     return UserFactory.CreateUserResponse(_tokenService.CreateToken(await _userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email), "User"));
                 }
             else 
                 {
 
-                    return UserFactory.CreateUserResponse($"You tried signing in with a different authentication method than the one you used during signup. Please try again using your {entity.Issuer} authentication account.",true);
+                    return UserFactory.CreateUserResponse($"You tried signing in with a different authentication method than the one you used during signup. Please try again using your {entity.CreatedBy} authentication account.",true);
                 }
             }
             catch { return UserFactory.CreateUserResponse("Something went wrong while login", true); }
