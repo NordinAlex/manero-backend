@@ -58,7 +58,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.OrderEntities.OrderLineEntity", b =>
@@ -79,7 +79,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderLines");
+                    b.ToTable("OrderLines", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.BrandEntity", b =>
@@ -99,7 +99,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.CategoryEntity", b =>
@@ -116,7 +116,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ColorEntity", b =>
@@ -136,7 +136,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colors");
+                    b.ToTable("Colors", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ImagesEntity", b =>
@@ -160,7 +160,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("ProductItemEntityId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductEntity", b =>
@@ -199,7 +199,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("WishlistEntityId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductTagsEntity", b =>
@@ -214,7 +214,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("TagsEntityId");
 
-                    b.ToTable("ProductTags");
+                    b.ToTable("ProductTags", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.ProductTypeEntity", b =>
@@ -229,7 +229,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("TypeEntityId");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("ProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.SizeEntity", b =>
@@ -246,7 +246,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.TagsEntity", b =>
@@ -263,7 +263,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductEntities.TypeEntity", b =>
@@ -280,7 +280,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Types");
+                    b.ToTable("Types", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.ProductItemEntities.ProductItemEntity", b =>
@@ -318,7 +318,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("ProductItems");
+                    b.ToTable("ProductItems", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.UserProductEntities.ReviewEntity", b =>
@@ -348,7 +348,7 @@ namespace Manero_backend.Migrations
 
                     b.HasIndex("ProductEntityId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.UserProductEntities.WishlistEntity", b =>
@@ -371,7 +371,7 @@ namespace Manero_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Wishlists");
+                    b.ToTable("Wishlists", (string)null);
                 });
 
             modelBuilder.Entity("Manero_backend.Models.OrderEntities.OrderLineEntity", b =>

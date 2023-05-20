@@ -47,7 +47,9 @@ namespace Manero_backend.Services
 
         public async Task<OrderResponse> GetOrderByIdAsync(int id)
         {
-            OrderResponse res = await _orderRepo.GetOrderByIdAsync(id);
+            var entity = await _orderRepo.GetOrderByIdAsync(id);
+            if (entity == null) return null!;
+            OrderResponse res = entity;
             return res;
         }
 

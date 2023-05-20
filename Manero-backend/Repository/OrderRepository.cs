@@ -52,6 +52,10 @@ namespace Manero_backend.Repository
         public async Task<OrderEntity> GetOrderByIdAsync(int id)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
+            if (order == null)
+            {
+                return null!;
+            }
             return order!;
         }
     }
