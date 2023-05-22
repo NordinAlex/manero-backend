@@ -48,9 +48,10 @@ namespace Manero_backend.Controllers
         public async Task<IActionResult> LoginAsync(LogInReq loginReq)
         {
 
-            if (ModelState.IsValid) 
+            if (true) 
             {
-                if (await _authService.CheckEmailAsync(loginReq.Email))
+                if (!await _authService.CheckEmailAsync(loginReq.Email))
+                { return BadRequest(UserFactory.CreateUserResponse("Wrong email or password!", true)); }
                 { var result = await _authService.LogInAsync(loginReq);
                     if (!result.Error)
                         return Ok(result);
@@ -58,7 +59,7 @@ namespace Manero_backend.Controllers
                         return BadRequest(result);
                 }
             }
-            return BadRequest(ModelState);
+            return BadRequest();
         }
         [HttpPost("create/external")]
         public async Task<IActionResult> CreateExternalAsync(UserRequest userRequest)

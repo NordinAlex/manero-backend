@@ -8,11 +8,10 @@ namespace Manero_backend.DTOs.User
         [Required(ErrorMessage = "PLEASE ENTER AN EMAIL")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "EMAIL")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
         [Required(ErrorMessage = "PLEASE ENTER A PASSWORD")]
         [DataType(DataType.Password)]
         [Display(Name = "PASSWORD")]
-        public string Password { get; set; }
-
+        public string Password { get; set; } = null!;
     }
 }
