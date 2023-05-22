@@ -5,6 +5,7 @@ namespace Manero_backend.Models.CartsEntity
     //Oscar // Belal // Julius
     public class CartItemEntity
     {
+
         public int Id { get; set; }
         public int ProductId { get; set; }
         public ProductEntity Product { get; set; }

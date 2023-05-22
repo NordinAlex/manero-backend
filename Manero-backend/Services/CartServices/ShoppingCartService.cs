@@ -28,10 +28,26 @@ namespace Manero_backend.Services.CartRelatedServices
             return await _cartRepository.CreateCartAsync(email);
         }
 
+        /*
         public async Task<CartItemResponseDTO> AddCartItemAsync(int cartId, CartItemRequestDTO cartItemDto)
         {
             return await _cartRepository.AddCartItemAsync(cartId, cartItemDto);
         }
+        */
+        public async Task<CartItemResponseDTO> AddCartItemAsync(string email, CartItemRequestDTO cartItemDto)
+        {
+            var cart = await _cartRepository.GetCartByEmailAsync(email);
+
+            if (cart == null)
+            {
+                throw new ArgumentException("Cart not found.");
+            }
+
+            // Update the cartId parameter to use the retrieved cart's ID
+            return await _cartRepository.AddCartItemAsync(cart.Id.ToString(), cartItemDto);
+
+        }
+
 
         public async Task<CartItemResponseDTO> UpdateCartItemAsync(int cartItemId, CartItemRequestDTO cartItemDto)
         {

@@ -119,6 +119,7 @@ namespace Manero_backend.Repository.CartRepository
                     return cart.Id;
                 }
         */
+        
         public async Task<int> CreateCartAsync(string email)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == email);
@@ -145,7 +146,7 @@ namespace Manero_backend.Repository.CartRepository
 
             return cart.Id;
         }
-
+        /*
 
         public async Task<CartItemResponseDTO> AddCartItemAsync(int cartId, CartItemRequestDTO cartItemDto)
         {
@@ -192,6 +193,68 @@ namespace Manero_backend.Repository.CartRepository
 
             return null!; // _mapper.Map<CartItemResponseDTO>(cartItem);
         }
+        */
+
+        public async Task<CartItemResponseDTO> AddCartItemAsync(string email, CartItemRequestDTO cartItemDto)
+        {
+            var cart = await _context.Carts.FirstOrDefaultAsync(c => c.Email == email);
+
+            if (cart == null)
+            {
+                throw new ArgumentException($"Cart for email {email} not found.");
+            }
+
+            var product = await _context.Products.FindAsync(cartItemDto.ProductId);
+
+            if (product == null)
+            {
+                throw new ArgumentException($"Product with ID {cartItemDto.ProductId} not found.");
+            }
+
+            var size = await _context.Sizes.FindAsync(cartItemDto.SizeId);
+
+            if (size == null)
+            {
+                throw new ArgumentException($"Size with ID {cartItemDto.SizeId} not found.");
+            }
+
+            var color = await _context.Colors.FindAsync(cartItemDto.ColorId);
+
+            if (color == null)
+            {
+                throw new ArgumentException($"Color with ID {cartItemDto.ColorId} not found.");
+            }
+
+            // Create a new cart item
+            var cartItem = new CartItemEntity
+            {
+                Id = cart.Id,
+                ProductId = product.Id,
+                SizeId = size.Id,
+                ColorId = color.Id,
+                Quantity = cartItemDto.Quantity,
+                
+                
+             //+ mappa ut resten
+            };
+
+            // Add the cart item to the database
+            _context.CartItems.Add(cartItem);
+            await _context.SaveChangesAsync();
+
+            // Map the cart item to the response DTO
+            var responseDto = new CartItemResponseDTO
+            {
+                Id = cartItem.Id,
+                ProductId = cartItem.ProductId,
+                SizeId = cartItem.SizeId,
+                ColorId = cartItem.ColorId,
+                Quantity = cartItem.Quantity
+            };
+
+            return responseDto;
+        }
+
 
 
         public async Task<CartItemResponseDTO> UpdateCartItemAsync(int cartItemId, CartItemRequestDTO cartItemDto)

@@ -1,8 +1,8 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Manero_backend.Context;
-using Manero_backend.Interfaces.Addresses.Repository;
 using Manero_backend.Interfaces.Addresses.Service;
+using Manero_backend.Interfaces.Cart;
 using Manero_backend.Interfaces.Order;
 using Manero_backend.Interfaces.OrderLine;
 using Manero_backend.Interfaces.Product;
@@ -12,7 +12,9 @@ using Manero_backend.Interfaces.Users.Repositories;
 using Manero_backend.Interfaces.Users.Service;
 using Manero_backend.Models.UserEntities;
 using Manero_backend.Repository;
+using Manero_backend.Repository.CartRepository;
 using Manero_backend.Services;
+using Manero_backend.Services.CartRelatedServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +54,12 @@ builder.Services.AddScoped<IOrderLineService, OrderLineService>();
 builder.Services.AddScoped<IAuthService, AuthServices>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserServices>();
+
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IShoppingCartServiceFactory, ShoppingCartServiceFactory>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+
 builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
 {
     x.Password.RequiredLength = 8;
