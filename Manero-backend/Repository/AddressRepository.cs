@@ -1,5 +1,8 @@
-﻿using Manero_backend.Context;
-using Manero_backend.Interfaces.Users.Repositories;
+﻿using Azure.Core;
+using Manero_backend.Context;
+using Manero_backend.DTOs.Address;
+using Manero_backend.Interfaces.Addresses.Repository;
+using Manero_backend.Models.Addresses;
 using Manero_backend.Models.UserEntities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,11 +31,23 @@ namespace Manero_backend.Repository
           
         }
 
-        public async Task<AddressEntity> GetAsync(int id)
+        public async Task<AddressEntity> GetAsync(AddressRequest request)
         {
             try
             {
-                return await _identityContext.Addresses.FirstOrDefaultAsync(x => x.Id == id);
+                return await _identityContext.Addresses.FirstOrDefaultAsync(x => x.StreetName == request.StreetName && x.PostalCode == request.PostalCode && x.City == request.City)?? null!;
+            }
+            catch
+            {
+                return null!;
+            }
+        }
+
+        public async Task<UserAddressEntity> GetUserAddressAsync(string userId, int addressId)
+        {
+            try
+            {
+                return await _identityContext.UserAddress.FirstOrDefaultAsync(x => x.Userid == userId && x.AddressId == addressId) ?? null!;
             }
             catch
             {
