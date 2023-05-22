@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Manero_backend.Factories;
+using Manero_backend.Models.Addresses;
+using System.ComponentModel.DataAnnotations;
 
 namespace Manero_backend.DTOs.Address
 {
@@ -12,6 +14,18 @@ namespace Manero_backend.DTOs.Address
         public string PostalCode { get; set; } = null!;
         [Required]
         public string City { get; set; } = null!;
-        public string? Email { get; set; }
+        public string Email { get; set; } = null!;
+        public string AddressType { get; set; } = null!;
+
+        //public static implicit operator AddressEntity(AddressRequest addressRequest)
+        //{
+        //    var entity = AddressFactory.CreateEntity();
+        //    entity.StreetName = addressRequest.StreetName;
+        //    entity.PostalCode = addressRequest.PostalCode;
+        //    entity.City = addressRequest.City;
+        //    entity.TagName = addressRequest.TagName;
+        //    return entity;
+        //}
+
     }
 }

@@ -4,6 +4,7 @@ using Manero_backend.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Manero_backend.Migrations.Identity
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230522092219_Changed Entity For TagName")]
+    partial class ChangedEntityForTagName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,6 +50,23 @@ namespace Manero_backend.Migrations.Identity
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("Manero_backend.Models.Addresses.AddressTypeEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressesType");
+                });
+
             modelBuilder.Entity("Manero_backend.Models.UserEntities.UserAddressEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -59,8 +79,8 @@ namespace Manero_backend.Migrations.Identity
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("BillingAddress")
-                        .HasColumnType("bit");
+                    b.Property<int>("AddressTypeEntityId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");

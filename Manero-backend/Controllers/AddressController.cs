@@ -20,36 +20,36 @@ namespace Manero_backend.Controllers
             _addressService = addressService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(AddressRequest request)
-        {
-            if(ModelState.IsValid)
-            {
-                var respons = await _addressService.CreateAddressAsync(request);
+        //[HttpPost]
+        //public async Task<IActionResult> CreateAsync(AddressRequest request)
+        //{
+            
+        //    var respons = await _addressService.CreateAddressAsync(request);
+        //    if(respons != null)
+        //    {
+        //    }
+        //    return BadRequest(respons);
+        //    }            
+        //}
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllForOneUserAsync(string email)
+        //{
 
-            return BadRequest(respons);
-            }
-            return BadRequest(ModelState);
-        }
-        [HttpGet]
-        public async Task<IActionResult> GetAllForOneUserAsync(string email)
-        {
+        //    var respons = await _addressService.GetAllForOneUserAsync(email);
 
-            var respons = await _addressService.GetAllForOneUserAsync(email);
+        //    return BadRequest(respons);
 
-            return BadRequest(respons);
-
-        }
-        [HttpPut]
-        public async Task <IActionResult> RemoveAddressFromUser(AddressRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var respons = await _addressService.RemoveAddressFromUser(request);
-                return BadRequest(respons);
-            }
-            return BadRequest(ModelState);
-        }
+        //}
+        //[HttpPut]
+        //public async Task <IActionResult> RemoveAddressFromUser(AddressRequest request)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var respons = await _addressService.RemoveAddressFromUser(request);
+        //        return BadRequest(respons);
+        //    }
+        //    return BadRequest(ModelState);
+        //}
 
     }
 }
