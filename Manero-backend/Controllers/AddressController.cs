@@ -1,5 +1,6 @@
 ﻿using Manero_backend.DTOs.Address;
 using Manero_backend.DTOs.User;
+using Manero_backend.Interfaces.Addresses.Service;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,43 +14,24 @@ namespace Manero_backend.Controllers
     //[Authorize]
     public class AddressController : ControllerBase
     {
-        private readonly AddressService _addressService;
+        private readonly IAddressService _addressService;
 
-        public AddressController(AddressService addressService)
+        public AddressController(IAddressService addressService)
         {
             _addressService = addressService;
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateAsync(AddressRequest request)
-        //{
-            
-        //    var respons = await _addressService.CreateAddressAsync(request);
-        //    if(respons != null)
-        //    {
-        //    }
-        //    return BadRequest(respons);
-        //    }            
-        //}
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllForOneUserAsync(string email)
-        //{
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(AddressRequest request)
+        {
 
-        //    var respons = await _addressService.GetAllForOneUserAsync(email);
-
-        //    return BadRequest(respons);
-
-        //}
-        //[HttpPut]
-        //public async Task <IActionResult> RemoveAddressFromUser(AddressRequest request)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var respons = await _addressService.RemoveAddressFromUser(request);
-        //        return BadRequest(respons);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
-
+            var respons = await _addressService.CreateAddressAsync(request);
+            if (respons.Error = false || respons != null)
+            {
+                return Ok(respons);
+            }
+            return BadRequest(respons);
+        }
     }
 }
+

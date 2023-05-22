@@ -15,17 +15,16 @@ namespace Manero_backend.DTOs.Address
         [Required]
         public string City { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public string AddressType { get; set; } = null!;
+        public bool BillingAddress { get; set; }
 
-        //public static implicit operator AddressEntity(AddressRequest addressRequest)
-        //{
-        //    var entity = AddressFactory.CreateEntity();
-        //    entity.StreetName = addressRequest.StreetName;
-        //    entity.PostalCode = addressRequest.PostalCode;
-        //    entity.City = addressRequest.City;
-        //    entity.TagName = addressRequest.TagName;
-        //    return entity;
-        //}
+        public static implicit operator AddressEntity(AddressRequest addressRequest)
+        {
+            var entity = AddressFactory.CreateEntity();
+            entity.StreetName = addressRequest.StreetName;
+            entity.PostalCode = addressRequest.PostalCode;
+            entity.City = addressRequest.City;
+            return entity;
+        }
 
     }
 }

@@ -2,6 +2,7 @@
 using Manero_backend.Context;
 using Manero_backend.DTOs.Address;
 using Manero_backend.Interfaces.Addresses.Repository;
+using Manero_backend.Migrations.Identity;
 using Manero_backend.Models.Addresses;
 using Manero_backend.Models.UserEntities;
 using Microsoft.EntityFrameworkCore;
@@ -16,26 +17,29 @@ namespace Manero_backend.Repository
         {
             _identityContext = identityContext;
         }
-
-        public async Task<AddressEntity> CreateAsync(AddressEntity address)
+        //USER ADDRESSES
+        public async Task<UserAddressEntity> CreateUserAddressAsync(UserAddressEntity address)
         {
             try
             {
-                _identityContext.Addresses.Add(address);
+                _identityContext.UserAddress.Add(address);
                 await _identityContext.SaveChangesAsync();
                 return address;
-            } catch
+            }
+            catch
             {
                 return null!;
             }
-          
-        }
 
-        public async Task<AddressEntity> GetAsync(AddressRequest request)
+        }
+        public async Task<UserAddressEntity> CheckBillingTrueAsync(string userId)
         {
             try
             {
-                return await _identityContext.Addresses.FirstOrDefaultAsync(x => x.StreetName == request.StreetName && x.PostalCode == request.PostalCode && x.City == request.City)?? null!;
+                var result = await _identityContext.UserAddress.FirstOrDefaultAsync(x => x.Userid == userId && x.BillingAddress == true) ?? null!;
+                if (result != null)   
+                result.BillingAddress = !result.BillingAddress;
+                return result!;
             }
             catch
             {
@@ -53,6 +57,46 @@ namespace Manero_backend.Repository
             {
                 return null!;
             }
+        }
+
+        public async Task<UserAddressEntity> UpdateUserAddressAsync(UserAddressEntity userAddressEntity)
+        {
+            try 
+            {
+                _identityContext.Entry(userAddressEntity).State = EntityState.Modified;
+                await _identityContext.SaveChangesAsync();
+                return userAddressEntity;
+
+            }
+            catch
+            {
+                return null!;
+            }
+        }
+        //ADDRESSES
+        public async Task<AddressEntity> GetAddressAsync(AddressRequest request)
+        {
+            try
+            {
+                return await _identityContext.Addresses.FirstOrDefaultAsync(x => x.StreetName == request.StreetName && x.PostalCode == request.PostalCode && x.City == request.City)?? null!;
+            }
+            catch
+            {
+                return null!;
+            }
+        }
+        public async Task<AddressEntity> CreateAddressAsync(AddressEntity address)
+        {
+            try
+            {
+                _identityContext.Addresses.Add(address);
+                await _identityContext.SaveChangesAsync();
+                return address;
+            } catch
+            {
+                return null!;
+            }
+          
         }
     }
 }

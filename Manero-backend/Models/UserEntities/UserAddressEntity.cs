@@ -10,7 +10,7 @@ namespace Manero_backend.Models.UserEntities
         public bool BillingAddress { get; set; }
         public string TagName { get; set; } = null!;
         public DateTime Created { get; set; }
-        public bool Active { get; set; }
-        public DateTime InActivated { get; set; }
+        public bool Active { get; set; } = true;
+        public DateTime InActivated { get; set; } = new DateTime();
     }
 }

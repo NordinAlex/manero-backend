@@ -7,11 +7,15 @@ namespace Manero_backend.Interfaces.Addresses.Repository
 {
     public interface IAddressRepository
     {
-        public Task<AddressEntity> CreateAsync(AddressEntity address);
+        public Task<AddressEntity> CreateAddressAsync(AddressEntity address);
 
-        public Task<AddressEntity> GetAsync(AddressRequest request);
+        public Task<AddressEntity> GetAddressAsync(AddressRequest request);
 
         public Task<UserAddressEntity> GetUserAddressAsync(string userId, int addressId);
+        public Task<UserAddressEntity> CheckBillingTrueAsync(string userId);
+
+        public Task<UserAddressEntity> UpdateUserAddressAsync(UserAddressEntity userAddressEntity);
+        public Task<UserAddressEntity> CreateUserAddressAsync(UserAddressEntity address);
 
     }
 }
