@@ -65,13 +65,22 @@ namespace Manero_backend.Controllers
             return Ok(cartId);
         }
 
-
+        /*
         [HttpPost("{cartId}/items")]
         public async Task<ActionResult<CartItemResponseDTO>> AddCartItem(int cartId, [FromBody] CartItemRequestDTO cartItemDto)
         {
             var cartItem = await _shoppingCartService.AddCartItemAsync(cartId, cartItemDto);
             return Ok(cartItem);
         }
+        */
+
+        [HttpPost("{email}/items")]
+        public async Task<ActionResult<CartItemResponseDTO>> AddCartItem(string email, [FromBody] CartItemRequestDTO cartItemDto)
+        {
+            var cartItem = await _shoppingCartService.AddCartItemAsync(email, cartItemDto);
+            return Ok(cartItem);
+        }
+
 
         [HttpPut("{cartItemId}")]
         public async Task<ActionResult<CartItemResponseDTO>> UpdateCartItem(int cartItemId, [FromBody] CartItemRequestDTO cartItemDto)
