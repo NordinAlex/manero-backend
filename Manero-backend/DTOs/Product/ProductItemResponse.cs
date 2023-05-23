@@ -3,6 +3,7 @@
     public class ProductItemResponse  // Product Variation
     {
         public int Id { get; set; }
+        public string Name { get; set; } = null!;
         public string SKU { get; set; } = null!;
         public string Color { get; set; } = null!;
         public string Size { get; set; } = null!;
