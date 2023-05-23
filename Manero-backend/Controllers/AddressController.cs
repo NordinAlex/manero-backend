@@ -12,7 +12,7 @@ namespace Manero_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class AddressController : ControllerBase
     {
         private readonly IAddressService _addressService;
@@ -25,7 +25,7 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(AddressRequest request)
         {
-            //if(request.Email != User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value) { return BadRequest();}
+            if(request.Email != User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value) { return BadRequest();}
             
             var respons = await _addressService.CreateAddressAsync(request);
             if (respons.Error == false)
@@ -36,9 +36,9 @@ namespace Manero_backend.Controllers
         }
 
         [HttpGet("myaddresses")]
-        public async Task<IActionResult> GetAllUserAddresses(string email) // för dev ta bort mot token
+        public async Task<IActionResult> GetAllUserAddresses() 
         {
-            var response = await _addressService.GetAllForOneUserAsync(/*User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value)*/email);
+            var response = await _addressService.GetAllForOneUserAsync(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
             if (!response.Error) { return Ok(response); }
             return BadRequest(response);
         }
@@ -46,7 +46,7 @@ namespace Manero_backend.Controllers
         [HttpPut]
         public async Task<IActionResult> DeleteAsync(AddressRequest request)
         {
-            //if(request.Email != User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value) { return BadRequest();}
+            request.Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
 
             var respons = await _addressService.InActivateAddressAsync(request);
             if (respons.Error == false)

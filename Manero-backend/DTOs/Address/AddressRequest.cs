@@ -14,7 +14,7 @@ namespace Manero_backend.DTOs.Address
         public string PostalCode { get; set; } = null!;
         [Required]
         public string City { get; set; } = null!;
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; }
         public bool BillingAddress { get; set; }
 
         public static implicit operator AddressEntity(AddressRequest addressRequest)
