@@ -8,6 +8,6 @@ namespace Manero_backend.Interfaces.Addresses.Service
         Task<AddressResponse> CreateAddressAsync(AddressRequest request);
         Task<AddressEntity> GetAsync(AddressRequest request);
         Task<AddressResponse> GetAllForOneUserAsync(string email);
-        Task<AddressResponse> RemoveAddressFromUser(AddressRequest request);
+        Task<AddressResponse> InActivateAddressAsync(AddressRequest request);
     }
 }

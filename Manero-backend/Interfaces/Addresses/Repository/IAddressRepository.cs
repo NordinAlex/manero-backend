@@ -1,7 +1,6 @@
 ﻿using Manero_backend.Context;
 using Manero_backend.DTOs.Address;
 using Manero_backend.Models.Addresses;
-using Manero_backend.Models.UserEntities;
 
 namespace Manero_backend.Interfaces.Addresses.Repository
 {
@@ -12,6 +11,7 @@ namespace Manero_backend.Interfaces.Addresses.Repository
         public Task<AddressEntity> GetAddressAsync(AddressRequest request);
 
         public Task<UserAddressEntity> GetUserAddressAsync(string userId, int addressId);
+        public Task<List<AddressResponse>> GetAllUserAddressesAsync(string userId);
         public Task<UserAddressEntity> CheckBillingTrueAsync(string userId);
 
         public Task<UserAddressEntity> UpdateUserAddressAsync(UserAddressEntity userAddressEntity);

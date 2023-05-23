@@ -8,5 +8,8 @@
         public string? StatusMessage { get; set; }
         public bool Error { get; set; }
         public string? TagName { get; set; }
+        public bool BillingAddress { get; set; }
+        public bool Active { get; set; }
+        public ICollection<AddressResponse>? AddressList { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Manero_backend.DTOs.Address;
 using Manero_backend.Models.Addresses;
-using Manero_backend.Models.UserEntities;
 
 namespace Manero_backend.Factories
 {
@@ -28,6 +27,10 @@ namespace Manero_backend.Factories
             PostalCode = postalCode,
             City = city,
             TagName = tagName
+        };
+        public static AddressResponse CreateResponse(List<AddressResponse> responseList) => new()
+        {
+            AddressList = responseList
         };
 
     }

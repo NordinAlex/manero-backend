@@ -1,11 +1,13 @@
 ﻿using Azure.Core;
 using Manero_backend.Context;
 using Manero_backend.DTOs.Address;
+using Manero_backend.Factories;
+using Manero_backend.Interfaces.Addresses.Model;
 using Manero_backend.Interfaces.Addresses.Repository;
 using Manero_backend.Migrations.Identity;
 using Manero_backend.Models.Addresses;
-using Manero_backend.Models.UserEntities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
 
 namespace Manero_backend.Repository
 {
@@ -57,6 +59,28 @@ namespace Manero_backend.Repository
             {
                 return null!;
             }
+        }
+        public async Task<List<AddressResponse>> GetAllUserAddressesAsync(string userId)
+        {
+            try
+            {
+                var listResponse = new List<AddressResponse>();
+                var query= from userAddress in _identityContext.UserAddress join addresses in _identityContext.Addresses on userAddress.AddressId equals addresses.Id where userAddress.Userid == userId select new { Column1 = userAddress, Column2 = addresses };
+                var result = await query.ToListAsync();
+                foreach (var item in result)
+                {
+                    var response = AddressFactory.CreateResponse();
+                    response.StreetName = item.Column2.StreetName;
+                    response.City = item.Column2.City;
+                    response.PostalCode = item.Column2.PostalCode;
+                    response.TagName = item.Column1.TagName;
+                    response.BillingAddress = item.Column1.BillingAddress;
+                    response.Active = item.Column1.Active;
+                    listResponse.Add(response);
+                }
+                return listResponse;
+            }
+            catch { return null!; }
         }
 
         public async Task<UserAddressEntity> UpdateUserAddressAsync(UserAddressEntity userAddressEntity)

@@ -25,9 +25,31 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(AddressRequest request)
         {
-            request.Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
+            //if(request.Email != User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value) { return BadRequest();}
+            
             var respons = await _addressService.CreateAddressAsync(request);
-            if (respons.Error = false || respons != null)
+            if (respons.Error == false)
+            {
+                return Ok(respons);
+            }
+            return BadRequest(respons);
+        }
+
+        [HttpGet("myaddresses")]
+        public async Task<IActionResult> GetAllUserAddresses(string email) // för dev ta bort mot token
+        {
+            var response = await _addressService.GetAllForOneUserAsync(/*User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value)*/email);
+            if (!response.Error) { return Ok(response); }
+            return BadRequest(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> DeleteAsync(AddressRequest request)
+        {
+            //if(request.Email != User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value) { return BadRequest();}
+
+            var respons = await _addressService.InActivateAddressAsync(request);
+            if (respons.Error == false)
             {
                 return Ok(respons);
             }
