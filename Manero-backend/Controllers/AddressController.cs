@@ -5,6 +5,7 @@ using Manero_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Web.Helpers;
 
 namespace Manero_backend.Controllers
@@ -24,7 +25,7 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(AddressRequest request)
         {
-
+            request.Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
             var respons = await _addressService.CreateAddressAsync(request);
             if (respons.Error = false || respons != null)
             {
