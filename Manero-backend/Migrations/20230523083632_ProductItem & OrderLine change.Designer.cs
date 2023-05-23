@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Manero_backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230522113710_Init23")]
-    partial class Init23
+    [Migration("20230523083632_ProductItem & OrderLine change")]
+    partial class ProductItemOrderLinechange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,8 +151,15 @@ namespace Manero_backend.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductItemId", "OrderId");
 
@@ -372,6 +379,10 @@ namespace Manero_backend.Migrations
 
                     b.Property<int>("ColorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");

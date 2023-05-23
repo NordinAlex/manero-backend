@@ -60,6 +60,7 @@ namespace Manero_backend.Services
                 var productItemEntity = new ProductItemEntity
                 {
                     Product = products,
+                    Name = productRequest.Name,
                     Color = colorEntity,
                     Size = sizeEntity,
                     SKU = $"{brandE?.BrandCode}-{colorEntity.ColorCode}-{sizeEntity.Size}-{productRequest.ProductSR}",
