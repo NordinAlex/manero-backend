@@ -46,12 +46,12 @@ namespace Manero_backend.Repository
 
         public async Task<IEnumerable<OrderEntity>> GetAllOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.Include(x => x.OrderLines).ToListAsync();
         }
 
         public async Task<OrderEntity> GetOrderByIdAsync(int id)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
+            var order = await _context.Orders.Include(x => x.OrderLines).FirstOrDefaultAsync(x => x.Id == id);
             if (order == null)
             {
                 return null!;
