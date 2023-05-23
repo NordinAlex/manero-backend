@@ -39,6 +39,7 @@ namespace Manero_backend.Models
             return new ProductItemResponse
             {
                 Id = productItemEntity.Id,
+                Name = productItemEntity.Name,
                 SKU = productItemEntity.SKU,
                 Color = productItemEntity.Color.Color,
                 Size = productItemEntity.Size.Size,
