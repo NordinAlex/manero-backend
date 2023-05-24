@@ -29,6 +29,11 @@ namespace Manero_backend.Controllers
         {
             return await _orderService.GetOrderByIdAsync(id);
         }
+        [HttpGet("id, userId")]
+        public async Task<OrderResponse> ReadByUser(int orderId, string userId)
+        {
+            return await _orderService.GetUserOrderByIdAsync(orderId, userId);
+        }
         [HttpGet]
         public async Task<IEnumerable<OrderResponse>> ReadAll()
         {
