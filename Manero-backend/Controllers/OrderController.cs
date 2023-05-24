@@ -1,10 +1,14 @@
 ﻿using Manero_backend.DTOs.Order;
 using Manero_backend.Factories;
 using Manero_backend.Interfaces.Order;
+using Manero_backend.Interfaces.Users.Service;
+using Manero_backend.Models.UserEntities;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Manero_backend.Controllers
 {
@@ -14,10 +18,12 @@ namespace Manero_backend.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly UserManager<UserEntity> _userManager;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, UserManager<UserEntity> userManager)
         {
             _orderService = orderService;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -29,6 +35,7 @@ namespace Manero_backend.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> Read(int id)
         {
+            var userId = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
             var order = await _orderService.GetOrderByIdAsync(id);
             if(order != null)
             {
