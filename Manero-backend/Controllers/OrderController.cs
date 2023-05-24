@@ -25,24 +25,42 @@ namespace Manero_backend.Controllers
             return Created("", res);
         }
         [HttpGet("id")]
-        public async Task<OrderResponse> Read(int id)
+        public async Task<IActionResult> Read(int id)
         {
-            return await _orderService.GetOrderByIdAsync(id);
+            var order = await _orderService.GetOrderByIdAsync(id);
+            if(order != null)
+            {
+                return Ok(order);
+            }
+            return NotFound();
         }
         [HttpGet("id, userId")]
-        public async Task<OrderResponse> ReadByUser(int orderId, string userId)
+        public async Task<IActionResult> ReadByUser(int orderId, string userId)
         {
-            return await _orderService.GetUserOrderByIdAsync(orderId, userId);
+            var order = await _orderService.GetUserOrderByIdAsync(orderId, userId);
+            if(order != null) 
+            {
+                return Ok(order);
+            }
+            return NotFound();
         }
         [HttpGet]
-        public async Task<IEnumerable<OrderResponse>> ReadAll()
+        public async Task <IActionResult> ReadAll()
         {
-            return await _orderService.GetAllOrdersAsync();
+            var orders = await _orderService.GetAllOrdersAsync();
+            if (orders != null)
+                return Ok(orders);
+            return BadRequest();
         }
         [HttpGet("userId")]
-        public async Task<IEnumerable<OrderResponse>> ReadAllByUser(string id)
+        public async Task<IActionResult> ReadAllByUser(string id)
         {
-            return await _orderService.GetOrdersForUser(id);
+            var orders = await _orderService.GetOrdersForUser(id);
+            if(orders != null)
+            {
+                return Ok(orders);
+            }
+            return BadRequest();
         }
         [HttpDelete("id")]
         public async Task<IActionResult> Delete(int id)
