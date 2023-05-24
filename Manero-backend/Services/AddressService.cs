@@ -40,6 +40,23 @@ namespace Manero_backend.Services
                 var userAddressEntity = await _addressRepository.GetUserAddressAsync(userEntity.Id , addressEntity.Id);
                 if(userAddressEntity != null) //Kollar om vår User är kopplad till addressen
                 {
+                    #region Kollar om den är useraddress är active // EJ TESTAD ÄNNU PB
+                    if (!userAddressEntity.Active)
+                    {
+                        if(request.BillingAddress)
+                        {
+                            var billingAddress = await _addressRepository.CheckBillingTrueAsync(userEntity.Id);
+                            if (billingAddress != null)  // kolla att det inte finns andra billing addresssen i db (MAN KAN ENDAST HA 1)
+                            { var result = await _addressRepository.UpdateUserAddressAsync(billingAddress); }
+                            var userAddressCreatedEntity = AddressFactory.CreateUserAddressEntity(addressEntity.Id, userEntity.Id, request.BillingAddress, request.TagName);
+                            var databaseRespons = await _addressRepository.CreateUserAddressAsync(userAddressCreatedEntity);
+                            if (databaseRespons != null)
+                            {
+                                return AddressFactory.CreateResponse(addressEntity.StreetName, addressEntity.PostalCode, addressEntity.City, userAddressCreatedEntity.TagName);
+                            }
+                        }
+                    }
+                    #endregion
                     if (userAddressEntity.TagName != request.TagName || userAddressEntity.BillingAddress != request.BillingAddress)
                     { //Kollar om den har bytt tagname eller billing address
                         if (userAddressEntity.TagName != request.TagName)
@@ -75,6 +92,7 @@ namespace Manero_backend.Services
                         }
                     var userAddressCreatedEntity = AddressFactory.CreateUserAddressEntity(addressEntity.Id, userEntity.Id, request.BillingAddress, request.TagName);
                     var userAddressCreatedResponse = await _addressRepository.CreateUserAddressAsync(userAddressCreatedEntity);
+                    return AddressFactory.CreateResponse(addressEntity.StreetName, addressEntity.PostalCode, addressEntity.City, userAddressCreatedResponse.TagName);
                 }
                 #endregion
                 #region Om Adressen inte finns: skapa Address och UserAddress

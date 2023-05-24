@@ -25,8 +25,8 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(AddressRequest request)
         {
-            if(request.Email != User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value) { return BadRequest();}
-            
+            request.Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
+
             var respons = await _addressService.CreateAddressAsync(request);
             if (respons.Error == false)
             {
