@@ -34,7 +34,7 @@ namespace Manero_backend.Controllers
             }
             return NotFound();
         }
-        [HttpGet("id, userId")]
+        [HttpGet("orderid-userid")]
         public async Task<IActionResult> ReadByUser(int orderId, string userId)
         {
             var order = await _orderService.GetUserOrderByIdAsync(orderId, userId);
