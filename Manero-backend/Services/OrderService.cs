@@ -64,5 +64,13 @@ namespace Manero_backend.Services
             }
             return resList;
         }
+
+        public async Task<OrderResponse> GetUserOrderByIdAsync(int orderId, string userId)
+        {
+            var orders = await GetOrdersForUser(userId);
+            var order = orders.FirstOrDefault(x => x.Id == orderId);
+            if (order == null) return null!;
+            return order;
+        }
     }
 }
