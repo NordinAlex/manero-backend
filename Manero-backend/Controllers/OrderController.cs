@@ -35,7 +35,8 @@ namespace Manero_backend.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> Read(int id)
         {
-            var userId = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+
+            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
             var order = await _orderService.GetOrderByIdAsync(id);
             if(order != null)
             {
