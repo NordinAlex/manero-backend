@@ -29,9 +29,13 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderRequest orderRequest)
         {
-            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
-            OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, userEntity!);
-            return Created("", res);
+            if (ModelState.IsValid)
+            {
+                var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, userEntity!);
+                return Created("", res);
+            }
+            return BadRequest();
         }
         [HttpGet("id")]
         public async Task<IActionResult> Read(int id)
