@@ -21,8 +21,6 @@ namespace Manero_backend.Services
             var entity = orderRequest;
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);
             await _orderLineService.CreateOrderLineAsync(orderRequest, addedOrderEntity);
-
-
             OrderResponse res = await _orderRepo.GetOrderByIdAsync(addedOrderEntity.Id);
             return res;
         }
@@ -31,7 +29,6 @@ namespace Manero_backend.Services
         {
             var order = await _orderRepo.GetOrderByIdAsync(id);
             return await _orderRepo.DeleteOrderAsync(order);
-            
         }
 
         public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
