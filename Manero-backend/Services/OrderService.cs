@@ -1,7 +1,11 @@
 ﻿using Manero_backend.DTOs.Order;
 using Manero_backend.Factories;
+using Manero_backend.Interfaces.Addresses.Service;
 using Manero_backend.Interfaces.Order;
 using Manero_backend.Interfaces.OrderLine;
+using Manero_backend.Models.UserEntities;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Manero_backend.Services
 {
@@ -10,14 +14,17 @@ namespace Manero_backend.Services
         private readonly IOrderRepository _orderRepo;
         private readonly IOrderLineService _orderLineService;
 
+
         public OrderService(IOrderRepository orderRepo, IOrderLineService orderLineService)
         {
             _orderRepo = orderRepo;
             _orderLineService = orderLineService;
+
         }
 
         public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) 
         {
+            
             var entity = orderRequest;
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);
             await _orderLineService.CreateOrderLineAsync(orderRequest, addedOrderEntity);
