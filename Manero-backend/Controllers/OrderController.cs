@@ -14,7 +14,7 @@ namespace Manero_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -31,9 +31,9 @@ namespace Manero_backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var actualEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+                //var actualEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
                 var testEntity = new UserEntity();
-                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, testEntity!);
+                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest);
                 return Created("", res);
             }
             return BadRequest();

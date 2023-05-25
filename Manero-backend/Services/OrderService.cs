@@ -22,9 +22,8 @@ namespace Manero_backend.Services
             _orderLineService = orderLineService;
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest, UserEntity user) 
+        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) 
         {
-            if (user == null) return null!;
             OrderEntity entity = orderRequest;
             entity.UserId = "ae8fd478-464b-49fa-8d13-083c6e2e6ed5";
             entity.CustomerName = "Admin Admin";
