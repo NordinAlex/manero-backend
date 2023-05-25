@@ -22,11 +22,11 @@ namespace Manero_backend.Services
             _orderLineService = orderLineService;
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) 
+        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest, UserEntity userEntity) 
         {
             OrderEntity entity = orderRequest;
-            entity.UserId = "ae8fd478-464b-49fa-8d13-083c6e2e6ed5";
-            entity.CustomerName = "Admin Admin";
+            entity.UserId = userEntity.Id;
+            entity.CustomerName = $"{userEntity.FirstName} {userEntity.LastName}";
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);
             await _orderLineService.CreateOrderLineAsync(orderRequest, addedOrderEntity);
             OrderResponse res = await _orderRepo.GetOrderByIdAsync(addedOrderEntity.Id);
