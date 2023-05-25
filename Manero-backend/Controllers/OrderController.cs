@@ -29,14 +29,14 @@ namespace Manero_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderRequest orderRequest)
         {
-            OrderResponse res = await _orderService.CreateOrderAsync(orderRequest);
+            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+            OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, userEntity!);
             return Created("", res);
         }
         [HttpGet("id")]
         public async Task<IActionResult> Read(int id)
         {
 
-            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
             var order = await _orderService.GetOrderByIdAsync(id);
             if(order != null)
             {
@@ -45,9 +45,10 @@ namespace Manero_backend.Controllers
             return NotFound();
         }
         [HttpGet("orderid-userid")]
-        public async Task<IActionResult> ReadByUser(int orderId, string userId)
+        public async Task<IActionResult> ReadByUser(int orderId)
         {
-            var order = await _orderService.GetUserOrderByIdAsync(orderId, userId);
+            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+            var order = await _orderService.GetUserOrderByIdAsync(orderId, userEntity!.Id);
             if(order != null) 
             {
                 return Ok(order);
@@ -63,9 +64,10 @@ namespace Manero_backend.Controllers
             return BadRequest();
         }
         [HttpGet("userId")]
-        public async Task<IActionResult> ReadAllByUser(string id)
+        public async Task<IActionResult> ReadAllByUser()
         {
-            var orders = await _orderService.GetOrdersForUser(id);
+            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+            var orders = await _orderService.GetOrdersForUser(userEntity!.Id);
             if(orders != null)
             {
                 return Ok(orders);

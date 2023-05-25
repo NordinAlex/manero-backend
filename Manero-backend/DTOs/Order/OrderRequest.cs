@@ -10,9 +10,6 @@ namespace Manero_backend.DTOs.Order
     public class OrderRequest : IOrderRequest
     {
         
-        public string UserId { get; set; } = null!;
-        public string CustomerFirstName { get; set; } = null!;
-        public string CustomerLastName { get; set; } = null!;
         public DateTime OrderDate { get; set; }
         public List<ProductItemOrderModel> ProductItems { get; set; } = null!;
         public string Address { get; set; } = null!;
@@ -22,9 +19,7 @@ namespace Manero_backend.DTOs.Order
         public static implicit operator OrderEntity(OrderRequest orderRequest)
         {
             var orderEntity = OrderFactory.CreateOrderEntity();
-            orderEntity.UserId = orderRequest.UserId;
             orderEntity.OrderDate = orderRequest.OrderDate = DateTime.Now;
-            orderEntity.CustomerName = $"{orderRequest.CustomerFirstName} {orderRequest.CustomerLastName}";
             orderEntity.Address = orderRequest.Address;
             orderEntity.City = orderRequest.City;
             orderEntity.PostalCode = orderRequest.PostalCode;

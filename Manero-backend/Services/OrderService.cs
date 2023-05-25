@@ -3,6 +3,7 @@ using Manero_backend.Factories;
 using Manero_backend.Interfaces.Addresses.Service;
 using Manero_backend.Interfaces.Order;
 using Manero_backend.Interfaces.OrderLine;
+using Manero_backend.Models.OrderEntities;
 using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -22,10 +23,15 @@ namespace Manero_backend.Services
 
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) 
+        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest, UserEntity user) 
         {
-            
-            var entity = orderRequest;
+            if(user == null)
+            {
+                return null!;
+            }
+            OrderEntity entity = orderRequest;
+            entity.UserId = user.Id;
+            entity.CustomerName = $"{user.FirstName} {user.LastName}";
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);
             await _orderLineService.CreateOrderLineAsync(orderRequest, addedOrderEntity);
             OrderResponse res = await _orderRepo.GetOrderByIdAsync(addedOrderEntity.Id);
