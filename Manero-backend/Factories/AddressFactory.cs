@@ -19,7 +19,8 @@ namespace Manero_backend.Factories
         public static AddressResponse CreateResponse(string statusMessage, bool error) => new()
         {
             StatusMessage = statusMessage,
-            Error = error
+            Error = error,
+            AddressList = ListFactory.CreateAddressResponseList()
         };
         public static AddressResponse CreateResponse(string streetName, string postalCode, string city, string tagName) => new()
         {
