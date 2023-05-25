@@ -20,15 +20,11 @@ namespace Manero_backend.Services
         {
             _orderRepo = orderRepo;
             _orderLineService = orderLineService;
-
         }
 
         public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest, UserEntity user) 
         {
-            if(user == null)
-            {
-                return null!;
-            }
+            if (user == null) return null!;
             OrderEntity entity = orderRequest;
             entity.UserId = user.Id;
             entity.CustomerName = $"{user.FirstName} {user.LastName}";
@@ -65,6 +61,7 @@ namespace Manero_backend.Services
 
         public async Task<IEnumerable<OrderResponse>> GetOrdersForUser(string id)
         {
+            if(id == null) return null!;
             var orders = await _orderRepo.GetAllOrdersAsync();
             var userOrders = orders.Where(x => x.UserId == id);
             var resList = new List<OrderResponse>();
