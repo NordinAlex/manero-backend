@@ -31,12 +31,16 @@ namespace Manero_backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var actualEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
-                var testEntity = new UserEntity();
-                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, testEntity!);
+                try
+                {
+                var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
+                var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == email);
+                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, userEntity!);
                 return Created("", res);
+                }
+                catch { }
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         [HttpGet("id")]
         public async Task<IActionResult> Read(int id)
@@ -52,7 +56,8 @@ namespace Manero_backend.Controllers
         [HttpGet("orderid-userid")]
         public async Task<IActionResult> ReadByUser(int orderId)
         {
-            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+            var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
+            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == email);
             var order = await _orderService.GetUserOrderByIdAsync(orderId, userEntity!.Id);
             if(order != null) 
             {
@@ -71,13 +76,14 @@ namespace Manero_backend.Controllers
         [HttpGet("userId")]
         public async Task<IActionResult> ReadAllByUser()
         {
-            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+            var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
+            var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == email);
             var orders = await _orderService.GetOrdersForUser(userEntity!.Id);
             if(orders != null)
             {
                 return Ok(orders);
             }
-            return BadRequest();
+            return NotFound();
         }
         [HttpDelete("id")]
         public async Task<IActionResult> Delete(int id)
