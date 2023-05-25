@@ -9,6 +9,7 @@ namespace Manero_backend.Interfaces.Order
         Task<OrderResponse> GetOrderByIdAsync(int id);
         Task<bool> DeleteOrderAsync(int id);
         Task<IEnumerable<OrderResponse>> GetOrdersForUser(string id);
+        Task<OrderResponse> GetUserOrderByIdAsync(int orderId, string userId);
 
     }
 }
