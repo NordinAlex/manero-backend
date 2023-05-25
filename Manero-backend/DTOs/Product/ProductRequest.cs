@@ -13,12 +13,8 @@ namespace Manero_backend.DTOs.Product
         public string Name { get; set; } = null!;
         public bool Featured { get; set; } = false;
         public string Description { get; set; } = null!;
-        public int ProductSR { get; set; }
-        public int BrandId { get; set; }
-        [JsonIgnore]
-        public string? Brand { get; set; } 
-        [JsonIgnore]
-        public string? BrandCode { get; set; }
+        public int SeasonNumber { get; set; }
+        public int BrandId { get; set; }  
         public int CategoryId { get; set; }
         public ICollection<int> TagsId { get; set; } = null!;
         public ICollection<int> TypeId { get; set; } = null!;

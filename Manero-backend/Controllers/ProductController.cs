@@ -13,10 +13,12 @@ namespace Manero_backend.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly ISearchFilterService _searchFilterService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ISearchFilterService searchFilterService)
         {
             _productService = productService;
+            _searchFilterService = searchFilterService;
         }
 
 
@@ -117,9 +119,9 @@ namespace Manero_backend.Controllers
         }
 
 
-        // skapa en metod för search och filter som tar in en parameter och returnerar en lista med produkter som matchar sökningen och filtret och är asynkron
+        
         // GET: api/Product/search
-        [HttpGet("searchby")]
+        [HttpGet("search by name")]
         public async Task<ActionResult<ServiceResponse<IEnumerable<ProductResponse>>>> GetProductBySearchAsync([FromQuery] string search)
         {
             //var productService = new ProductService();
@@ -141,18 +143,6 @@ namespace Manero_backend.Controllers
         }
 
 
-        [HttpGet("search")]
-        public async Task<ActionResult<List<ProductResponse>>> GetProductBySearchAndFilterAsync([FromQuery] SearchFilterCriteria criteria)
-        {
-            var products = await _productService.GetProductBySearchAndFilterAsync(criteria);
-
-            if (products == null || !products.Any())
-            {
-                return NotFound("No products found.");
-            }
-
-            return Ok(products);
-        }
 
 
 
@@ -186,9 +176,30 @@ namespace Manero_backend.Controllers
             }
         }
 
+        [HttpPost("search")]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<SearchFilterResponse>>>> SearchAndFilter([FromQuery] SearchFilterRequest filterRequest)
+        {
+            try
+            {
+                var filterResponse = await _searchFilterService.SearchAndFilterAsync(filterRequest);
 
-      
+                var response = new ServiceResponse<IEnumerable<SearchFilterResponse>>
+                {
+                    Data = filterResponse
+                };
 
+                if (!filterResponse.Any()) // Kontrollera om listan med produkter är tom
+                {
+                    response.Message = "No products found for the provided filters. 😱";
+                }
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error occurred during search and filter \U0001f937‍♀️: " + e.Message);
+            }
+        }
 
     }
 }

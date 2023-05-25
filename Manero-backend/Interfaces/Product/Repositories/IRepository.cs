@@ -13,6 +13,7 @@ namespace Manero_backend.Interfaces.Product.Repositories
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
         Task<IEnumerable<TEntity>> GetBySearchAsync(Expression<Func<ProductEntity, bool>> predicate);
-        Task<List<ProductEntity>> GetBySearchAndFilterAsync(SearchFilterCriteria criteria);
+        Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest searchFilterRequest);
+
     }
 }

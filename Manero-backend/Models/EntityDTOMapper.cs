@@ -83,24 +83,7 @@ namespace Manero_backend.Models
 
 
         }
-
-        public static SearchFilterCriteria ToSearchFilterCriteria(ProductEntity product)
-        {
-            return new SearchFilterCriteria
-            {                
-                Name = product.Name,
-                //Color = product.Variants.Select(t => t.Color.Color).ToList(), 
-                Color = product.Variants.FirstOrDefault()?.Color.Color, 
-                SKU = product.Variants.FirstOrDefault()?.SKU, 
-                Size = product.Variants.FirstOrDefault()?.Size.Size, 
-                MinPrice = product.Variants.Min(v => v.Price), 
-                MaxPrice = product.Variants.Max(v => v.Price), 
-                Type = product.Type?.Select(t => t.TypeEntity.Type).ToList(), 
-                Tags = product.Tags?.Select(t => t.TagsEntity.Tag).ToList(), 
-                Category = product.Category?.Name, 
-                Brand = product.BrandEntity?.BrandName 
-            };
-        }
+      
 
         public static void UpdateProductEntity(this ProductRequest request, ProductEntity entity)
         {

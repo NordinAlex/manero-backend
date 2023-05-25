@@ -67,80 +67,92 @@ namespace Manero_backend.Repository
                                  .Where(predicate)
                                  .ToListAsync();
         }
-
-
-
-        public async Task<List<ProductEntity>> GetBySearchAndFilterAsync(SearchFilterCriteria criteria)
+        public async Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest filter)
         {
-            IQueryable<ProductEntity> query = _context.Products
-                                        .Include(x => x.Variants)
-                                        .Include(x => x.Type)
-                                         .Include(x => x.Tags)
-                                         .Include(x => x.Category)
-                                         .Include(x => x.BrandEntity);
+                    
+            // Baslinje för sökning
+            var products = _context.Products
+                .Include(a => a.BrandEntity)
+                .Include(p => p.Type)?
+                .Include(c => c.Tags)?
+                .Include(p => p.Category)
+                .Include(c => c.Variants).ThenInclude(v => v.Size)
+                .Include(c => c.Variants).ThenInclude(v => v.Color)
+                .AsQueryable();
+           
 
-
-            if (!string.IsNullOrWhiteSpace(criteria.Name))
+            // Filtrering på namn
+            if (!string.IsNullOrEmpty(filter.Name))
             {
-                query = query.Where(p => p.Name.Contains(criteria.Name));
+                products = products?.Where(p => p.Name.Contains(filter.Name));
             }
 
-            if (!string.IsNullOrWhiteSpace(criteria.Color))
-            {
-                query = query.Where(p => p.Variants.Any(v => v.Color.Color.Contains(criteria.Color)));
+            // Filtrering på SKU
+            if (!string.IsNullOrEmpty(filter.SKU))
+            {               
+                var sku = filter.SKU?.ToLower();
+                products = products?.Where(p => p.Variants.Any(v => v.SKU.ToLower() == sku));
             }
 
-            //if (criteria.Color != null && criteria.Color.Any())
-            //{
-            //    query = query.Where(p => p.Variants.Any(v => v.Color.Color.Contains(v.Color.Color)));
-
-            //}
-
-
-            if (!string.IsNullOrWhiteSpace(criteria.SKU))
+            // Filtrering på Brand
+            if (!string.IsNullOrEmpty(filter.Brand))
             {
-                query = query.Where(p => p.Variants.Any(v => v.SKU.Contains(criteria.SKU)));
+                products = products?.Where(p => p.BrandEntity.BrandName == filter.Brand);
             }
 
-            if (!string.IsNullOrWhiteSpace(criteria.Size))
+            // Filtrering på Category
+            if (!string.IsNullOrEmpty(filter.Category))
             {
-                query = query.Where(p => p.Variants.Any(v => v.Size.Size.Contains(criteria.Size)));
+                products = products?.Where(p => p.Category.Name == filter.Category);
             }
 
-            if (criteria.MinPrice.HasValue)
+            // Filtrering på Tags
+            if (filter.Tags != null && filter.Tags.Any())
             {
-                var minPrice = criteria.MinPrice.Value;
-                query = query.Where(p => p.Variants.Any(v => v.Price >= minPrice));
+                products = products?.Where(p => p.Tags.Any(t => filter.Tags.Contains(t.TagsEntity.Tag.ToLower())));
             }
 
-            if (criteria.MaxPrice.HasValue)
+            // Filtrering på Type
+            if (filter.Type != null && filter.Type.Any())
             {
-                var maxPrice = criteria.MaxPrice.Value;
-                query = query.Where(p => p.Variants.Any(v => v.Price <= maxPrice));
+                products = products?.Where(p => p.Type.Any(t => filter.Type.Contains(t.TypeEntity.Type.ToLower())));
+            }
+            // Filtrering på Color
+            if (filter.Color != null && filter.Color.Any())
+            {
+                products = products?.Where(p => p.Variants.Any(v => filter.Color.Contains(v.Color.Color)));
+            }
+            // Filtrering på Size
+            if (!string.IsNullOrEmpty(filter.Size))
+            {
+                products = products?.Where(p => p.Variants.Any(v => v.Size.Size == filter.Size));
+            }
+            // Filtrering Price
+            if (filter.MinPrice.HasValue || filter.MaxPrice.HasValue)
+            {
+                products = products?.Where(p => p.Variants.Any(v =>                  
+                    (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
+                    (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)));
             }
 
-            if (criteria.Type != null && criteria.Type.Any())
+            var productList = await products.ToListAsync();
+
+            // Ta bort de varianter som inte matchar filtret
+            foreach (var product in productList)
             {
-                query = query.Where(p => p.Type.Any(t => criteria.Type.Contains(t.TypeEntity.Type)));
+                var colors = filter.Color?.Select(c => c.ToLower());
+                var size = filter.Size?.ToLower();
+                var sku = filter.SKU?.ToLower();
+
+                product.Variants = product.Variants.Where(v =>
+                    (colors == null || colors.Contains(v.Color.Color.ToLower())) &&
+                    (size == null || v.Size.Size.ToLower() == size) &&
+                    (sku == null || v.SKU.ToLower() == sku) &&
+                    (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
+                    (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)).ToList();
             }
 
-            if (criteria.Tags != null && criteria.Tags.Any())
-            {
-                query = query.Where(p => p.Tags.Any(t => criteria.Tags.Contains(t.TagsEntity.Tag)));
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Category))
-            {
-                query = query.Where(p => p.Category.Name.Contains(criteria.Category));
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Brand))
-            {
-                query = query.Where(p => p.BrandEntity.BrandName.Contains(criteria.Brand));
-            }
-
-
-            return await query.ToListAsync();
+            return productList;
         }
 
     }

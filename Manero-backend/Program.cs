@@ -49,10 +49,14 @@ builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISearchFilterService, SearchFilterService>();
+// Order services
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderLineRepository, OrderLineRepository>();
 builder.Services.AddScoped<IOrderLineService, OrderLineService>();
+
+// User services
 builder.Services.AddScoped<IAuthService, AuthServices>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserServices>();

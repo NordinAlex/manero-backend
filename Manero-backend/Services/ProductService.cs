@@ -51,8 +51,7 @@ namespace Manero_backend.Services
 
             foreach (var variantRequest in productRequest.Variants)
             {
-                var brandE = await _brandRepository.GetByIdAsync(productEntity.BrandEntityId);
-                //var brandE = await _brandRepository.GetByBrandNameAsync(productEntity.BrandEntityId.ToString());
+                var brandE = await _brandRepository.GetByIdAsync(productEntity.BrandEntityId);               
                 var colorEntity = await _colorRepository.GetByColorAsync(variantRequest.Color);
                 var sizeEntity = await _sizeRepository.GetBySizeAsync(variantRequest.Size);
                 var imageEntities = variantRequest.ImageName?.Zip(variantRequest.ImageAlt, (name, alt) => new ImagesEntity { ImageName = name, ImageAlt = alt }).ToList();
@@ -63,9 +62,7 @@ namespace Manero_backend.Services
                     Name = productRequest.Name,
                     Color = colorEntity,
                     Size = sizeEntity,
-                    SKU = $"{brandE?.BrandCode}-{colorEntity.ColorCode}-{sizeEntity.Size}-{productRequest.ProductSR}",
-                    //SKU = $"{(products.BrandEntity.BrandName == brandE.BrandName ? brandE.BrandCode : brandE.BrandCode)}-{colorEntity.ColorCode}-{sizeEntity.Size}-{"1022"}",
-                    //SKU = $"{products.BrandEntity.BrandName.Substring(0,2)}-{colorEntity.ColorCode}-{sizeEntity.Size}-{"1022"} ",                  
+                    SKU = $"{brandE?.BrandCode}-{colorEntity.ColorCode}-{sizeEntity.Size}-{productRequest.SeasonNumber.ToString().Substring(0,2)}",  
                     QuantityInStock = variantRequest.Stock,
                     Price = variantRequest.Price,
                     Images = imageEntities,
@@ -161,22 +158,6 @@ namespace Manero_backend.Services
             var items = await _productItemRepository.GetAllAsync();
             return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
-
-
-
-
-        public async Task<List<SearchFilterCriteria>> GetProductBySearchAndFilterAsync(SearchFilterCriteria criteria)
-        {
-
-            var brands = await _brandRepository.GetAllBrandAsync();
-            var colors = await _colorRepository.GetAllColorAsync();
-            var images = await _imageRepository.GetAllImageAsync();
-            var sizes = await _sizeRepository.GetAllSizeAsync();
-            var tags = await _tagRepository.GetAllTagAsync();
-            var types = await _typeRepository.GetAllTypeAsync();
-            var items = await _productItemRepository.GetAllAsync();
-            var products = await _productRepository.GetBySearchAndFilterAsync(criteria);
-            return products.Select(EntityDTOMapper.ToSearchFilterCriteria).ToList();
-        }
+                      
     }
 }

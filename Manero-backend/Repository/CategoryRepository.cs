@@ -35,11 +35,7 @@ namespace Manero_backend.Repository
         {
             throw new NotImplementedException();
         }
-
-        public Task<List<ProductEntity>> GetBySearchAndFilterAsync(SearchFilterCriteria criteria)
-        {
-            throw new NotImplementedException();
-        }
+             
 
         public Task<IEnumerable<CategoryEntity>> GetBySearchAsync(Expression<Func<ProductEntity, bool>> predicate)
         {
@@ -47,6 +43,11 @@ namespace Manero_backend.Repository
         }
 
         public Task<IEnumerable<CategoryEntity>> GetByTypeIdAsync(int typeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest searchFilterRequest)
         {
             throw new NotImplementedException();
         }
