@@ -32,7 +32,7 @@ namespace Manero_backend.Controllers
             if (ModelState.IsValid)
             {
                 var actualEntity = _userManager.Users.FirstOrDefault(x => x.Email == User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
-                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, actualEntity);
+                OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, actualEntity!);
                 return Created("", res);
             }
             return BadRequest();
