@@ -26,8 +26,8 @@ namespace Manero_backend.Services
         {
             if (user == null) return null!;
             OrderEntity entity = orderRequest;
-            entity.UserId = user.Id;
-            entity.CustomerName = $"{user.FirstName} {user.LastName}";
+            entity.UserId = "ae8fd478-464b-49fa-8d13-083c6e2e6ed5";
+            entity.CustomerName = "Admin Admin";
             var addedOrderEntity = await _orderRepo.CreateOrderAsync(entity);
             await _orderLineService.CreateOrderLineAsync(orderRequest, addedOrderEntity);
             OrderResponse res = await _orderRepo.GetOrderByIdAsync(addedOrderEntity.Id);
