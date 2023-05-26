@@ -177,7 +177,7 @@ namespace Manero_backend.Controllers
         }
 
         [HttpPost("search")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<SearchFilterResponse>>>> SearchAndFilter([FromQuery] SearchFilterRequest filterRequest)
+        public async Task<ActionResult<ServiceResponse<IEnumerable<SearchFilterResponse>>>> SearchAndFilter( SearchFilterRequest filterRequest)
         {
             try
             {
