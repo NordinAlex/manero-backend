@@ -16,45 +16,13 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public Task AddAsync(CategoryEntity entity)
-        {
-            throw new NotImplementedException();
-        }
+      
 
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<CategoryEntity>> GetAllAsync()
+        public async Task<IEnumerable<CategoryEntity>> GetAllCategoryAsync()
         {
             return await _context.Category.ToListAsync();
         }
 
-        public Task<CategoryEntity> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-             
-
-        public Task<IEnumerable<CategoryEntity>> GetBySearchAsync(Expression<Func<ProductEntity, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<CategoryEntity>> GetByTypeIdAsync(int typeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest searchFilterRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(CategoryEntity entity)
-        {
-            throw new NotImplementedException();
-        }      
+          
     }
 }

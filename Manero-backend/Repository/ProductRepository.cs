@@ -69,7 +69,7 @@ namespace Manero_backend.Repository
         }
         public async Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest filter)
         {
-                    
+            
             // Baslinje för sökning
             var products = _context.Products
                 .Include(a => a.BrandEntity)
@@ -78,9 +78,14 @@ namespace Manero_backend.Repository
                 .Include(p => p.Category)
                 .Include(c => c.Variants).ThenInclude(v => v.Size)
                 .Include(c => c.Variants).ThenInclude(v => v.Color)
+                .Include(c => c.Variants).ThenInclude(v => v.Images)
                 .AsQueryable();
-           
 
+            //// Filtrering på Color
+            //if (filter.ImageName != null && filter.ImageName.Any())
+            //{
+            //    products = products?.Where(p => p.Variants.Any(v => v.Images. == filter.ImageName));
+            //}
             // Filtrering på namn
             if (!string.IsNullOrEmpty(filter.Name))
             {
@@ -118,7 +123,7 @@ namespace Manero_backend.Repository
                 products = products?.Where(p => p.Type.Any(t => filter.Type.Contains(t.TypeEntity.Type.ToLower())));
             }
             // Filtrering på Color
-            if (filter.Color != null && filter.Color.Any())
+            if (filter.Color.Any())
             {
                 products = products?.Where(p => p.Variants.Any(v => filter.Color.Contains(v.Color.Color)));
             }
@@ -127,6 +132,7 @@ namespace Manero_backend.Repository
             {
                 products = products?.Where(p => p.Variants.Any(v => v.Size.Size == filter.Size));
             }
+           
             // Filtrering Price
             if (filter.MinPrice.HasValue || filter.MaxPrice.HasValue)
             {
@@ -137,20 +143,20 @@ namespace Manero_backend.Repository
 
             var productList = await products.ToListAsync();
 
-            // Ta bort de varianter som inte matchar filtret
-            foreach (var product in productList)
-            {
-                var colors = filter.Color?.Select(c => c.ToLower());
-                var size = filter.Size?.ToLower();
-                var sku = filter.SKU?.ToLower();
+            ////Ta bort de varianter som inte matchar filtret
+            //foreach (var product in productList)
+            //{
+            //    var colors = filter.Color?.Select(c => c.ToLower());
+            //    var size = filter.Size?.ToLower();
+            //    var sku = filter.SKU?.ToLower();
 
-                product.Variants = product.Variants.Where(v =>
-                    (colors == null || colors.Contains(v.Color.Color.ToLower())) &&
-                    (size == null || v.Size.Size.ToLower() == size) &&
-                    (sku == null || v.SKU.ToLower() == sku) &&
-                    (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
-                    (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)).ToList();
-            }
+            //    product.Variants = product.Variants.Where(v =>
+            //        (colors == null || colors.Contains(v.Color.Color.ToLower())) &&
+            //        (size == null || v.Size.Size.ToLower() == size) &&
+            //        (sku == null || v.SKU.ToLower() == sku) &&
+            //        (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
+            //        (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)).ToList();
+            //}
 
             return productList;
         }

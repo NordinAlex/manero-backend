@@ -15,6 +15,8 @@
             public string? Size { get; set; }
             public decimal? Price { get; set; }
             public List<string>? Color { get; set; }
+            public List<string>? ImageAlt { get; set; }
+            public List<string>? ImageName { get; set; }
         }
     }
 }

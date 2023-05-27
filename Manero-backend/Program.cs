@@ -48,6 +48,7 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISearchFilterService, SearchFilterService>();
 // Order services

@@ -12,5 +12,7 @@
         public List<string>? Tags { get; set; }
         public string? Category { get; set; }
         public string? Brand { get; set; }
+        public List<string>? ImageAlt { get; set; }
+        public List<string>? ImageName { get; set; }
     }
 }
