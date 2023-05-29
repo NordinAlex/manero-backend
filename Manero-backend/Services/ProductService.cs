@@ -37,7 +37,7 @@ namespace Manero_backend.Services
         }
 
       
-        public async Task<ServiceResponse<ProductEntity>> CreateProductAsync(ProductRequest productRequest)
+        public async Task<ServiceResponse<ProductResponse>> CreateProductAsync(ProductRequest productRequest)
         {
             try
             {
@@ -60,12 +60,12 @@ namespace Manero_backend.Services
 
                     if (products == null )
                     {
-                        return new ServiceResponse<ProductEntity>
+                        return new ServiceResponse<ProductResponse>
                         {
                             Success = false,
                             Message = "Something went wrong, product could not be created."
                         };
-                        //return new ProductResponse { ErrorMessage = "Something went wrong, product could not be created." };
+                       
                     }
 
                     foreach (var variantRequest in productRequest.Variants)
@@ -76,7 +76,7 @@ namespace Manero_backend.Services
                         var imageEntities = variantRequest.ImageName?.Zip(variantRequest.ImageAlt, (name, alt) => new ImagesEntity { ImageName = name, ImageAlt = alt }).ToList();
                         if (productRequest.Variants == null || !productRequest.Variants.Any())
                         {
-                            return new ServiceResponse<ProductEntity>
+                            return new ServiceResponse<ProductResponse>
                             {
                                 Success = false,
                                 Message = "Product variants were null or empty."
@@ -85,7 +85,7 @@ namespace Manero_backend.Services
                         var colorE = await _colorRepository.GetByColorAsync(variantRequest.Color);
                         if (colorE == null)
                         {
-                            return new ServiceResponse<ProductEntity>
+                            return new ServiceResponse<ProductResponse>
                             {
                               
                                 Message = $"Color entity could not be found for color: {variantRequest.Color}"
@@ -94,7 +94,7 @@ namespace Manero_backend.Services
                         var sizeE = await _sizeRepository.GetBySizeAsync(variantRequest.Size);
                         if (sizeE == null)
                         {
-                            return new ServiceResponse<ProductEntity>
+                            return new ServiceResponse<ProductResponse>
                             {
                                 
                                 Message = $"Size entity could not be found for size: {variantRequest.Size}"
@@ -122,9 +122,9 @@ namespace Manero_backend.Services
 
                                        
 
-                    return new ServiceResponse<ProductEntity>
+                    return new ServiceResponse<ProductResponse>
                     {
-                        Data = products,
+                       
                         Success = true,
                         Message = "Product created successfully"
                     };
@@ -133,14 +133,14 @@ namespace Manero_backend.Services
             catch (Exception ex)
             {
                 Debug.Write(ex.Message);
-                return new ServiceResponse<ProductEntity>
+                return new ServiceResponse<ProductResponse>
                 {
                     Success = false,
                     Message = $"An error occurred: {ex.Message}"
                 };
             }
 
-            return new ServiceResponse<ProductEntity>
+            return new ServiceResponse<ProductResponse>
             {
                 Success = false,
                 Message = "Product request was null."
