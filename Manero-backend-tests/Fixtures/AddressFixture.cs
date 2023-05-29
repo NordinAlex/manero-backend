@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Manero_backend.DTOs.Address;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,27 +18,7 @@ namespace Manero_backend_tests.Fixtures
         public AddressResponse InvalidAddressCreateResponse { get; }
         public AddressResponse ValidGetAllAddressForOneUserResponse { get; }
 
-        public class AddressRequest
-        {
-            public string? TagName { get; set; }
-            public string? StreetName { get; set; } 
-            public string? PostalCode { get; set; }
-            public string? City { get; set; }
-            public string? Email { get; set; }
-            public bool BillingAddress { get; set; }
-        }
-        public class AddressResponse
-        {
-            public string? StreetName { get; set; }
-            public string? City { get; set; }
-            public string? PostalCode { get; set; }
-            public string? StatusMessage { get; set; }
-            public bool Error { get; set; }
-            public string? TagName { get; set; }
-            public bool BillingAddress { get; set; }
-            public bool Active { get; set; }
-            public ICollection<AddressResponse>? AddressList { get; set; }
-        }
+
         public AddressFixture()
         {
             ValidAddressCreateRequest = new AddressRequest
