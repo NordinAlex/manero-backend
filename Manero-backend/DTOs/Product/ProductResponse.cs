@@ -5,19 +5,20 @@ using Manero_backend;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.UserProductEntities;
 using System.ComponentModel.DataAnnotations.Schema;
+using Manero_backend.Interfaces.Product.Models;
 
 namespace Manero_backend.DTOs.Product
 {
-    public class ProductResponse
+    public class ProductResponse : IProductResponse
     {
         public int Id { get; set; }
         public bool Featured { get; set; } = false;
-        public string Name { get; set; } = null!;       
-        public string Description { get; set; } = string.Empty;  
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = string.Empty;
         public string Brand { get; set; } = null!;
-        public string? Category { get; set; } 
-        public ICollection<string> Tags { get; set; } = null!;      
+        public string? Category { get; set; }
+        public ICollection<string> Tags { get; set; } = null!;
         public ICollection<string> Type { get; set; } = null!;
-        public ICollection<ProductItemResponse> Variants { get; set; } = new List<ProductItemResponse>();
+        public ICollection<ProductItemResponse> Variants { get; set; } = new List<ProductItemResponse>();      
     }
 }

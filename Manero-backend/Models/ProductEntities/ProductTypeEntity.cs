@@ -1,6 +1,8 @@
-﻿namespace Manero_backend.Models.ProductEntities
+﻿using Manero_backend.Interfaces.Product.Models;
+
+namespace Manero_backend.Models.ProductEntities
 {
-    public class ProductTypeEntity
+    public class ProductTypeEntity : IProductTypeEntity
     {
         public int ProductEntityId { get; set; }
         public ProductEntity ProductEntity { get; set; } = null!;

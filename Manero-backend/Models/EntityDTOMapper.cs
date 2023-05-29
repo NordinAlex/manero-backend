@@ -3,6 +3,7 @@ using Manero_backend.DTOs.Product;
 using Manero_backend.Migrations;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.ProductItemEntities;
+using System.Diagnostics;
 using System.Drawing;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -12,30 +13,43 @@ namespace Manero_backend.Models
     {
         public static ProductResponse ToProductResponse(this ProductEntity product, IEnumerable<TagsEntity> tags, IEnumerable<BrandEntity> brands, IEnumerable<ColorEntity> colors, IEnumerable<ImagesEntity> images, IEnumerable<SizeEntity> sizes, IEnumerable<TypeEntity> types)
         {
-            if (product == null)
+            try
             {
-                return null!;
+                if (product == null)
+                {
+                    Debug.Write("Could not find matching brand entity");
+                    return null!;
+                }
+                return new ProductResponse
+                {
+                    Id = product.Id,
+                    Featured = product.Featured,
+                    Name = product.Name,
+                    Description = product.Description,
+                    //Brand = product.BrandEntity.BrandName,
+                    Category = product.Category?.Name,
+                    Brand = brands.FirstOrDefault(b => b.Id == product.BrandEntityId).BrandName ?? "",
+                    Tags = product.Tags.Select(t => tags.First(tag => tag.Id == t.TagsEntityId).Tag).ToList(),
+                    //Type = product.Type.Select(t => product.Type.First(type => type.ProductEntityId == t.TypeEntityId).TypeEntity.Type).ToList(),
+                    Type = product.Type.Select(t => types.First(type => type.Id == t.TypeEntityId).Type).ToList(),
+
+                    Variants = product.Variants.Select(v => v.ToProductItemResponse()).ToList(),
+
+                };
             }
-            return new ProductResponse
+            catch (Exception ex)
             {
-                Id = product.Id,
-                Featured = product.Featured,
-                Name = product.Name,
-                Description = product.Description,
-                //Brand = product.BrandEntity.BrandName,
-                Category = product.Category?.Name,
-                Brand = brands.First(b => b.Id == product.BrandEntityId).BrandName,
-                Tags = product.Tags.Select(t => tags.First(tag => tag.Id == t.TagsEntityId).Tag).ToList(),
-                //Type = product.Type.Select(t => product.Type.First(type => type.ProductEntityId == t.TypeEntityId).TypeEntity.Type).ToList(),
-                Type = product.Type.Select(t => types.First(type => type.Id == t.TypeEntityId).Type).ToList(),
 
-                Variants = product.Variants.Select(v => v.ToProductItemResponse()).ToList(),
-                
+                Debug.Write(ex.Message);
             };
-
+            return null!;
         }
         public static ProductItemResponse ToProductItemResponse(this ProductItemEntity productItemEntity)
         {
+            if (productItemEntity == null)
+            {Debug.Write("Could not find matching brand entity");
+                return null!;
+            }
             return new ProductItemResponse
             {
                 Id = productItemEntity.Id,
@@ -53,6 +67,10 @@ namespace Manero_backend.Models
 
         public static ProductEntity ToProductEntity(this ProductRequest request)
         {
+            if (request == null)
+            {
+                return null!;
+            }
             var ProductTagsEntity = request.TagsId.Select(TagId => new ProductTagsEntity { TagsEntityId = TagId }).ToList();
             var ProductTypeEntity = request.TypeId.Select(tId => new ProductTypeEntity { TypeEntityId = tId }).ToList();
             //var ProductBrandEntity =  new BrandEntity { Id = request.BrandId, BrandName = new BrandEntity().BrandName}.Id;

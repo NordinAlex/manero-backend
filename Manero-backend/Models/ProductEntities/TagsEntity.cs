@@ -1,6 +1,8 @@
-﻿namespace Manero_backend.Models.ProductEntities
+﻿using Manero_backend.Interfaces.Product.Models;
+
+namespace Manero_backend.Models.ProductEntities
 {
-    public class TagsEntity
+    public class TagsEntity : ITagsEntity
     {
         public int Id { get; set; }
         public string Tag { get; set; } = null!;
