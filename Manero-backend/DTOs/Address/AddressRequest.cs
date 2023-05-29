@@ -25,6 +25,5 @@ namespace Manero_backend.DTOs.Address
             entity.City = addressRequest.City;
             return entity;
         }
-
     }
 }

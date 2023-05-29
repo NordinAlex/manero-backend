@@ -27,7 +27,8 @@ namespace Manero_backend_tests.Fixtures
                 StreetName = "123 Main St",
                 PostalCode = "12345",
                 City = "City",
-                BillingAddress = true
+                BillingAddress = true,
+                Email = "patrik.byren@hotmail.com"
             };
 
             InvalidAddressCreateRequest = new AddressRequest

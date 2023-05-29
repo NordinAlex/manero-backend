@@ -8,6 +8,7 @@ using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Manero_backend.Services
 {

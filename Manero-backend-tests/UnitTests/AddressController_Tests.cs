@@ -5,20 +5,22 @@ using Manero_backend_tests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using Manero_backend.DTOs.Address;
 using Manero_backend.Migrations;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Manero_backend_tests.UnitTests
 {
     public class AddressController_Tests : IClassFixture<AddressFixture>
     {
 
-        private AddressController _controller;
+        private AddressController _addressController;
         private Mock<IAddressService> _addressService;
         private AddressFixture _addressFixture;
 
         public AddressController_Tests(AddressFixture addressFixture)
         {
             _addressService = new Mock<IAddressService>();
-            _controller = new AddressController(_addressService.Object);
+            _addressController = new AddressController(_addressService.Object);
             _addressFixture = addressFixture;
         }
 
@@ -29,10 +31,45 @@ namespace Manero_backend_tests.UnitTests
             _addressService.Setup(x => x.CreateAddressAsync(_addressFixture.ValidAddressCreateRequest)).ReturnsAsync(_addressFixture.ValidAddressCreateResponse);
 
             //Act
-            var result = await _controller.CreateAsync(_addressFixture.ValidAddressCreateRequest);
+            var result = await _addressController.CreateAsync(_addressFixture.ValidAddressCreateRequest);
 
             //Assert
             Assert.NotNull(result);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var value = okResult.Value as AddressResponse;
+            Assert.Equal(_addressFixture.ValidAddressCreateRequest.City, value!.City);
+            Assert.Equal(_addressFixture.ValidAddressCreateRequest.BillingAddress, value.BillingAddress);
         }
+        [Fact]
+        public async Task CreateAsync_WithValidAddressRequestAndFailedCreation_ReturnsBadRequest()
+        {
+            // Arrange
+
+            _addressService.Setup(x => x.CreateAddressAsync(_addressFixture.ValidAddressCreateRequest)).ReturnsAsync(_addressFixture.InvalidAddressCreateResponse);
+
+            // Act
+            var result = await _addressController.CreateAsync(_addressFixture.ValidAddressCreateRequest);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<BadRequestObjectResult>(result);
+            var badRequestResult = result as BadRequestObjectResult;
+            var addressResponse = badRequestResult!.Value as AddressResponse;
+            Assert.True(addressResponse!.Error);
+        }
+       /* [Fact]
+        public async Task GetAllUserAddresses_ShouldReturnIActionRsult_WhitAddressResponse()
+        {
+            // Arrange
+            _addressService.Setup(x => x.GetAllForOneUserAsync(_addressFixture.ValidAddressCreateRequest.Email)).ReturnsAsync(_addressFixture.ValidGetAllAddressForOneUserResponse);
+
+            // Act
+            var result = await _addressController.GetAllUserAddresses();
+            //Assert
+            Assert.NotNull(result);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var value = okResult.Value as AddressResponse;
+            Assert.Equal(_addressFixture.ValidGetAllAddressForOneUserResponse.AddressList!.Count, value!.AddressList!.Count);
+        }*/
     }
 }
