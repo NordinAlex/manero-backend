@@ -1,11 +1,15 @@
 namespace Manero_backend_tests.UnitTests
 {
-    public class UnitTest1
+    public class AddressController_Tests
     {
         [Fact]
-        public void Test1()
+        public void CreateAsync_ShouldCreateNewAddress_AndReturnAddressResponse()
         {
+            //Arrange
 
+            //Act
+
+            //Assert
         }
     }
 }
