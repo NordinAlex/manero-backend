@@ -62,7 +62,7 @@ namespace Manero_backend_tests.UnitTests
         public async Task GetAllUserAddresses_ShouldReturnIActionRsult_WhitAddressResponse()
         {
             // Arrange
-            var email = "patrik.byren@hotmail.com"; 
+           var email = "patrik.byren@hotmail.com"; 
             var claims = new List<Claim>
                 {
                  new Claim(ClaimTypes.Email, email)
