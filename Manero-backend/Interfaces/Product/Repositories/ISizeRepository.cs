@@ -6,5 +6,6 @@ namespace Manero_backend.Interfaces.Product.Repositories
     {
         Task<IEnumerable<SizeEntity>> GetAllSizeAsync();
         Task<SizeEntity> GetBySizeAsync(int size);
+        Task<IEnumerable<SizeEntity>> GetSizesForProduct(int productId);
     }
 }

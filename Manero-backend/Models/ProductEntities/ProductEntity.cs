@@ -15,7 +15,7 @@ namespace Manero_backend.Models.ProductEntities
         public int BrandEntityId { get; set; }
         public int CategoryEntityId { get; set; }
         public CategoryEntity? Category { get; set; }
-
+        public bool BestSeller { get; set; } = false;
         public bool Featured { get; set; } = false;
         public BrandEntity BrandEntity { get; set; } = null!; // en product kan ha en brand
         public ICollection<ReviewEntity>? ReviewEntity { get; set; } // en product kan ha flera reviews      

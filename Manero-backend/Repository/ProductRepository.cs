@@ -3,6 +3,7 @@ using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Models.ProductEntities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -167,6 +168,19 @@ namespace Manero_backend.Repository
 
             return productList;
         }
+    
 
+        public async Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.Featured).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
+        public async Task<IEnumerable<ProductEntity>> GetBestsellerProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.BestSeller).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
     }
 }

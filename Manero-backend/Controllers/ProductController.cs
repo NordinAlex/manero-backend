@@ -205,7 +205,35 @@ namespace Manero_backend.Controllers
                 return BadRequest("Error occurred during search and filter \U0001f937‍♀️: " + e.Message);
             }
         }
-     
+
+        [HttpGet("featured")]
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetFeaturedProducts()
+        {
+            //Oscar
+            var products = await _productService.GetFeaturedProductsAsync();
+
+            if (products == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+
+        [HttpGet("BestSeller")]
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetBestSellerProducts()
+        {
+            //Oscar
+            var products = await _productService.GetBestSellerProductsAsync();
+
+            if (products == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+
 
     }
 }

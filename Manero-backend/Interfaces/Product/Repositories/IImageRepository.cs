@@ -9,5 +9,6 @@ namespace Manero_backend.Interfaces.Product.Repositories
         Task<ImagesEntity> GetByIdAsync(int id);
         Task UpdateAsync(ImagesEntity image);
         Task DeleteAsync(int id);
+        Task<IEnumerable<ImagesEntity>> GetImagesForProduct(int productId);
     }
 }

@@ -24,6 +24,7 @@ namespace Manero_backend.Models
                 {
                     Id = product.Id,
                     Featured = product.Featured,
+                    BestSeller = product.BestSeller,
                     Name = product.Name,
                     Description = product.Description,
                     //Brand = product.BrandEntity.BrandName,

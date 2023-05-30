@@ -22,6 +22,12 @@ namespace Manero_backend.Repository
         {
             return await _context.Colors.FirstOrDefaultAsync(c => c.Id == color);
         }
-
+        public async Task<IEnumerable<ColorEntity>> GetColorsForProduct(int productId)
+        {
+            return await _context.ProductItems
+                .Where(pi => pi.ProductId == productId)
+                .Select(pi => pi.Color)
+                .ToListAsync();
+        }
     }
 }
