@@ -26,5 +26,11 @@ namespace Manero_backend.Repository
         {
             return await _context.Brands.FindAsync(id);
         }
+        public async Task<BrandEntity> GetBrandForProduct(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            return product != null ? await _context.Brands.FindAsync(product.BrandEntityId) : null;
+        }
+
     }
 }

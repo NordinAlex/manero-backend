@@ -3,6 +3,7 @@ using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Models.ProductEntities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -167,6 +168,7 @@ namespace Manero_backend.Repository
 
             return productList;
         }
+    
 
     }
 }

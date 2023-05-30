@@ -3,6 +3,7 @@ using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Interfaces.Product.Repositories;
 using Manero_backend.Interfaces.Product.Services;
+using Manero_backend.Migrations;
 using Manero_backend.Models;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.ProductItemEntities;
@@ -224,8 +225,9 @@ namespace Manero_backend.Services
             var items = await _productItemRepository.GetAllAsync();
             return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
-       
-     
+
+        
+
 
     }
 }

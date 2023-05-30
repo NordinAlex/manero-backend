@@ -2,6 +2,7 @@
 using Manero_backend.Interfaces.Product.Models;
 using Manero_backend.Interfaces.Product.Services;
 using Manero_backend.Migrations;
+using Manero_backend.Models.ProductEntities;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -205,7 +206,19 @@ namespace Manero_backend.Controllers
                 return BadRequest("Error occurred during search and filter \U0001f937‍♀️: " + e.Message);
             }
         }
-     
+
+        [HttpGet("featured")]
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetFeaturedProducts()
+        {
+            var products = await _productService.GetFeaturedProductsAsync();
+
+            if (products == null )
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
 
     }
 }

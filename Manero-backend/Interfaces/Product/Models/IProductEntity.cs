@@ -13,7 +13,7 @@ namespace Manero_backend.Interfaces.Product.Models
         string Description { get; set; }
         bool Featured { get; set; }
         int Id { get; set; }
-        string Name { get; set; }
+        string Name { get; set; }       
         ICollection<ReviewEntity>? ReviewEntity { get; set; }
         ICollection<ProductTagsEntity> Tags { get; set; }
         ICollection<ProductTypeEntity> Type { get; set; }
