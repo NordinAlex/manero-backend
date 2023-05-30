@@ -21,6 +21,12 @@ namespace Manero_backend.Repository
         {
             return await _context.Sizes.FirstOrDefaultAsync(c => c.Id == size);
         }
-
+        public async Task<IEnumerable<SizeEntity>> GetSizesForProduct(int productId)
+        {
+            return await _context.ProductItems
+                .Where(pi => pi.ProductId == productId)
+                .Select(pi => pi.Size)
+                .ToListAsync();
+        }
     }
 }

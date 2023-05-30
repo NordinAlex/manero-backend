@@ -17,5 +17,13 @@ namespace Manero_backend.Repository
         {
             return await _context.Tags.ToListAsync();
         }
+        public async Task<IEnumerable<TagsEntity>> GetTagsForProduct(int productId)
+        {
+            return await _context.ProductTags
+                .Where(pt => pt.ProductEntityId == productId)
+                .Select(pt => pt.TagsEntity)
+                .ToListAsync();
+        }
+
     }
 }

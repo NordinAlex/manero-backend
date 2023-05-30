@@ -7,5 +7,6 @@ namespace Manero_backend.Interfaces.Product.Repositories
         Task<IEnumerable<BrandEntity>> GetAllBrandAsync();
         Task<BrandEntity> GetByBrandNameAsync(string brand);
         Task<BrandEntity?> GetByIdAsync(int id);
+        Task<BrandEntity> GetBrandForProduct(int productId);
     }
 }
