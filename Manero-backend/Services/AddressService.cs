@@ -28,23 +28,23 @@ namespace Manero_backend.Services
         public async Task<AddressResponse> CreateAddressAsync(AddressRequest request)
         {
             #region Hämtar Adress och Användare och kontrollerar att de finns 
-            var userEntity = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == request.Email);
-            if(userEntity == null) //Hämtar ID på User och kollar att den finns
+            UserEntity? userEntity = await GetUserEntityAsync(request);
+            if (userEntity == null) //Hämtar ID på User och kollar att den finns
             {
-                return AddressFactory.CreateResponse("Unexpected error! Could not find user.", true); 
+                return AddressFactory.CreateResponse("Unexpected error! Could not find user.", true);
             }
             var addressEntity = await _addressRepository.GetAddressAsync(request);
             if (addressEntity != null!) //Hämtar ID på addressen och kollar att den finns
             {
                 #endregion
                 #region Kollar om en UserAddress redan finns kopplad till användaren. Om så, uppdaterar denna.
-                var userAddressEntity = await _addressRepository.GetUserAddressAsync(userEntity.Id , addressEntity.Id);
-                if(userAddressEntity != null) //Kollar om vår User är kopplad till addressen
+                var userAddressEntity = await _addressRepository.GetUserAddressAsync(userEntity.Id, addressEntity.Id);
+                if (userAddressEntity != null) //Kollar om vår User är kopplad till addressen
                 {
                     #region Kollar om den är useraddress är active // EJ TESTAD ÄNNU PB
                     if (!userAddressEntity.Active)
                     {
-                        if(request.BillingAddress)
+                        if (request.BillingAddress)
                         {
                             var billingAddress = await _addressRepository.CheckBillingTrueAsync(userEntity.Id);
                             if (billingAddress != null)  // kolla att det inte finns andra billing addresssen i db (MAN KAN ENDAST HA 1)
@@ -82,15 +82,15 @@ namespace Manero_backend.Services
                 #endregion
                 #region Om Adressen finns men ingen UserAddress så skapa UserAddress och koppla dessa.
                 else
-                { 
+                {
                     if (request.BillingAddress == true)
-                        {
+                    {
                         var billingAddress = await _addressRepository.CheckBillingTrueAsync(userEntity.Id);
-                        if (billingAddress != null) 
-                            {
-                                var updateResponse = await _addressRepository.UpdateUserAddressAsync(billingAddress); 
-                            }
+                        if (billingAddress != null)
+                        {
+                            var updateResponse = await _addressRepository.UpdateUserAddressAsync(billingAddress);
                         }
+                    }
                     var userAddressCreatedEntity = AddressFactory.CreateUserAddressEntity(addressEntity.Id, userEntity.Id, request.BillingAddress, request.TagName);
                     var userAddressCreatedResponse = await _addressRepository.CreateUserAddressAsync(userAddressCreatedEntity);
                     return AddressFactory.CreateResponse(addressEntity.StreetName, addressEntity.PostalCode, addressEntity.City, userAddressCreatedResponse.TagName);
@@ -109,18 +109,23 @@ namespace Manero_backend.Services
                     }
                 }
                 addressEntity = await _addressRepository.CreateAddressAsync(request);
-                if(addressEntity != null)
+                if (addressEntity != null)
                 {
                     var userAddressCreatedEntity = AddressFactory.CreateUserAddressEntity(addressEntity.Id, userEntity.Id, request.BillingAddress, request.TagName);
                     var databaseRespons = await _addressRepository.CreateUserAddressAsync(userAddressCreatedEntity);
-                    if(databaseRespons != null)
+                    if (databaseRespons != null)
                     {
                         return AddressFactory.CreateResponse(addressEntity.StreetName, addressEntity.PostalCode, addressEntity.City, userAddressCreatedEntity.TagName);
                     }
                 }
             }
-                #endregion
-            return AddressFactory.CreateResponse("Unexpected Error",true);
+            #endregion
+            return AddressFactory.CreateResponse("Unexpected Error", true);
+        }
+
+        private async Task<UserEntity?> GetUserEntityAsync(AddressRequest request)
+        {
+            return await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == request.Email);
         }
 
         //ADDRESSES
@@ -131,16 +136,19 @@ namespace Manero_backend.Services
         }
         public async Task<AddressResponse> GetAllForOneUserAsync(string email)
         {
-            var userEntity = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == email);
-            if (userEntity == null) //Hämtar ID på User och kollar att den finns
+            try
             {
-                return AddressFactory.CreateResponse("Unexpected error! Could not find user.", true);
-            }
-            var listResponse = await _addressRepository.GetAllUserAddressesAsync(userEntity.Id);
-            if(listResponse != null && listResponse!.Count != 0)
-            {
-                return AddressFactory.CreateResponse(listResponse.OrderByDescending(x => x.BillingAddress).Where(x => x.Active == true).ToList());
-            }
+                var userEntity = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == email);
+                if (userEntity == null) //Hämtar ID på User och kollar att den finns
+                {
+                    return AddressFactory.CreateResponse("Unexpected error! Could not find user.", true);
+                }
+                var listResponse = await _addressRepository.GetAllUserAddressesAsync(userEntity.Id);
+                if(listResponse != null && listResponse!.Count != 0)
+                {
+                    return AddressFactory.CreateResponse(listResponse.OrderByDescending(x => x.BillingAddress).Where(x => x.Active == true).ToList());
+                }
+            }catch (Exception ex) { }
             return AddressFactory.CreateResponse("There were no addresses or an unexpected error occured in the database",true);
         }
         public async Task<AddressResponse> InActivateAddressAsync(AddressRequest request)

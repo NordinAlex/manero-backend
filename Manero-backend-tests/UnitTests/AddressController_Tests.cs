@@ -7,6 +7,7 @@ using Manero_backend.DTOs.Address;
 using Manero_backend.Migrations;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Manero_backend_tests.UnitTests
 {
@@ -44,7 +45,7 @@ namespace Manero_backend_tests.UnitTests
         public async Task CreateAsync_WithValidAddressRequestAndFailedCreation_ReturnsBadRequest()
         {
             // Arrange
-
+            
             _addressService.Setup(x => x.CreateAddressAsync(_addressFixture.ValidAddressCreateRequest)).ReturnsAsync(_addressFixture.InvalidAddressCreateResponse);
 
             // Act
@@ -57,11 +58,22 @@ namespace Manero_backend_tests.UnitTests
             var addressResponse = badRequestResult!.Value as AddressResponse;
             Assert.True(addressResponse!.Error);
         }
-       /* [Fact]
+        [Fact]
         public async Task GetAllUserAddresses_ShouldReturnIActionRsult_WhitAddressResponse()
         {
             // Arrange
-            _addressService.Setup(x => x.GetAllForOneUserAsync(_addressFixture.ValidAddressCreateRequest.Email)).ReturnsAsync(_addressFixture.ValidGetAllAddressForOneUserResponse);
+           var email = "patrik.byren@hotmail.com"; 
+            var claims = new List<Claim>
+                {
+                 new Claim(ClaimTypes.Email, email)
+                };
+            var claimsIdentity = new ClaimsIdentity(claims);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            _addressController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = claimsPrincipal }
+            };
+            _addressService.Setup(x => x.GetAllForOneUserAsync(email)).ReturnsAsync(_addressFixture.ValidGetAllAddressForOneUserResponse);
 
             // Act
             var result = await _addressController.GetAllUserAddresses();
@@ -70,6 +82,6 @@ namespace Manero_backend_tests.UnitTests
             var okResult = Assert.IsType<OkObjectResult>(result);
             var value = okResult.Value as AddressResponse;
             Assert.Equal(_addressFixture.ValidGetAllAddressForOneUserResponse.AddressList!.Count, value!.AddressList!.Count);
-        }*/
+        }
     }
 }
