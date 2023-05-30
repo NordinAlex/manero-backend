@@ -45,5 +45,12 @@ namespace Manero_backend.Repository
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<ImagesEntity>> GetImagesForProduct(int productId)
+        {
+            return await _context.ProductItems
+                .Where(pi => pi.ProductId == productId)
+                .SelectMany(pi => pi.Images)
+                .ToListAsync();
+        }
     }
 }

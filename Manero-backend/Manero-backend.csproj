@@ -8,13 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Interfaces\Product\Models\**" />
     <Compile Remove="Migrations\Data\**" />
-    <Content Remove="Interfaces\Product\Models\**" />
     <Content Remove="Migrations\Data\**" />
-    <EmbeddedResource Remove="Interfaces\Product\Models\**" />
     <EmbeddedResource Remove="Migrations\Data\**" />
-    <None Remove="Interfaces\Product\Models\**" />
     <None Remove="Migrations\Data\**" />
   </ItemGroup>
 

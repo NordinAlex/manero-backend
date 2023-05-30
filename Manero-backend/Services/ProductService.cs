@@ -7,6 +7,7 @@ using Manero_backend.Models;
 using Manero_backend.Models.ProductEntities;
 using Manero_backend.Models.ProductItemEntities;
 using Manero_backend.Repository;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -35,52 +36,117 @@ namespace Manero_backend.Services
             _productItemRepository = productItemRepository;
         }
 
-        public async Task<ProductResponse> CreateProductAsync(ProductRequest productRequest)
+      
+        public async Task<ServiceResponse<ProductResponse>> CreateProductAsync(ProductRequest productRequest)
         {
-
-            var brands = await _brandRepository.GetAllBrandAsync();
-            var colors = await _colorRepository.GetAllColorAsync();
-            var images = await _imageRepository.GetAllImageAsync();
-            var sizes = await _sizeRepository.GetAllSizeAsync();
-            var tags = await _tagRepository.GetAllTagAsync();
-            var types = await _typeRepository.GetAllTypeAsync();
-            var Item = await _productItemRepository.GetAllAsync();
-            var products = productRequest.ToProductEntity();
-            await _productRepository.AddAsync(products);
-            var productEntity = productRequest.ToProductEntity();
-
-            foreach (var variantRequest in productRequest.Variants)
+            try
             {
-                var brandE = await _brandRepository.GetByIdAsync(productEntity.BrandEntityId);
-                var colorEntity = await _colorRepository.GetByColorAsync(variantRequest.Color);
-                var sizeEntity = await _sizeRepository.GetBySizeAsync(variantRequest.Size);
-                var imageEntities = variantRequest.ImageName?.Zip(variantRequest.ImageAlt, (name, alt) => new ImagesEntity { ImageName = name, ImageAlt = alt }).ToList();
-
-                var productItemEntity = new ProductItemEntity
+                if (productRequest != null)
                 {
-                    Product = products,
-                    Name = productRequest.Name,
-                    Color = colorEntity,
-                    Size = sizeEntity,
-                    SKU = $"{brandE?.BrandCode}-{colorEntity.ColorCode}-{sizeEntity.Size}-{productRequest.SeasonNumber.ToString().Substring(0, 2)}",
-                    QuantityInStock = variantRequest.Stock,
-                    Price = variantRequest.Price,
-                    Images = imageEntities,
-                };
-                //foreach (var image in imageEntities)
-                //{
-                //    image.Id = productItemEntity.Id;
-                //}
+                    var ProductTagsEntity = productRequest.TagsId.Select(TagId => new ProductTagsEntity { TagsEntityId = TagId }).ToList();
+                    var ProductTypeEntity = productRequest.TypeId.Select(tId => new ProductTypeEntity { TypeEntityId = tId }).ToList();
 
-                products.Variants.Add(productItemEntity);
+                    var products = new ProductEntity
+                    {
+                        Name = productRequest.Name,
+                        Featured = productRequest.Featured,
+                        BrandEntityId = productRequest.BrandId,
+                        Description = productRequest.Description,
+                        CategoryEntityId = productRequest.CategoryId,
+                        Tags = ProductTagsEntity,
+                        Type = ProductTypeEntity,
+                        
+                    };
+
+                    if (products == null )
+                    {
+                        return new ServiceResponse<ProductResponse>
+                        {
+                            Success = false,
+                            Message = "Something went wrong, product could not be created."
+                        };
+                       
+                    }
+
+                    foreach (var variantRequest in productRequest.Variants)
+                    {
+                        var brandE = await _brandRepository.GetByIdAsync(products.BrandEntityId);
+                        var colorEntity = await _colorRepository.GetByColorAsync(variantRequest.Color);
+                        var sizeEntity = await _sizeRepository.GetBySizeAsync(variantRequest.Size);
+                        var imageEntities = variantRequest.ImageName?.Zip(variantRequest.ImageAlt, (name, alt) => new ImagesEntity { ImageName = name, ImageAlt = alt }).ToList();
+                        if (productRequest.Variants == null || !productRequest.Variants.Any())
+                        {
+                            return new ServiceResponse<ProductResponse>
+                            {
+                                Success = false,
+                                Message = "Product variants were null or empty."
+                            };
+                        }
+                        var colorE = await _colorRepository.GetByColorAsync(variantRequest.Color);
+                        if (colorE == null)
+                        {
+                            return new ServiceResponse<ProductResponse>
+                            {
+                              
+                                Message = $"Color entity could not be found for color: {variantRequest.Color}"
+                            };
+                        }
+                        var sizeE = await _sizeRepository.GetBySizeAsync(variantRequest.Size);
+                        if (sizeE == null)
+                        {
+                            return new ServiceResponse<ProductResponse>
+                            {
+                                
+                                Message = $"Size entity could not be found for size: {variantRequest.Size}"
+                            };
+                        }
+                     
+                        var productItemEntity = new ProductItemEntity
+                        {
+                            Product = products,
+                            Name = productRequest.Name,
+                            Color = colorEntity,
+                            Size = sizeEntity,
+                            SKU = $"{brandE?.BrandCode}-{colorEntity.ColorCode}-{sizeEntity.Size}-{productRequest.SeasonNumber.ToString().Substring(0, 2)}",
+                            QuantityInStock = variantRequest.Stock,
+                            Price = variantRequest.Price,
+                            Images = imageEntities,
+                        };
+
+
+                        products.Variants.Add(productItemEntity);
+                    }
+
+                    await _productRepository.AddAsync(products);
+                    await _productRepository.UpdateAsync(products);
+
+                                       
+
+                    return new ServiceResponse<ProductResponse>
+                    {
+                       
+                        Success = true,
+                        Message = "Product created successfully"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.Message);
+                return new ServiceResponse<ProductResponse>
+                {
+                    Success = false,
+                    Message = $"An error occurred: {ex.Message}"
+                };
             }
 
-
-            await _productRepository.UpdateAsync(products);
-
-
-            return products.ToProductResponse(tags, brands, colors, images, sizes, types);
+            return new ServiceResponse<ProductResponse>
+            {
+                Success = false,
+                Message = "Product request was null."
+            };
         }
+               
 
         public async Task DeleteProductAsync(int id)
         {
@@ -158,8 +224,54 @@ namespace Manero_backend.Services
             var items = await _productItemRepository.GetAllAsync();
             return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
-       
-     
+
+        public async Task<IEnumerable<ProductResponse>> GetFeaturedProductsAsync()
+        {
+            //Oscar
+
+            var products = await _productRepository.GetFeaturedProductsAsync();
+
+            var productResponses = new List<ProductResponse>();
+            foreach (var product in products)
+            {
+                var tags = await _tagRepository.GetTagsForProduct(product.Id);
+                var brands = await _brandRepository.GetBrandForProduct(product.Id);
+                var colors = await _colorRepository.GetColorsForProduct(product.Id);
+                var images = await _imageRepository.GetImagesForProduct(product.Id);
+                var sizes = await _sizeRepository.GetSizesForProduct(product.Id);
+                var types = await _typeRepository.GetTypesForProduct(product.Id);
+
+                var productResponse = product.ToProductResponse(tags, new List<BrandEntity> { brands }, colors, images, sizes, types);
+                productResponses.Add(productResponse);
+            }
+
+            return productResponses;
+        }
+
+        public async Task<IEnumerable<ProductResponse>> GetBestSellerProductsAsync()
+        {
+            //Oscar
+
+            var products = await _productRepository.GetBestsellerProductsAsync();
+
+            var productResponses = new List<ProductResponse>();
+            foreach (var product in products)
+            {
+                var tags = await _tagRepository.GetTagsForProduct(product.Id);
+                var brands = await _brandRepository.GetBrandForProduct(product.Id);
+                var colors = await _colorRepository.GetColorsForProduct(product.Id);
+                var images = await _imageRepository.GetImagesForProduct(product.Id);
+                var sizes = await _sizeRepository.GetSizesForProduct(product.Id);
+                var types = await _typeRepository.GetTypesForProduct(product.Id);
+
+                var productResponse = product.ToProductResponse(tags, new List<BrandEntity> { brands }, colors, images, sizes, types);
+                productResponses.Add(productResponse);
+            }
+
+            return productResponses;
+        }
+
+
 
     }
 }

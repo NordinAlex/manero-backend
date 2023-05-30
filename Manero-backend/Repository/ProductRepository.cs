@@ -3,6 +3,7 @@ using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Models.ProductEntities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -17,10 +18,17 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public async Task AddAsync(ProductEntity product)
+        public async Task<ProductEntity> AddAsync(ProductEntity product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+
+            if (product != null)
+            {
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                return product;
+            }
+            return null!;
         }
 
         public async Task DeleteAsync(int id)
@@ -69,7 +77,7 @@ namespace Manero_backend.Repository
         }
         public async Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest filter)
         {
-            
+
             // Baslinje för sökning
             var products = _context.Products
                 .Include(a => a.BrandEntity)
@@ -94,7 +102,7 @@ namespace Manero_backend.Repository
 
             // Filtrering på SKU
             if (!string.IsNullOrEmpty(filter.SKU))
-            {               
+            {
                 var sku = filter.SKU?.ToLower();
                 products = products?.Where(p => p.Variants.Any(v => v.SKU.ToLower() == sku));
             }
@@ -132,11 +140,11 @@ namespace Manero_backend.Repository
             {
                 products = products?.Where(p => p.Variants.Any(v => v.Size.Size == filter.Size));
             }
-           
+
             // Filtrering Price
             if (filter.MinPrice.HasValue || filter.MaxPrice.HasValue)
             {
-                products = products?.Where(p => p.Variants.Any(v =>                  
+                products = products?.Where(p => p.Variants.Any(v =>
                     (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
                     (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)));
             }
@@ -160,6 +168,19 @@ namespace Manero_backend.Repository
 
             return productList;
         }
+    
 
+        public async Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.Featured).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
+        public async Task<IEnumerable<ProductEntity>> GetBestsellerProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.BestSeller).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
     }
 }

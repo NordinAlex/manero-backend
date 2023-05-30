@@ -6,5 +6,6 @@ namespace Manero_backend.Interfaces.Product.Repositories
     {
         Task<IEnumerable<ColorEntity>> GetAllColorAsync();
         Task<ColorEntity> GetByColorAsync(int color);
+        Task<IEnumerable<ColorEntity>> GetColorsForProduct(int productId);
     }
 }

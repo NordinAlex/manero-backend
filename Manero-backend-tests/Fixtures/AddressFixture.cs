@@ -1,4 +1,6 @@
 ﻿using Manero_backend.DTOs.Address;
+using Manero_backend.Models.Addresses;
+using Manero_backend.Models.UserEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,16 +13,24 @@ namespace Manero_backend_tests.Fixtures
 {
     public class AddressFixture
     {
-        
+        //Addresses
         public AddressRequest ValidAddressCreateRequest { get; }
         public AddressRequest InvalidAddressCreateRequest { get; }
         public AddressResponse ValidAddressCreateResponse { get; }
         public AddressResponse InvalidAddressCreateResponse { get; }
         public AddressResponse ValidGetAllAddressForOneUserResponse { get; }
 
+        //User
+        public UserEntity ValidUserEntity { get; }
+        public UserEntity InvalidUserEntity { get; }
+        public UserAddressEntity ValidUserAddressEntity { get; }
+        public UserAddressEntity InvalidUserAddressEntity { get; }
+        public UserAddressEntity ValidUserAddressEntityAsBillingAddress { get; }
+        public UserAddressEntity ValidUserAddressEntityFalseBillingAddress { get; }
 
         public AddressFixture()
         {
+            //Address
             ValidAddressCreateRequest = new AddressRequest
             {
                 TagName = "Home",
@@ -76,6 +86,52 @@ namespace Manero_backend_tests.Fixtures
                     }
                 }
 
+            };
+
+            //User
+            ValidUserEntity = new UserEntity
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                CreatedBy = "MANERO",
+            };
+            InvalidUserEntity = new UserEntity
+            {
+
+            };
+            ValidUserAddressEntity = new UserAddressEntity
+            {
+                Id = Guid.NewGuid(),
+                AddressId = 1,
+                Userid = "1",
+                BillingAddress = true,
+                TagName = "Home",
+                Created = DateTime.Now,
+                Active = true,
+            };
+            InvalidUserAddressEntity = new UserAddressEntity
+            {
+
+            };
+            ValidUserAddressEntityAsBillingAddress = new UserAddressEntity
+            {
+                Id = Guid.NewGuid(),
+                AddressId = 1,
+                Userid = "1",
+                BillingAddress = true,
+                TagName = "Home",
+                Created = DateTime.Now,
+                Active = true,
+            };
+            ValidUserAddressEntityFalseBillingAddress = new UserAddressEntity
+            {
+                Id = Guid.NewGuid(),
+                AddressId = 1,
+                Userid = "1",
+                BillingAddress = true,
+                TagName = "Home",
+                Created = DateTime.Now,
+                Active = false
             };
         }
     }

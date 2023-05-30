@@ -17,5 +17,12 @@ namespace Manero_backend.Repository
         {
            return await _context.Types.ToListAsync();
         }
+        public async Task<IEnumerable<TypeEntity>> GetTypesForProduct(int productId)
+        {
+            return await _context.ProductTypes
+                .Where(pt => pt.ProductEntityId == productId)
+                .Select(pt => pt.TypeEntity)
+                .ToListAsync();
+        }
     }
 }
