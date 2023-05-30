@@ -2,7 +2,6 @@
 using Manero_backend.Interfaces.Product.Models;
 using Manero_backend.Interfaces.Product.Services;
 using Manero_backend.Migrations;
-using Manero_backend.Models.ProductEntities;
 using Manero_backend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
