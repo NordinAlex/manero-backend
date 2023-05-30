@@ -1,4 +1,6 @@
-﻿using Manero_backend.DTOs.Address;
+﻿using Azure;
+using Azure.Core;
+using Manero_backend.DTOs.Address;
 using Manero_backend.DTOs.User;
 using Manero_backend.Factories;
 using Manero_backend.Interfaces.Addresses.Service;
@@ -43,14 +45,12 @@ namespace Manero_backend.Controllers
         [HttpGet("myaddresses")]
         public async Task<IActionResult> GetAllUserAddresses() 
         {
-            try
-            {
-                var response = await _addressService.GetAllForOneUserAsync(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
-                if (!response.Error) { return Ok(response); }
-                return BadRequest(response);
-            }
-            catch (Exception ex) { Debug.WriteLine(ex); }
-            return BadRequest(AddressFactory.CreateResponse("Something went wrong", true));
+            var response = await _addressService.GetAllForOneUserAsync(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value);
+                if(response !=null)
+                    if (!response.Error)  
+                    return Ok(response); 
+
+            return BadRequest(response);
         }
 
         [HttpPut]

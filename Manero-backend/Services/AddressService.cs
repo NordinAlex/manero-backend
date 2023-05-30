@@ -131,16 +131,19 @@ namespace Manero_backend.Services
         }
         public async Task<AddressResponse> GetAllForOneUserAsync(string email)
         {
-            var userEntity = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == email);
-            if (userEntity == null) //Hämtar ID på User och kollar att den finns
+            try
             {
-                return AddressFactory.CreateResponse("Unexpected error! Could not find user.", true);
-            }
-            var listResponse = await _addressRepository.GetAllUserAddressesAsync(userEntity.Id);
-            if(listResponse != null && listResponse!.Count != 0)
-            {
-                return AddressFactory.CreateResponse(listResponse.OrderByDescending(x => x.BillingAddress).Where(x => x.Active == true).ToList());
-            }
+                var userEntity = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == email);
+                if (userEntity == null) //Hämtar ID på User och kollar att den finns
+                {
+                    return AddressFactory.CreateResponse("Unexpected error! Could not find user.", true);
+                }
+                var listResponse = await _addressRepository.GetAllUserAddressesAsync(userEntity.Id);
+                if(listResponse != null && listResponse!.Count != 0)
+                {
+                    return AddressFactory.CreateResponse(listResponse.OrderByDescending(x => x.BillingAddress).Where(x => x.Active == true).ToList());
+                }
+            }catch (Exception ex) { }
             return AddressFactory.CreateResponse("There were no addresses or an unexpected error occured in the database",true);
         }
         public async Task<AddressResponse> InActivateAddressAsync(AddressRequest request)
