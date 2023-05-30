@@ -168,5 +168,11 @@ namespace Manero_backend.Repository
             return productList;
         }
 
+        public async Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync()
+        {
+            return await _context.Products
+                .Where(p => p.Featured).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
+
     }
 }

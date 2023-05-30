@@ -224,8 +224,31 @@ namespace Manero_backend.Services
             var items = await _productItemRepository.GetAllAsync();
             return products.Select(a => a.ToProductResponse(tags, brands, colors, images, sizes, types));
         }
-       
-     
+
+        Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync();
+        public async Task<IEnumerable<ProductResponse>> GetFeaturedProductsAsync()
+        {
+
+
+            var products = await _productRepository.GetFeaturedProductsAsync();
+
+            var productResponses = new List<ProductResponse>();
+            foreach (var product in products)
+            {
+                var tags = await _tagRepository.GetTagsForProduct(product.Id);
+                var brands = await _brandRepository.GetBrandForProduct(product.Id);
+                var colors = await _colorRepository.GetColorsForProduct(product.Id);
+                var images = await _imageRepository.GetImagesForProduct(product.Id);
+                var sizes = await _sizeRepository.GetSizesForProduct(product.Id);
+                var types = await _typeRepository.GetTypesForProduct(product.Id);
+
+                var productResponse = product.ToProductResponse(tags, new List<BrandEntity> { brands }, colors, images, sizes, types);
+                productResponses.Add(productResponse);
+            }
+
+            return productResponses;
+        }
+
 
     }
 }

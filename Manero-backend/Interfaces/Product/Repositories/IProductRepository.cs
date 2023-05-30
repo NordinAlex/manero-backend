@@ -16,5 +16,6 @@ namespace Manero_backend.Interfaces.Product
         Task DeleteAsync(int id);
         Task<IEnumerable<ProductEntity>> GetBySearchAsync(Expression<Func<ProductEntity, bool>> predicate);
         Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest searchFilterRequest);
+        Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync();
     }
 }
