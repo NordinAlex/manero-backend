@@ -172,9 +172,15 @@ namespace Manero_backend.Repository
 
         public async Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync()
         {
+            //Oscar
             return await _context.Products
                 .Where(p => p.Featured).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
         }
-
+        public async Task<IEnumerable<ProductEntity>> GetBestsellerProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.BestSeller).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
     }
 }

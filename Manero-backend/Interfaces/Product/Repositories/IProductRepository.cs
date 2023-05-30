@@ -17,5 +17,6 @@ namespace Manero_backend.Interfaces.Product
         Task<IEnumerable<ProductEntity>> GetBySearchAsync(Expression<Func<ProductEntity, bool>> predicate);
         Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest searchFilterRequest);
         Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync();
+        Task<IEnumerable<ProductEntity>> GetBestsellerProductsAsync();
     }
 }
