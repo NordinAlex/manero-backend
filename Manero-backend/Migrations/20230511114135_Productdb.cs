@@ -9,7 +9,7 @@ namespace Manero_backend.Migrations
     public partial class Productdb : Migration
     {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
+        protected override void Up(MigrationBuilder  migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Brands",

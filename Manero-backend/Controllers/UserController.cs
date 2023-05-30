@@ -9,6 +9,7 @@ namespace Manero_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -28,13 +29,13 @@ namespace Manero_backend.Controllers
             }
             return BadRequest("Invalid ID");
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("all")]
         public async Task<IEnumerable<UserResponse>> GetAllAsync()
         {
             return await _userService.GetAllAsync();
         }
-        //[Authorize]
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync(string id)
         {

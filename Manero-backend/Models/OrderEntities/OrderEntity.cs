@@ -22,6 +22,16 @@ namespace Manero_backend.Models.OrderEntities
             res.Address = orderEntity.Address;
             res.City = orderEntity.City;
             res.PostalCode = orderEntity.PostalCode;
+            res.ProductItems = orderEntity.OrderLines?.Select(x =>
+            {
+                var prores = ProductItemFactory.CreateProductItemModel();
+                prores.Name = x.ProductName;
+                prores.Id = x.ProductItemId;
+                prores.Price = x.UnitPrice;
+                prores.Quantity = x.Quantity;
+
+                return prores;
+            }).ToList()!;
             
             return res;
             

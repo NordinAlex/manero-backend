@@ -1,4 +1,5 @@
 ﻿using Manero_backend.DTOs.Product;
+using Manero_backend.Interfaces.Product.Models;
 using Manero_backend.Interfaces.Product.Services;
 using Manero_backend.Migrations;
 using Manero_backend.Services;
@@ -13,10 +14,12 @@ namespace Manero_backend.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly ISearchFilterService _searchFilterService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ISearchFilterService searchFilterService)
         {
             _productService = productService;
+            _searchFilterService = searchFilterService;
         }
 
 
@@ -83,9 +86,13 @@ namespace Manero_backend.Controllers
             try
             {
                 var product = await _productService.CreateProductAsync(productRequest);
+                
+               
                 var response = new ServiceResponse<ProductResponse>
-                {
-                    Data = product
+                {                    
+                    Success = product.Success,
+                    Message = product.Message,
+                    Extensions = product.Extensions
                 };
                 return Ok(response);
             }
@@ -117,9 +124,9 @@ namespace Manero_backend.Controllers
         }
 
 
-        // skapa en metod för search och filter som tar in en parameter och returnerar en lista med produkter som matchar sökningen och filtret och är asynkron
+        
         // GET: api/Product/search
-        [HttpGet("searchby")]
+        [HttpGet("search by name")]
         public async Task<ActionResult<ServiceResponse<IEnumerable<ProductResponse>>>> GetProductBySearchAsync([FromQuery] string search)
         {
             //var productService = new ProductService();
@@ -141,22 +148,91 @@ namespace Manero_backend.Controllers
         }
 
 
-        [HttpGet("search")]
-        public async Task<ActionResult<List<ProductResponse>>> GetProductBySearchAndFilterAsync([FromQuery] SearchFilterCriteria criteria)
-        {
-            var products = await _productService.GetProductBySearchAndFilterAsync(criteria);
 
-            if (products == null || !products.Any())
+
+
+        // DELETE: api/Product/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int id)
+        {
+           
+            try
             {
-                return NotFound("No products found.");
+                var response = new ServiceResponse<bool>();
+
+                var product = await _productService.GetProductByIdAsync(id);
+                if (product == null)
+                {
+                    response.Success = false;
+                    response.Message = "Product not found \U0001f937‍♀️.";
+                    return response;
+                }
+
+
+                await _productService.DeleteProductAsync(id);
+                response.Success = true;
+                response.Message = "Product deleted successfully \U0001f44d.";
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(" OPPS \U0001fae3 \U0001fae2  : " + e.Message + "\U0001f937‍♀️");
+            }
+        }
+
+        [HttpPost("search")]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<SearchFilterResponse>>>> SearchAndFilter( SearchFilterRequest filterRequest)
+        {
+            try
+            {
+                var filterResponse = await _searchFilterService.SearchAndFilterAsync(filterRequest);
+
+                var response = new ServiceResponse<IEnumerable<SearchFilterResponse>>
+                {
+                    Data = filterResponse
+                };
+
+                if (!filterResponse.Any()) // Kontrollera om listan med produkter är tom
+                {
+                    response.Message = "No products found for the provided filters. 😱";
+                }
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error occurred during search and filter \U0001f937‍♀️: " + e.Message);
+            }
+        }
+
+        [HttpGet("featured")]
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetFeaturedProducts()
+        {
+            //Oscar
+            var products = await _productService.GetFeaturedProductsAsync();
+
+            if (products == null)
+            {
+                return NotFound();
             }
 
             return Ok(products);
         }
 
+        [HttpGet("BestSeller")]
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetBestSellerProducts()
+        {
+            //Oscar
+            var products = await _productService.GetBestSellerProductsAsync();
 
+            if (products == null)
+            {
+                return NotFound();
+            }
 
-
+            return Ok(products);
+        }
 
 
     }

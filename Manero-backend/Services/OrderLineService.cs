@@ -20,7 +20,7 @@ namespace Manero_backend.Services
             
             foreach(var product in orderRequest.ProductItems)
             {
-                var orderLineEntity = OrderLineFactory.CreateOrderLineEntity(orderEntity.Id, product.Id, product.LinePrice, product.Quantity);
+                var orderLineEntity = OrderLineFactory.CreateOrderLineEntity(orderEntity.Id, product.Id, product.LinePrice, product.Quantity, product.Name!, product.Price);
                 await _orderLineRepo.CreateAsync(orderLineEntity);
             }
             return true;

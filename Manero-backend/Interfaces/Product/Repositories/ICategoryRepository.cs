@@ -2,7 +2,8 @@
 
 namespace Manero_backend.Interfaces.Product.Repositories
 {
-    public interface ICategoryRepository : IRepository<CategoryEntity>
+    public interface ICategoryRepository 
     {
+        Task<IEnumerable<CategoryEntity>> GetAllCategoryAsync();
     }
 }

@@ -13,7 +13,7 @@ namespace Manero_backend.Services
         {
             _configuration = configuration;
         }
-        //Async await ? (PB)
+        
         public string CreateToken(UserEntity entity, string role) 
         {
             var claims = new List<Claim>()
@@ -23,7 +23,8 @@ namespace Manero_backend.Services
                 new Claim(ClaimTypes.Surname, entity.LastName!),
                 new Claim(ClaimTypes.Email, entity.Email!),
                 new Claim(ClaimTypes.Role, role),
-                new Claim("DisplayName", $"{entity.FirstName} {entity.LastName}")
+                new Claim("DisplayName", $"{entity.FirstName} {entity.LastName}"),
+                new Claim("ImageUrl", entity.ImageUrl ?? "")
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityTokenDescriptor = new SecurityTokenDescriptor
@@ -35,6 +36,7 @@ namespace Manero_backend.Services
                 (Encoding.UTF8.GetBytes(_configuration["TokenService:Secret"]!)), SecurityAlgorithms.HmacSha512Signature),
                 Subject = new ClaimsIdentity(claims)
             };
+               
             return tokenHandler.WriteToken(tokenHandler.CreateToken(securityTokenDescriptor));
         }
     }

@@ -3,6 +3,7 @@ using Manero_backend.DTOs.Product;
 using Manero_backend.Interfaces.Product;
 using Manero_backend.Models.ProductEntities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -17,10 +18,17 @@ namespace Manero_backend.Repository
             _context = context;
         }
 
-        public async Task AddAsync(ProductEntity product)
+        public async Task<ProductEntity> AddAsync(ProductEntity product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+
+            if (product != null)
+            {
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                return product;
+            }
+            return null!;
         }
 
         public async Task DeleteAsync(int id)
@@ -67,81 +75,112 @@ namespace Manero_backend.Repository
                                  .Where(predicate)
                                  .ToListAsync();
         }
-
-
-
-        public async Task<List<ProductEntity>> GetBySearchAndFilterAsync(SearchFilterCriteria criteria)
+        public async Task<IEnumerable<ProductEntity>> SearchAndFilterAsync(SearchFilterRequest filter)
         {
-            IQueryable<ProductEntity> query = _context.Products
-                                        .Include(x => x.Variants)
-                                        .Include(x => x.Type)
-                                         .Include(x => x.Tags)
-                                         .Include(x => x.Category)
-                                         .Include(x => x.BrandEntity);
 
+            // Baslinje för sökning
+            var products = _context.Products
+                .Include(a => a.BrandEntity)
+                .Include(p => p.Type)?
+                .Include(c => c.Tags)?
+                .Include(p => p.Category)
+                .Include(c => c.Variants).ThenInclude(v => v.Size)
+                .Include(c => c.Variants).ThenInclude(v => v.Color)
+                .Include(c => c.Variants).ThenInclude(v => v.Images)
+                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(criteria.Name))
-            {
-                query = query.Where(p => p.Name.Contains(criteria.Name));
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Color))
-            {
-                query = query.Where(p => p.Variants.Any(v => v.Color.Color.Contains(criteria.Color)));
-            }
-
-            //if (criteria.Color != null && criteria.Color.Any())
+            //// Filtrering på Color
+            //if (filter.ImageName != null && filter.ImageName.Any())
             //{
-            //    query = query.Where(p => p.Variants.Any(v => v.Color.Color.Contains(v.Color.Color)));
+            //    products = products?.Where(p => p.Variants.Any(v => v.Images. == filter.ImageName));
+            //}
+            // Filtrering på namn
+            if (!string.IsNullOrEmpty(filter.Name))
+            {
+                products = products?.Where(p => p.Name.Contains(filter.Name));
+            }
 
+            // Filtrering på SKU
+            if (!string.IsNullOrEmpty(filter.SKU))
+            {
+                var sku = filter.SKU?.ToLower();
+                products = products?.Where(p => p.Variants.Any(v => v.SKU.ToLower() == sku));
+            }
+
+            // Filtrering på Brand
+            if (!string.IsNullOrEmpty(filter.Brand))
+            {
+                products = products?.Where(p => p.BrandEntity.BrandName == filter.Brand);
+            }
+
+            // Filtrering på Category
+            if (!string.IsNullOrEmpty(filter.Category))
+            {
+                products = products?.Where(p => p.Category.Name == filter.Category);
+            }
+
+            // Filtrering på Tags
+            if (filter.Tags != null && filter.Tags.Any())
+            {
+                products = products?.Where(p => p.Tags.Any(t => filter.Tags.Contains(t.TagsEntity.Tag.ToLower())));
+            }
+
+            // Filtrering på Type
+            if (filter.Type != null && filter.Type.Any())
+            {
+                products = products?.Where(p => p.Type.Any(t => filter.Type.Contains(t.TypeEntity.Type.ToLower())));
+            }
+            // Filtrering på Color
+            if (filter.Color.Any())
+            {
+                products = products?.Where(p => p.Variants.Any(v => filter.Color.Contains(v.Color.Color)));
+            }
+            // Filtrering på Size
+            if (!string.IsNullOrEmpty(filter.Size))
+            {
+                products = products?.Where(p => p.Variants.Any(v => v.Size.Size == filter.Size));
+            }
+
+            // Filtrering Price
+            if (filter.MinPrice.HasValue || filter.MaxPrice.HasValue)
+            {
+                products = products?.Where(p => p.Variants.Any(v =>
+                    (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
+                    (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)));
+            }
+
+            var productList = await products.ToListAsync();
+
+            ////Ta bort de varianter som inte matchar filtret
+            //foreach (var product in productList)
+            //{
+            //    var colors = filter.Color?.Select(c => c.ToLower());
+            //    var size = filter.Size?.ToLower();
+            //    var sku = filter.SKU?.ToLower();
+
+            //    product.Variants = product.Variants.Where(v =>
+            //        (colors == null || colors.Contains(v.Color.Color.ToLower())) &&
+            //        (size == null || v.Size.Size.ToLower() == size) &&
+            //        (sku == null || v.SKU.ToLower() == sku) &&
+            //        (!filter.MinPrice.HasValue || v.Price >= filter.MinPrice.Value) &&
+            //        (!filter.MaxPrice.HasValue || v.Price <= filter.MaxPrice.Value)).ToList();
             //}
 
-
-            if (!string.IsNullOrWhiteSpace(criteria.SKU))
-            {
-                query = query.Where(p => p.Variants.Any(v => v.SKU.Contains(criteria.SKU)));
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Size))
-            {
-                query = query.Where(p => p.Variants.Any(v => v.Size.Size.Contains(criteria.Size)));
-            }
-
-            if (criteria.MinPrice.HasValue)
-            {
-                var minPrice = criteria.MinPrice.Value;
-                query = query.Where(p => p.Variants.Any(v => v.Price >= minPrice));
-            }
-
-            if (criteria.MaxPrice.HasValue)
-            {
-                var maxPrice = criteria.MaxPrice.Value;
-                query = query.Where(p => p.Variants.Any(v => v.Price <= maxPrice));
-            }
-
-            if (criteria.Type != null && criteria.Type.Any())
-            {
-                query = query.Where(p => p.Type.Any(t => criteria.Type.Contains(t.TypeEntity.Type)));
-            }
-
-            if (criteria.Tags != null && criteria.Tags.Any())
-            {
-                query = query.Where(p => p.Tags.Any(t => criteria.Tags.Contains(t.TagsEntity.Tag)));
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Category))
-            {
-                query = query.Where(p => p.Category.Name.Contains(criteria.Category));
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Brand))
-            {
-                query = query.Where(p => p.BrandEntity.BrandName.Contains(criteria.Brand));
-            }
-
-
-            return await query.ToListAsync();
+            return productList;
         }
+    
 
+        public async Task<IEnumerable<ProductEntity>> GetFeaturedProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.Featured).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
+        public async Task<IEnumerable<ProductEntity>> GetBestsellerProductsAsync()
+        {
+            //Oscar
+            return await _context.Products
+                .Where(p => p.BestSeller).Include(a => a.BrandEntity).Include(z => z.ReviewEntity).Include(p => p.Tags).Include(c => c.Type).Include(p => p.Category).Include(c => c.Category).Include(c => c.Variants).ToListAsync();
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace Manero_backend.Migrations.Identity
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Manero_backend.Models.UserEntities.AddressEntity", b =>
+            modelBuilder.Entity("Manero_backend.Models.Addresses.AddressEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,6 +31,7 @@ namespace Manero_backend.Migrations.Identity
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
@@ -46,6 +47,40 @@ namespace Manero_backend.Migrations.Identity
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("Manero_backend.Models.UserEntities.UserAddressEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("BillingAddress")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InActivated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TagName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Userid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserAddress");
+                });
+
             modelBuilder.Entity("Manero_backend.Models.UserEntities.UserEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -54,11 +89,12 @@ namespace Manero_backend.Migrations.Identity
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AddressEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -70,6 +106,9 @@ namespace Manero_backend.Migrations.Identity
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -110,8 +149,6 @@ namespace Manero_backend.Migrations.Identity
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressEntityId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -257,13 +294,6 @@ namespace Manero_backend.Migrations.Identity
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Manero_backend.Models.UserEntities.UserEntity", b =>
-                {
-                    b.HasOne("Manero_backend.Models.UserEntities.AddressEntity", null)
-                        .WithMany("Users")
-                        .HasForeignKey("AddressEntityId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -313,11 +343,6 @@ namespace Manero_backend.Migrations.Identity
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Manero_backend.Models.UserEntities.AddressEntity", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

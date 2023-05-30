@@ -1,4 +1,5 @@
-﻿using Manero_backend.Models.UserEntities;
+﻿using Manero_backend.Models.Addresses;
+using Manero_backend.Models.UserEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace Manero_backend.Context
         }
 
         public DbSet<AddressEntity> Addresses { get; set; }
+        public DbSet<UserAddressEntity> UserAddress { get; set; }
     }
 
 

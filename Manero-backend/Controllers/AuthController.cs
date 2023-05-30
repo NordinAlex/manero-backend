@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Manero_backend.Controllers
 {
@@ -25,38 +26,64 @@ namespace Manero_backend.Controllers
             _authService = authService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(UserRequest userRequest)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAsync(UserRequest userRequest)
         {
             if(ModelState.IsValid) {
-                //var checkemail = await _registerService.CheckEmailAsync(userRequest.Email);
+
                 if (await _authService.CheckEmailAsync(userRequest.Email))
                 {
-                    return Conflict(UserFactory.CreateUserResponse("Email already exist",true,userRequest));
+                    return Conflict(UserFactory.CreateUserResponse("Email already exist", userRequest));
                 }
                 var result = await _authService.CreateUserAsync(userRequest);
-                if(result != null)
+                if (result.Error)
                 {
-                    if(!result.Error)
-                    return Created("", result);
+                    return BadRequest(UserFactory.CreateUserResponse("Could not create an account", userRequest));
                 }
-                return BadRequest(result);
+                return Created("", result);
             } 
             return BadRequest(ModelState);
         }
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(LogInReq loginReq)
         {
-
-            if(ModelState.IsValid) 
-            {
-                if (await _authService.CheckEmailAsync(loginReq.Email))
+                if (!await _authService.CheckEmailAsync(loginReq.Email))
+                { return BadRequest(UserFactory.CreateUserResponse("Wrong email or password!", true)); }
                 { var result = await _authService.LogInAsync(loginReq);
-                    return Ok(result);
+                    if (!result.Error)
+                        return Ok(result);
+                    else
+                        return BadRequest(result);
                 }
+        }
+        [HttpPost("create/external")]
+        public async Task<IActionResult> CreateExternalAsync(UserRequest userRequest)
+        {
+            if(ModelState.IsValid)
+            {
+            var result = await _authService.CreateSocialAsync(userRequest);
+
+            if (!result.Error)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
             }
             return BadRequest(ModelState);
         }
-        
+        [HttpPost("login/external")]
+        public async Task<IActionResult> LoginAsyncExternalAsync(LogInExternalRequest request)
+        {
+            if (!request.CreatedBy.IsNullOrEmpty())
+            {
+                var result = await _authService.LogInExternalAsync(request);
+                if (!result.Error)
+                    return Ok(result);
+                return BadRequest(result);
+            }
+            return BadRequest(UserFactory.CreateUserResponse("Can't login", true));
+        }
+
+
     }
 }

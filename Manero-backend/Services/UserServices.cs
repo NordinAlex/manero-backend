@@ -15,9 +15,10 @@ namespace Manero_backend.Services
         private readonly UserManager<UserEntity> _userManager;
         private readonly TokenService _tokenService;
 
-        public UserServices(UserManager<UserEntity> userManager)
+        public UserServices(UserManager<UserEntity> userManager, TokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         public async Task<IActionResult> DeleteAsync(string id) // INTE TESTAD PATRIK
@@ -27,7 +28,7 @@ namespace Manero_backend.Services
             {
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded) { return StatusFactory<OkResult>.Create(); }
-                else { return StatusFactory<NotFoundResult>.Create(); } 
+                else { return StatusFactory<NotFoundResult>.Create(); }
             }
             return StatusFactory<BadRequestResult>.Create();
         }
@@ -36,33 +37,33 @@ namespace Manero_backend.Services
         {
             try
             {
-            var list = new List<UserResponse>(); // FACTORIES? 
-            var result = await _userManager.Users.ToListAsync();
-            foreach (var user in result)
-            {
-                UserResponse response = user;
-                list.Add(response);
+                var list = new List<UserResponse>(); // FACTORIES? 
+                var result = await _userManager.Users.ToListAsync();
+                foreach (var user in result)
+                {
+
+                }
+                return list;
             }
-            return list;
-            } catch (Exception ex) { return null!; }
+            catch (Exception ex) { return null!; }
         }
 
-        public async Task<UserResponse> GetAsync(string id)
+        public async Task<UserResponse> GetAsync(string email)
         {
-            return await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id) ?? null!;
+            return null!;
         }
 
-        public async Task<string> UpdateAsync(UpdateUser updateUser, string email) // EJ TESTAD
+        public async Task<string> UpdateAsync(UpdateUser updateUser, string email)
         {
             var entity = await _userManager.FindByEmailAsync(email);
 
             if (entity != null)
             {
-                if(updateUser.FirstName != null) 
-                    entity.FirstName = updateUser.FirstName;
-                if (updateUser.LastName != null)
-                    entity.LastName = updateUser.LastName;
-                if (updateUser.PhoneNumber != null)
+                if(updateUser.FirstName != "") 
+                    entity.FirstName = updateUser.FirstName!;
+                if (updateUser.LastName != "")
+                    entity.LastName = updateUser.LastName!;
+                if (updateUser.PhoneNumber != "" || updateUser.PhoneNumber != null)
                     entity.PhoneNumber = updateUser.PhoneNumber;
 
                 await _userManager.UpdateAsync(entity);

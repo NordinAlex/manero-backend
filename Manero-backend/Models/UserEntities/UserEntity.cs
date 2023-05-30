@@ -10,22 +10,7 @@ namespace Manero_backend.Models.UserEntities
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-
-        public static implicit operator UserResponse(UserEntity entity)
-        {
-            if(entity != null)
-            {
-                var result = UserFactory.CreateUserResponse();
-
-                result.FirstName = entity.FirstName;
-                result.LastName = entity.LastName;
-                result.PhoneNumber = entity.PhoneNumber;
-                result.Email = entity.Email;
-
-                return result;
-            }
-            return null!;
-        }
-
+        public string CreatedBy { get; set; } = null!;
+        public string? ImageUrl { get; set; }
     }
 }

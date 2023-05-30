@@ -1,9 +1,10 @@
-﻿using Manero_backend.Models.ProductItemEntities;
+﻿using Manero_backend.Interfaces.Product.Models;
+using Manero_backend.Models.ProductItemEntities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manero_backend.Models.ProductEntities
 {
-    public class ImagesEntity
+    public class ImagesEntity : IImagesEntity
     {
         public int Id { get; set; }
         public string? ImageAlt { get; set; }
