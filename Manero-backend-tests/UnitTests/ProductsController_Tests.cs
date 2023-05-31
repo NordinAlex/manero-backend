@@ -47,9 +47,7 @@ namespace Manero_backend.Tests.Controllers
             }
             else if (result.Result is BadRequestObjectResult badRequestResult)
             {
-                // Handle the BadRequestObjectResult
                 var value = Assert.IsType<string>(badRequestResult.Value);
-                // Add assertions or other handling specific to the BadRequest case
             }
             else
             {
