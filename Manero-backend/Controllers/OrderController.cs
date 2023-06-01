@@ -36,7 +36,9 @@ namespace Manero_backend.Controllers
                 var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
                 var userEntity = _userManager.Users.FirstOrDefault(x => x.Email == email);
                 OrderResponse res = await _orderService.CreateOrderAsync(orderRequest, userEntity!);
-                return Created("", res);
+                    if (res == null)
+                        return BadRequest();
+                    return Created("", res);
                 }
                 catch { }
             }
